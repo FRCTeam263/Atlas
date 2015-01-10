@@ -12,10 +12,10 @@
 #include "LiftSystem.h"
 #include "MecanumDrive.h"
 
-class Autonomous{
+class AutonomousSystem{
 public:
-	Autonomous();
-	~Autonomous();
+	AutonomousSystem(void);
+	~AutonomousSystem(void);
 
 	void Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter);
 

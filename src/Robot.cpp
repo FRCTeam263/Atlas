@@ -1,11 +1,14 @@
 #include "WPILib.h"
 #include "Systems/MecanumDrive.h"
 #include "Systems/LiftSystem.h"
+#include "Systems/Autonomous.h"
 
 Joystick *drivePad;
 Joystick *gamePad;
 MecanumDrive *drive;
 LiftSystem *lifter;
+
+AutonomousSystem *auton;
 
 class Robot: public SampleRobot
 {
@@ -16,6 +19,8 @@ public:
 		gamePad = new Joystick(1);
 		drive = new MecanumDrive();
 		lifter = new LiftSystem();
+
+		auton = new AutonomousSystem();
 	}
 
 	void Autonomous()

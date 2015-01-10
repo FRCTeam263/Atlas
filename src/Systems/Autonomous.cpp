@@ -1,6 +1,6 @@
 #include "Autonomous.h"
 
-Autonomous::Autonomous(){
+AutonomousSystem::AutonomousSystem(){
 	autoMode = Step1;
 
 	toteTouchSensor = new DigitalInput(9);
@@ -8,11 +8,11 @@ Autonomous::Autonomous(){
 
 }
 
-Autonomous::~Autonomous(){
+AutonomousSystem::~AutonomousSystem(){
 
 }
 
-void Autonomous::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
+void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 
 	float LifterDistance = lifter->liftDistance->GetDistance();
 	float WheelEncoder = drive->FLWheel->GetDistance();
@@ -156,5 +156,3 @@ void Autonomous::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 		drive->BRMotor->Set(1);
 	}
 }
-
-

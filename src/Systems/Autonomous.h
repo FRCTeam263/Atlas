@@ -11,6 +11,7 @@
 #include "WPILib.h"
 #include "LiftSystem.h"
 #include "MecanumDrive.h"
+#include "../Misc/AfterPID.h"
 
 class AutonomousSystem{
 public:
@@ -20,10 +21,12 @@ public:
 	void Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter);
 
 private:
-	typedef enum{Step1, Step2, Step3, Step4, Step5, Step6} AutoMode;
+	typedef enum{Reset, Step1, Step2, Step3, Step4, Step5, Step6} AutoMode;
 
 	DigitalInput *toteTouchSensor;
 	DigitalInput *bottomLiftLS;
+
+	AfterPID *lifterPID;
 
 	AutoMode autoMode;
 

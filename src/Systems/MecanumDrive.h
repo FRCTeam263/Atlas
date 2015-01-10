@@ -4,6 +4,7 @@
 #include "WPILib.h"
 #include "LiftSystem.h"
 #include "Utilities.h"
+#include <math.h>
 
 class MecanumDrive{
 public:
@@ -11,7 +12,8 @@ public:
 	~MecanumDrive(void);
 
 	void Drive(Joystick *drivePad);
-	void AutonDrive(Joystick *box, LiftSystem *lifter);
+	void AutonDriveStraight(bool GyroEnabled, float Speed);
+	void AutonTurn(float Speed);
 
 	Talon *FLMotor;
 	Talon *FRMotor;
@@ -25,6 +27,8 @@ public:
 
 private:
 	Utilities *utilities;
+
+	Gyro *mecanumGyro;
 
 	float FLSpeed;
 	float FRSpeed;

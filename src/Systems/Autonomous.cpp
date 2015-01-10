@@ -17,7 +17,7 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 
 	float LifterDistance = lifter->liftDistance->GetDistance();
 	float WheelEncoder = drive->FLWheel->GetDistance();
-	//float WheelEncoder = drive->FLMotor->GetEncPosition();
+	//float WheelEncoder = drive->FLMotor->GetPosition();
 
 	float LifterSetpoint = 0;
 

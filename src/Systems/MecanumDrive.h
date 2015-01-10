@@ -20,6 +20,11 @@ public:
 	Talon *BLMotor;
 	Talon *BRMotor;
 
+	/*CANTalon *FLMotor;
+	CANTalon *FRMotor;
+	CANTalon *BLMotor;
+	CANTalon *BRMotor;*/
+
 	Encoder *FLWheel;
 	/*Encoder *BLWheel;
 	Encoder *FRWheel;

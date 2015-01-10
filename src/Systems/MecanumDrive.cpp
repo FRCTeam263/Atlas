@@ -6,6 +6,16 @@ MecanumDrive::MecanumDrive(){
 	BRMotor = new Talon(3);
 	BLMotor = new Talon(0);
 
+	/*FRMotor = new CANTalon(0);
+	FLMotor = new CANTalon(1);
+	BRMotor = new CANTalon(2);
+	BLMotor = new CANTalon(3);
+
+	FLMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
+	BLMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
+	FRMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
+	BRMotor->SetFeedbackDevice(CANTalon::QuadEncoder);*/
+
 	FLWheel = new Encoder(0, 1, false, Encoder::k2X);
 	/*BLWheel = new Encoder(2, 3, false, Encoder::k1X);
 	FRWheel = new Encoder(4, 5, false, Encoder::k1X);

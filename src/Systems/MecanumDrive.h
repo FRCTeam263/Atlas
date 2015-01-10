@@ -14,6 +14,7 @@ public:
 	void Drive(Joystick *drivePad);
 	void AutonDriveStraight(bool GyroEnabled, float Speed);
 	void AutonTurn(float Speed);
+	void SetZero(void);
 
 	Talon *FLMotor;
 	Talon *FRMotor;

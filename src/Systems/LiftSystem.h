@@ -10,13 +10,15 @@ public:
 	~LiftSystem(void);
 
 	void RunLift(Joystick *gamePad);
+	void ResetLifter(void);
+	void SetZero(void);
 
 	Victor *liftMotor;
 
 	Encoder *liftDistance;
 
 private:
-
+	DigitalInput *BottomLS;
 	Utilities *utilities;
 
 };

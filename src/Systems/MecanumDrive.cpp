@@ -191,3 +191,10 @@ void MecanumDrive::AutonTurn(float Speed){
 	BLMotor->Set(BLSpeed * -1);
 	BRMotor->Set(BRSpeed);
 }
+
+void MecanumDrive::SetZero(void){
+	FLMotor->Set(0);
+	FRMotor->Set(0);
+	BLMotor->Set(0);
+	BRMotor->Set(0);
+}

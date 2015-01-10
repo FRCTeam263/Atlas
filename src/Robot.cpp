@@ -5,6 +5,7 @@
 
 Joystick *drivePad;
 Joystick *gamePad;
+Joystick *autonMode;
 MecanumDrive *drive;
 LiftSystem *lifter;
 
@@ -17,6 +18,8 @@ public:
 	{
 		drivePad = new Joystick(0);
 		gamePad = new Joystick(1);
+		autonMode = new Joystick(2);
+
 		drive = new MecanumDrive();
 		lifter = new LiftSystem();
 
@@ -25,6 +28,21 @@ public:
 
 	void Autonomous()
 	{
+		while(IsAutonomous() && IsEnabled()){
+
+			if(autonMode->GetRawButton(1)){
+				auton->Run3ToteAuto(drive, lifter);
+			}
+
+			else if(autonMode->GetRawButton(2)){
+
+			}
+		}
+
+		while(IsOperatorControl() && IsDisabled()){
+			lifter->ResetLifter();
+			drive->SetZero();
+		}
 	}
 
 	void OperatorControl()
@@ -33,6 +51,11 @@ public:
 		{
 			drive->Drive(drivePad);
 			lifter->RunLift(drivePad);
+		}
+
+		while(IsOperatorControl() && IsDisabled()){
+			lifter->ResetLifter();
+			drive->SetZero();
 		}
 	}
 };

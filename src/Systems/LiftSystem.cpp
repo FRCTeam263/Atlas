@@ -5,6 +5,8 @@ LiftSystem::LiftSystem(void){
 
 	liftDistance = new Encoder(8, 9, false, Encoder::k1X);
 
+	BottomLS = new DigitalInput(1);
+
 	utilities = new Utilities;
 
 	liftMotor->Set(0);
@@ -25,6 +27,15 @@ void LiftSystem::RunLift(Joystick *gamePad){
 		liftMotor->Set(-0.8);
 	}
 	else{
+		liftMotor->Set(0);
+	}
+}
+
+void LiftSystem::ResetLifter(){
+	if(!BottomLS->Get()){
+		liftMotor->Set(-1.0);
+	}
+	if(BottomLS->Get()){
 		liftMotor->Set(0);
 	}
 }

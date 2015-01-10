@@ -76,11 +76,11 @@ void Autonomous::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 		drive->FLWheel->Reset();
 	}
 
-	if(autoMode == Step3 && LifterDistance <= 110){
+	if(autoMode == Step3 && LifterDistance <= 110){//move totes up
 		lifter->liftMotor->Set(0.5);
 	}
 
-	if(autoMode == Step3 && (LifterDistance >= 110 && LifterDistance <= 160) && WheelEncoder <= 100){
+	if(autoMode == Step3 && (LifterDistance >= 110 && LifterDistance <= 160) && WheelEncoder <= 100){//rotate and move totes higher
 		drive->FLMotor->Set(0.5);
 		drive->BLMotor->Set(0.5);
 		drive->FRMotor->Set(0.5);
@@ -89,13 +89,55 @@ void Autonomous::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 		lifter->liftMotor->Set(0.5);
 	}
 
-	if(autoMode == Step3 && LifterDistance >= 150 && (WheelEncoder >= 100 && WheelEncoder <= 1000)){
+	if(autoMode == Step3 && LifterDistance >= 150 && (WheelEncoder >= 100 && WheelEncoder <= 1000)){//move forward to 3rd tote
 		drive->FLMotor->Set(-0.5);
 		drive->BLMotor->Set(-0.5);
 		drive->FRMotor->Set(0.5);
 		drive->BRMotor->Set(0.5);
+
+		autoMode = Step4;
 	}
 
+	if(autoMode == Step4 && WheelEncoder >= 1000){//when reaches 3rd tote, reset encoder value.
+		drive->FLWheel->Reset();
+	}
+
+	if(autoMode == Step4 && (LifterDistance >= 150 && WheelEncoder <= 100)){//rotate -90 so 1st tote is above 2nd tote
+		drive->FLMotor->Set(-0.5);
+		drive->BLMotor->Set(-0.5);
+		drive->FRMotor->Set(-0.5);
+		drive->BRMotor->Set(-0.5);
+	}
+
+	if(autoMode == Step4 && (LifterDistance >= 90 && WheelEncoder >= 100)){//lowers 1st tote onto 2nd tote
+		lifter->liftMotor->Set(-0.5);
+		drive->FLWheel->Reset();
+	}
+
+	if(autoMode == Step4 && (((LifterDistance >= 0 && LifterDistance <= 95) && WheelEncoder >= -20))){//drive back to wheel <= -20 lift <= 0. set mode to step3
+		drive->FLMotor->Set(-0.5);
+		drive->BLMotor->Set(-0.5);
+		drive->FRMotor->Set(0.5);
+		drive->BRMotor->Set(0.5);
+
+		if(!bottomLiftLS->Get()){
+			lifter->liftMotor->Set(-1);
+		}
+
+		autoMode = Step5;
+	}
+
+	if(autoMode == Step5 && !toteTouchSensor->Get()){//drive forward to 2nd tote.
+		drive->FLMotor->Set(0.5);
+		drive->BLMotor->Set(0.5);
+		drive->FRMotor->Set(-0.5);
+		drive->BRMotor->Set(-0.5);
+		drive->FLWheel->Reset();
+	}
+
+	if(autoMode == Step5 && LifterDistance <= 110){//move totes up
+		lifter->liftMotor->Set(0.5);
+	}
 }
 
 

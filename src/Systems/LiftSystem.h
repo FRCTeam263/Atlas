@@ -11,8 +11,11 @@ public:
 
 	void RunLift(Joystick *gamePad);
 
-private:
 	Victor *liftMotor;
+
+	Encoder *liftDistance;
+
+private:
 
 	Utilities *utilities;
 

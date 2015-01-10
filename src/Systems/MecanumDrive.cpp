@@ -13,8 +13,6 @@ MecanumDrive::MecanumDrive(){
 
 	utilities = new Utilities();
 
-	autoMode = Step1;
-
 	FRMotor->Set(0);
 	BRMotor->Set(0);
 	FLMotor->Set(0);
@@ -43,7 +41,7 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	float XDrive = drivePad->GetX() * -1;
 	float Rotate = -drivePad->GetThrottle() + drivePad->GetTwist();
 
-	printf("Throttle: %f\t Twist: %f\t Trigger: %d\n", drivePad->GetThrottle(), drivePad->GetTwist(), drivePad->GetTrigger());
+	//printf("Throttle: %f\t Twist: %f\t Trigger: %d\n", drivePad->GetThrottle(), drivePad->GetTwist(), drivePad->GetTrigger());
 
 	YDrive = utilities->DeadBand(YDrive, 0.1);
 	XDrive = utilities->DeadBand(XDrive, 0.1);
@@ -81,39 +79,4 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	BRMotor->Set(BRSpeed);
 }
 
-void MecanumDrive::AutonDrive(Joystick *box){
 
-	if(box->GetRawButton(1)){//3 Totes Auto
-
-		if((FLWheel->GetDistance() < 100) && (autoMode == Step1)){
-			FLMotor->Set(0.15);
-			BLMotor->Set(-0.15);
-			FRMotor->Set(-0.15);
-			BRMotor->Set(0.15);
-		}
-
-		if(FLWheel->GetDistance() > 100){
-			autoMode = Step2;
-			FLWheel->Reset();
-			/*FRWheel->Reset();
-			BLWheel->Reset();
-			BRWheel->Reset();*/
-		}
-
-		if((FLWheel->GetDistance() < 100) && (autoMode == Step2)){
-
-		}
-	}
-	else if(box->GetRawButton(2)){//2 Can/2 Tote Auto
-
-	}
-	else if(box->GetRawButton(3)){
-
-	}
-	else{
-		FLMotor->Set(0);
-		FRMotor->Set(0);
-		BLMotor->Set(0);
-		BRMotor->Set(0);
-	}
-}

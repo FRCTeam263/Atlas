@@ -3,6 +3,8 @@
 LiftSystem::LiftSystem(void){
 	liftMotor = new Victor(4);
 
+	liftDistance = new Encoder(8, 9, false, Encoder::k1X);
+
 	utilities = new Utilities;
 
 	liftMotor->Set(0);

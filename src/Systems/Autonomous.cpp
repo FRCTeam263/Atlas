@@ -138,6 +138,23 @@ void Autonomous::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 	if(autoMode == Step5 && LifterDistance <= 110){//move totes up
 		lifter->liftMotor->Set(0.5);
 	}
+
+	if(autoMode == Step5 && WheelEncoder >= -200){
+		drive->FLMotor->Set(-0.5);
+		drive->BLMotor->Set(-0.5);
+		drive->FRMotor->Set(0.5);
+		drive->BRMotor->Set(0.5);
+	}
+	if(autoMode == Step5 && WheelEncoder <= -200 && (LifterDistance >= 0 && !bottomLiftLS->Get())){
+		lifter->liftMotor->Set(-0.5);
+		autoMode = Step6;
+	}
+	if(autoMode == Step6 && bottomLiftLS->Get() && WheelEncoder >= -300){
+		drive->FLMotor->Set(-1);
+		drive->BLMotor->Set(-1);
+		drive->FRMotor->Set(1);
+		drive->BRMotor->Set(1);
+	}
 }
 
 

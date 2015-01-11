@@ -19,9 +19,10 @@ public:
 	~AutonomousSystem(void);
 
 	void Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter);
+	void Run2ToteAuto(MecanumDrive *drive, LiftSystem *lifter);
 
 private:
-	typedef enum{Reset, Step1, Step2, Step3, Step4, Step5, Step6} AutoMode;
+	typedef enum{Reset, Lift1Tote, Stack1Tote, Lift2Totes, Stack2Totes, Lift3Totes, DriveToAutoZone} AutoMode;
 
 	DigitalInput *toteTouchSensor;
 	DigitalInput *bottomLiftLS;
@@ -29,7 +30,6 @@ private:
 	AfterPID *lifterPID;
 
 	AutoMode autoMode;
-
 };
 
 

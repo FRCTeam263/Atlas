@@ -3,7 +3,7 @@
 LiftSystem::LiftSystem(void){
 	liftMotor = new Victor(4);
 
-	liftDistance = new Encoder(8, 9, false, Encoder::k1X);
+	liftDistance = new Encoder(8, 9, false, Encoder::k4X);
 
 	BottomLS = new DigitalInput(1);
 
@@ -18,13 +18,10 @@ LiftSystem::~LiftSystem(void){
 
 void LiftSystem::RunLift(Joystick *gamePad){
 	if(gamePad->GetRawButton(1)){
-		liftMotor->Set(0.8);
+		liftMotor->Set(0.5);
 	}
-	else{
-		liftMotor->Set(0);
-	}
-	if(gamePad->GetRawButton(2)){
-		liftMotor->Set(-0.8);
+	else if(gamePad->GetRawButton(2)){
+		liftMotor->Set(-0.5);
 	}
 	else{
 		liftMotor->Set(0);

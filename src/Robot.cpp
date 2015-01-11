@@ -1,13 +1,17 @@
 #include "WPILib.h"
 #include "Systems/MecanumDrive.h"
 #include "Systems/LiftSystem.h"
+#include "Systems/CanGrabber.h"
 #include "Systems/Autonomous.h"
 
 Joystick *drivePad;
 Joystick *gamePad;
 Joystick *autonMode;
+
 MecanumDrive *drive;
 LiftSystem *lifter;
+CanGrabber *grabber;
+
 
 AutonomousSystem *auton;
 
@@ -22,13 +26,14 @@ public:
 
 		drive = new MecanumDrive();
 		lifter = new LiftSystem();
+		grabber = new CanGrabber();
 
 		auton = new AutonomousSystem();
 	}
 
 	void Autonomous()
 	{
-		while(IsAutonomous() && IsEnabled()){
+		/*while(IsAutonomous() && IsEnabled()){
 
 			if(autonMode->GetRawButton(1)){
 				auton->Run3ToteAuto(drive, lifter);
@@ -42,7 +47,7 @@ public:
 		while(IsOperatorControl() && IsDisabled()){
 			lifter->ResetLifter();
 			drive->SetZero();
-		}
+		}*/
 	}
 
 	void OperatorControl()
@@ -51,12 +56,13 @@ public:
 		{
 			drive->Drive(drivePad);
 			lifter->RunLift(drivePad);
+			grabber->Extend(drivePad);
 		}
 
-		while(IsOperatorControl() && IsDisabled()){
+		/*while(IsOperatorControl() && IsDisabled()){
 			lifter->ResetLifter();
 			drive->SetZero();
-		}
+		}*/
 	}
 };
 

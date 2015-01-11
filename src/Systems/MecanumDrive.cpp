@@ -52,7 +52,7 @@ MecanumDrive::~MecanumDrive(){
 }
 
 void MecanumDrive::Drive(Joystick *drivePad){
-	float YDrive = drivePad->GetY() * -1;
+	float YDrive = drivePad->GetY();
 	float XDrive = drivePad->GetX() * -1;
 	float Rotate = -drivePad->GetThrottle() + drivePad->GetTwist();
 

@@ -19,6 +19,7 @@ public:
 
 private:
 	Victor *grabber;
+	DoubleSolenoid *canExtend;
 };
 
 #endif /* SRC_SYSTEMS_CANGRABBER_H_ */

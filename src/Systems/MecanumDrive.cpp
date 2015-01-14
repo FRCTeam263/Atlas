@@ -66,9 +66,9 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	}
 
 	if(ThrottleEnabled == 1){
-		YDrive = drivePad->GetY() / 2;
-		XDrive = (drivePad->GetX() * -1) / 2;
-		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 2;
+		YDrive = drivePad->GetY() / 2.2;
+		XDrive = (drivePad->GetX() * -1) / 2.2;
+		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 2.2;
 	}
 	else if(ThrottleEnabled == 0){
 		YDrive = drivePad->GetY();

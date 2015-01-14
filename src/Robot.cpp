@@ -4,20 +4,19 @@
 #include "Systems/CanGrabber.h"
 #include "Systems/Autonomous.h"
 
-Joystick *drivePad;
-Joystick *gamePad;
-Joystick *autonMode;
-
-MecanumDrive *drive;
-LiftSystem *lifter;
-CanGrabber *grabber;
-
-
-AutonomousSystem *auton;
-
 class Robot: public SampleRobot
 {
 public:
+	Joystick *drivePad;
+	Joystick *gamePad;
+	Joystick *autonMode;
+
+	MecanumDrive *drive;
+	LiftSystem *lifter;
+	CanGrabber *grabber;
+
+	AutonomousSystem *auton;
+
 	Robot()
 	{
 		drivePad = new Joystick(0);
@@ -31,6 +30,16 @@ public:
 		auton = new AutonomousSystem();
 	}
 
+	~Robot(){
+		delete drivePad;
+		delete gamePad;
+		delete autonMode;
+		delete drive;
+		delete lifter;
+		delete grabber;
+		delete auton;
+	}
+
 	void Autonomous()
 	{
 		/*while(IsAutonomous() && IsEnabled()){
@@ -38,6 +47,7 @@ public:
 			if(autonMode->GetRawButton(1)){
 				auton->Run3ToteAuto(drive, lifter);
 			}
+
 
 			else if(autonMode->GetRawButton(2)){
 
@@ -55,8 +65,10 @@ public:
 		while (IsOperatorControl() && IsEnabled())
 		{
 			drive->Drive(drivePad);
-			lifter->RunLift(drivePad);
-			grabber->Extend(drivePad);
+			lifter->TestLifter(drivePad);
+			//lifter->RunShortLift(gamePad);
+			//lifter->RunLongLift(gamePad);
+			//grabber->Extend(drivePad);
 		}
 
 		/*while(IsOperatorControl() && IsDisabled()){
@@ -67,3 +79,48 @@ public:
 };
 
 START_ROBOT_CLASS(Robot);
+
+
+
+/*Pokemon Battle 2015
+ *
+ * A wild Mercado appeared.
+ * Trainer Bryan sent out Chris.
+ * Go Chris!
+ * Mercado used splash.
+ * It does nothing.
+ * Chris used RKO.
+ * It's super effective.
+ * Mercado fainted.
+ * Chris gains 1337 EXP.
+ *
+ *
+ *
+ * A while later....
+ * Trainer Josh challenges Trainer Bryan.
+ * "I'm Asian!" - Trainer Josh
+ * Trainer Josh sent out Raj.
+ * Trainer Bryan sent out Mr. Wentzel
+ * Raj used CAD
+ * It failed.
+ * Mr. Wentzel used Long Speech
+ * Raj fell asleep.
+ * Trainer Josh recalls Raj.
+ * Come back Raj!
+ * Trainer Josh sent out Mercado.
+ * Go show them your worth Mercado!
+ * Mr. Wentzel used Salad.
+ * Mercado is poisoned.
+ * Mercado is hurt by the poison.
+ * Mercado used Eat Bread.
+ * He is no longer effected by poison and gains full HP.
+ * Mr. Wentzel used Extensive Knowledge of Aeronautical Engineering.
+ * It's a Critical Hit!
+ * Mercado fainted.
+ * Trainer Josh sent out Mateo.
+ * Show them dis dik Mateo!
+ * Trainer Bryan recalls Mr. Wentzel.
+ * Come back Mr. Wentzel!
+ * Trainer Bryan sent out Chris.
+ * Mateo used
+ */

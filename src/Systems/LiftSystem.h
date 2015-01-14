@@ -3,23 +3,41 @@
 
 #include "WPILib.h"
 #include "Utilities.h"
+#include "../Misc/AfterPID.h"
 
 class LiftSystem{
 public:
 	LiftSystem(void);
 	~LiftSystem(void);
 
-	void RunLift(Joystick *gamePad);
+	void RunLongLift(Joystick *gamePad);
+	void RunShortLift(Joystick *gamePad);
 	void ResetLifter(void);
 	void SetZero(void);
+	void TestLifter(Joystick *gamePad);
 
 	Victor *liftMotor;
+	CANTalon *shortLiftMotor1;
+	CANTalon *shortLiftMotor2;
+	CANTalon *longLiftMotor1;
+	VictorSP *longLiftMotor2;
 
-	Encoder *liftDistance;
+	Talon *leftWheel;
+	Talon *rightWheel;
 
+	DigitalInput *shortBottomLS;
+	DigitalInput *longBottomLS;
+	DigitalInput *shortTopLS;
+	DigitalInput *longTopLS;
+	DigitalInput *toteTouchSensor;
+
+	AfterPID *shortPID;
+	AfterPID *longPID;
 private:
-	DigitalInput *BottomLS;
 	Utilities *utilities;
+
+	float shortEncoderDistance;
+	float longEncoderDistance;
 
 };
 

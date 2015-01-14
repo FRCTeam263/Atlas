@@ -3,8 +3,8 @@
 MecanumDrive::MecanumDrive(){
 	FRMotor = new Talon(2);
 	FLMotor = new Talon(1);
-	BRMotor = new Talon(3);
-	BLMotor = new Talon(0);
+	BRMotor = new Talon(5);
+	BLMotor = new Talon(4);
 
 	/*FRMotor = new CANTalon(0);
 	FLMotor = new CANTalon(1);
@@ -16,7 +16,7 @@ MecanumDrive::MecanumDrive(){
 	FRMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
 	BRMotor->SetFeedbackDevice(CANTalon::QuadEncoder);*/
 
-	FLWheel = new Encoder(0, 1, false, Encoder::k2X);
+	FLWheel = new Encoder(0, 1, false, Encoder::k4X);
 	/*BLWheel = new Encoder(2, 3, false, Encoder::k1X);
 	FRWheel = new Encoder(4, 5, false, Encoder::k1X);
 	BRWheel = new Encoder(6, 7, false, Encoder::k1X);*/
@@ -52,9 +52,29 @@ MecanumDrive::~MecanumDrive(){
 }
 
 void MecanumDrive::Drive(Joystick *drivePad){
-	float YDrive = drivePad->GetY();
-	float XDrive = drivePad->GetX() * -1;
-	float Rotate = -drivePad->GetThrottle() + drivePad->GetTwist();
+	float YDrive;
+	float XDrive;
+	float Rotate;
+
+	static int ThrottleEnabled = 0;
+
+	if(drivePad->GetRawButton(1)){
+		ThrottleEnabled = 1;
+	}
+	if(drivePad->GetRawButton(2)){
+		ThrottleEnabled = 0;
+	}
+
+	if(ThrottleEnabled == 1){
+		YDrive = drivePad->GetY() / 2;
+		XDrive = (drivePad->GetX() * -1) / 2;
+		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 2;
+	}
+	else if(ThrottleEnabled == 0){
+		YDrive = drivePad->GetY();
+		XDrive = drivePad->GetX() * -1;
+		Rotate = -drivePad->GetThrottle() + drivePad->GetTwist();
+	}
 
 	//printf("Throttle: %f\t Twist: %f\t Trigger: %d\n", drivePad->GetThrottle(), drivePad->GetTwist(), drivePad->GetTrigger());
 

@@ -24,11 +24,6 @@ public:
 private:
 	typedef enum{Reset, Lift1Tote, Stack1Tote, Lift2Totes, Stack2Totes, Lift3Totes, DriveToAutoZone} AutoMode;
 
-	DigitalInput *toteTouchSensor;
-	DigitalInput *bottomLiftLS;
-
-	AfterPID *lifterPID;
-
 	AutoMode autoMode;
 };
 

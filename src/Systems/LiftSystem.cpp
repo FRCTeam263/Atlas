@@ -211,6 +211,12 @@ void LiftSystem::RunShortLift(Joystick *gamePad){
 				Counter = 0;
 			}
 		}
+		else if(gamePad->GetRawAxis(2) > 0){
+			if(Counter > Limit){
+				ShortLevel = 2.5;
+				Counter = 0;
+			}
+		}
 
 		if(ShortLevel == 0.5){
 			MotorOutput = longPID->GetOutput(longEncoderDistance, 0.5, 10, true);

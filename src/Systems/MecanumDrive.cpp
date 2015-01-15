@@ -1,20 +1,15 @@
 #include "MecanumDrive.h"
 
 MecanumDrive::MecanumDrive(){
-	FRMotor = new Talon(2);
-	FLMotor = new Talon(1);
-	BRMotor = new Talon(5);
-	BLMotor = new Talon(4);
-
-	/*FRMotor = new CANTalon(0);
-	FLMotor = new CANTalon(1);
-	BRMotor = new CANTalon(2);
+	FRMotor = new CANTalon(1);
+	FLMotor = new CANTalon(2);
+	BRMotor = new CANTalon(0);
 	BLMotor = new CANTalon(3);
 
 	FLMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
 	BLMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
 	FRMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
-	BRMotor->SetFeedbackDevice(CANTalon::QuadEncoder);*/
+	BRMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
 
 	FLWheel = new Encoder(0, 1, false, Encoder::k4X);
 	/*BLWheel = new Encoder(2, 3, false, Encoder::k1X);

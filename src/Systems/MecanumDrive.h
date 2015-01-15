@@ -16,15 +16,10 @@ public:
 	void AutonTurn(float Speed);
 	void SetZero(void);
 
-	Talon *FLMotor;
-	Talon *FRMotor;
-	Talon *BLMotor;
-	Talon *BRMotor;
-
-	/*CANTalon *FLMotor;
+	CANTalon *FLMotor;
 	CANTalon *FRMotor;
 	CANTalon *BLMotor;
-	CANTalon *BRMotor;*/
+	CANTalon *BRMotor;
 
 	Encoder *FLWheel;
 	/*Encoder *BLWheel;

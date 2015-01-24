@@ -4,6 +4,10 @@
 #include "Systems/CanGrabber.h"
 #include "Systems/Autonomous.h"
 
+const int numberOfElevatorLevels = 7;
+const int elevatorLevels[numberOfElevatorLevels] = { 0, 800, 1000, 1800, 2000,
+		2800, 3000 };
+
 class Robot: public SampleRobot
 {
 public:
@@ -16,6 +20,8 @@ public:
 	CanGrabber *grabber;
 
 	AutonomousSystem *auton;
+
+	int currentElevatorLevel = 0;
 
 	Robot()
 	{
@@ -65,10 +71,26 @@ public:
 		while (IsOperatorControl() && IsEnabled())
 		{
 			drive->Drive(drivePad);
-			lifter->TestLifter(drivePad);
+			lifter->TestLifter(gamePad);
+			printf("Encoder: %f\t 1:%d\n", lifter->longLiftMotor1->GetPosition(), lifter->longLiftMotor1->GetEncPosition());
 			//lifter->RunShortLift(gamePad);
-			//lifter->RunLongLift(gamePad);
+			//lifter->RunLongLift(drivePad);
 			//grabber->Extend(drivePad);
+			/*while (gamePad->GetRawButton(0) == false) {
+				if (gamePad->GetRawButton(1)) {
+					if (++currentElevatorLevel > numberOfElevatorLevels)
+						currentElevatorLevel = numberOfElevatorLevels;
+				}
+
+				if (gamePad->GetRawButton(2)) {
+					if (--currentElevatorLevel < 0)
+						currentElevatorLevel = 0;
+				}
+
+				lifter->SetSpeed(lifter->ElevatorSpeed(elevatorLevels[currentElevatorLevel]),
+						true, false);
+
+			}*/
 		}
 
 		/*while(IsOperatorControl() && IsDisabled()){
@@ -122,5 +144,6 @@ START_ROBOT_CLASS(Robot);
  * Trainer Bryan recalls Mr. Wentzel.
  * Come back Mr. Wentzel!
  * Trainer Bryan sent out Chris.
- * Mateo used
+ * Mateo used Racist Jokes.
+ *
  */

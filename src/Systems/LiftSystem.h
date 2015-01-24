@@ -15,21 +15,20 @@ public:
 	void ResetLifter(void);
 	void SetZero(void);
 	void TestLifter(Joystick *gamePad);
+	void SetSpeed(float Speed, bool longSide, bool shortSide, bool BothSides = false);
+	float ElevatorSpeed(float Setpoint);
 
-	Victor *liftMotor;
 	CANTalon *shortLiftMotor1;
 	CANTalon *shortLiftMotor2;
 	CANTalon *longLiftMotor1;
-	VictorSP *longLiftMotor2;
-
-	Talon *leftWheel;
-	Talon *rightWheel;
+	CANTalon *longLiftMotor2;
 
 	DigitalInput *shortBottomLS;
 	DigitalInput *longBottomLS;
 	DigitalInput *shortTopLS;
 	DigitalInput *longTopLS;
-	DigitalInput *toteTouchSensor;
+	DigitalInput *shortToteTouchSensor;
+	DigitalInput *longToteTouchSensor;
 
 	AfterPID *shortPID;
 	AfterPID *longPID;

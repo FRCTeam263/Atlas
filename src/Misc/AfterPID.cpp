@@ -36,19 +36,26 @@ float AfterPID::GetOutput(float current, float target, float deadband, bool zero
 	I_err += P_err;
 	D_err = P_err - Prev_P_err;
 
+    // Check whether we've crossed over the target position.
+	// (previous position error is opposite sign of current position error)
 	if ((Prev_P_err < 0 && P_err >= 0) || (Prev_P_err >= 0 && P_err < 0)) {
+		// CLear the Integration error if we're within the dead band.
 		if(zeroIInDeadband)
 			I_err = 0;
 	}
 
+	// Step foward our state so n becomes n+1
 	Prev_P_err = P_err;
 
 	float out;
 
+	// Determine whether current position error is within the dead band
 	if (P_err >= (deadband * -1) && P_err < deadband && zeroIInDeadband) {
+		// Set motor velocity to zero, and clear the integration error
 		out = 0;
 		I_err = 0;
 	} else {
+		//
 		out = ((kP * P_err) + (kI * I_err) - (kD * D_err));
 	}
 

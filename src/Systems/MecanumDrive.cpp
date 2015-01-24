@@ -1,10 +1,10 @@
 #include "MecanumDrive.h"
 
 MecanumDrive::MecanumDrive(){
-	FRMotor = new CANTalon(1);
-	FLMotor = new CANTalon(2);
-	BRMotor = new CANTalon(0);
-	BLMotor = new CANTalon(3);
+	FRMotor = new CANTalon(0);
+	FLMotor = new CANTalon(5);
+	BRMotor = new CANTalon(4);
+	BLMotor = new CANTalon(6);
 
 	FLMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
 	BLMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
@@ -61,13 +61,13 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	}
 
 	if(ThrottleEnabled == 1){
-		YDrive = drivePad->GetY() / 2.2;
-		XDrive = (drivePad->GetX() * -1) / 2.2;
+		YDrive = drivePad->GetY() * -1 / 2.2;
+		XDrive = (drivePad->GetX()) / 2.2;
 		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 2.2;
 	}
 	else if(ThrottleEnabled == 0){
-		YDrive = drivePad->GetY();
-		XDrive = drivePad->GetX() * -1;
+		YDrive = drivePad->GetY() * -1;
+		XDrive = drivePad->GetX();
 		Rotate = -drivePad->GetThrottle() + drivePad->GetTwist();
 	}
 

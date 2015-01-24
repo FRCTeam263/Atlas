@@ -18,7 +18,7 @@ public:
 	void Extend(Joystick *gamePad);
 
 private:
-	Victor *grabber;
+	CANTalon *grabber;
 	DoubleSolenoid *canExtend;
 };
 

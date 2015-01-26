@@ -159,10 +159,11 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 			autoMode = DriveToAutoZone;
 		}
 		break;
-	}
-
-	if(autoMode == DriveToAutoZone && lifter->longBottomLS->Get() && WheelEncoder >= -300){
-		drive->AutonDriveStraight(true, -1);
+	case DriveToAutoZone:
+		if( lifter->longBottomLS->Get() && WheelEncoder >= -300){
+			drive->AutonDriveStraight(true, -1);
+		}
+		break;
 	}
 
 	lifter->SetSpeed(LifterSetpoint, true, false);

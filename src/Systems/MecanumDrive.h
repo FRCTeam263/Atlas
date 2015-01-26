@@ -1,7 +1,9 @@
 #ifndef SRC_SYSTEMS_MECANUMDRIVE_H_
 #define SRC_SYSTEMS_MECANUMDRIVE_H_
 
-#include "WPILib.h"
+#include "CANTalon.h"
+#include "Gyro.h"
+#include "Joystick.h"
 #include "LiftSystem.h"
 #include "Utilities.h"
 #include <math.h>

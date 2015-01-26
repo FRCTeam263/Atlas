@@ -113,6 +113,7 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	}
 
 	if(drivePad->GetRawButton(5) == true){
+		//rotate around a point outside the robot instead of rotating around the center of the robot.
 		FLMotor->Set(-1);
 		FRMotor->Set(-1);
 		BLMotor->Set(0);

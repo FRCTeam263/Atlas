@@ -32,6 +32,9 @@ public:
 		grabber = new CanGrabber();
 
 		auton = new AutonomousSystem();
+
+		CameraServer::GetInstance()->SetQuality(50);
+		CameraServer::GetInstance()->StartAutomaticCapture("cam0");
 	}
 
 	~Omega(){

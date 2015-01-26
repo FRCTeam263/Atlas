@@ -100,10 +100,15 @@ void LiftSystem::RunLongLift(Joystick *gamePad){
 	}
 
 	if(gamePad->GetRawButton(1)){
-		while(longEncoderDistance < 750){
+		if(longEncoderDistance < 750){
 			SetSpeed(-0.8, true, false);
 		}
-		SetSpeed(0, true, false);
+		else if(longEncoderDistance > 900){
+			SetSpeed(0.4, true, false);
+		}
+		else{
+			SetSpeed(0, true, false);
+		}
 	}
 	else if(gamePad->GetRawButton(2)){
 		while(longEncoderDistance < 1500){

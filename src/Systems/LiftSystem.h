@@ -1,7 +1,9 @@
 #ifndef SRC_SYSTEMS_LIFTSYSTEM_H_
 #define SRC_SYSTEMS_LIFTSYSTEM_H_
 
-#include "WPILib.h"
+#include "CANTalon.h"
+#include "Joystick.h"
+#include "DigitalInput.h"
 #include "Utilities.h"
 #include "../Misc/AfterPID.h"
 

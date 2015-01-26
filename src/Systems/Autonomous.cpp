@@ -17,7 +17,6 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 
 
 	switch(autoMode){
-
 	case Reset:
 		if(lifter->longBottomLS->Get() == true){
 			lifter->longLiftMotor1->SetPosition(0);

@@ -71,7 +71,7 @@ float AfterPID::GetOutput(float current, float target, float deadband, bool zero
 	return out;
 }
 
-void AfterPID::CalcEvolPID(float InputMin, float InputMax, float OutputMin, float OutputMax, float Setpoint, bool SetI){
+void AfterPID::CalcEvolPID(float InputMin, float InputMax, float OutputMin, float OutputMax, bool SetI){
 
 	kP = (OutputMax - OutputMin) / (2 * (InputMax - InputMin));
 	if(SetI == false){

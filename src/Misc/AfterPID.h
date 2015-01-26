@@ -17,7 +17,7 @@ public:
 
 	float GetOutput(float current, float targetAngle, float deadband, bool zeroIInDeadband = true);
 	void SetPID(float P, float I, float D, float Multiplier = 1);
-	void CalcEvolPID(float InputMin, float InputMax, float OutputMin, float OutputMax, float Setpoint, bool SetI = false);
+	void CalcEvolPID(float InputMin, float InputMax, float OutputMin, float OutputMax, bool SetI = false);
 
 
 	void ResetPID();

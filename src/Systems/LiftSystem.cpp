@@ -31,8 +31,8 @@ LiftSystem::LiftSystem(void){
 	longLiftMotor1->Set(0);
 	longLiftMotor2->Set(0);
 
-	shortEncoderDistance = shortLiftMotor1->GetPosition();
-	longEncoderDistance = longLiftMotor1->GetPosition();
+	shortEncoderDistance = shortLiftMotor1->GetPosition() * -1;
+	longEncoderDistance = longLiftMotor1->GetPosition()* -1;
 }
 
 LiftSystem::~LiftSystem(void){
@@ -52,21 +52,28 @@ LiftSystem::~LiftSystem(void){
 }
 
 void LiftSystem::TestLifter(Joystick *gamePad){
-	if(longBottomLS->Get() == true && gamePad->GetRawButton(5)){
+	if(longBottomLS->Get() == true){
+		longLiftMotor1->SetPosition(0);
+	}
+	if(shortBottomLS->Get() == true){
+		shortLiftMotor1->SetPosition(0);
+	}
+
+	if(longBottomLS->Get() == true && gamePad->GetRawButton(16)){
 		longLiftMotor1->Set(0);
 		longLiftMotor2->Set(0);
 	}
-	else if(longTopLS->Get() == true && gamePad->GetRawButton(6)){
+	else if(longTopLS->Get() == true && gamePad->GetRawButton(15)){
 		longLiftMotor1->Set(0);
 		longLiftMotor2->Set(0);
 	}
-	else if((longTopLS->Get() == false || longTopLS->Get() == true) && gamePad->GetRawButton(5)){
-		longLiftMotor1->Set(0.5);
-		longLiftMotor2->Set(0.5);
+	else if((longTopLS->Get() == false || longTopLS->Get() == true) && gamePad->GetRawButton(16)){
+		longLiftMotor1->Set(0.4);
+		longLiftMotor2->Set(0.4);
 	}
-	else if((longBottomLS->Get() == false || longBottomLS->Get() == true) && gamePad->GetRawButton(6)){
-		longLiftMotor1->Set(-0.5);
-		longLiftMotor2->Set(-0.5);
+	else if((longBottomLS->Get() == false || longBottomLS->Get() == true) && gamePad->GetRawButton(15)){
+		longLiftMotor1->Set(-0.8);
+		longLiftMotor2->Set(-0.8);
 	}
 	else{
 		longLiftMotor1->Set(0);
@@ -96,222 +103,85 @@ void LiftSystem::TestLifter(Joystick *gamePad){
 }
 
 void LiftSystem::RunLongLift(Joystick *gamePad){
-	float MotorOutput = 0;
-	static float Counter = 0;
-	static float LongLevel = 0;
-	const long Limit = 128;
-
-	if(longBottomLS->Get() == true && (gamePad->GetRawButton(3) || gamePad->GetRawButton(1))){
-		longLiftMotor1->Set(0);
-		longLiftMotor2->Set(0);
-
+	if(longBottomLS->Get() == true){
 		longLiftMotor1->SetPosition(0);
 	}
-	else{
 
-		if(LongLevel > 2.5){
-			LongLevel = 2.5;
+	if(gamePad->GetRawButton(1)){
+		while((longLiftMotor1->GetPosition() * -1) < 750){
+			SetSpeed(-0.8, true, false);
 		}
-		if(LongLevel < 0){
-			LongLevel= 0;
-		}
-
-		Counter++;
-		if(gamePad->GetRawButton(6)){
-			if(Counter > Limit){
-				LongLevel = 0.5;
-				Counter = 0;
-			}
-		}
-		else if(gamePad->GetRawButton(7)){
-			if(Counter > Limit){
-				LongLevel = 1;
-				Counter = 0;
-			}
-		}
-		else if(gamePad->GetRawButton(8)){
-			if(Counter > Limit){
-				LongLevel = 1.5;
-				Counter = 0;
-			}
-		}
-		else if(gamePad->GetRawButton(9)){
-			if(Counter > Limit){
-				LongLevel = 2;
-				Counter = 0;
-			}
-		}
-		else if(gamePad->GetRawButton(10)){
-			if(Counter > Limit){
-				LongLevel = 0;
-				Counter = 0;
-			}
-		}
-		else if(gamePad->GetRawButton(15)){
-			if(Counter > Limit){
-				LongLevel = LongLevel - 0.2;
-				Counter = 0;
-			}
-		}
-		else if(gamePad->GetY() > 0.5){
-			if(Counter > Limit){
-				LongLevel = 2.5;
-				Counter = 0;
-			}
-		}
-		else if(gamePad->GetRawAxis(4) > 0.5){
-			if(Counter > Limit){
-				LongLevel = 2.4;
-				Counter = 0;
-			}
-		}
-
-		if(LongLevel == 0){
-			if(longBottomLS->Get() == false){
-				MotorOutput = longPID->GetOutput(longEncoderDistance, 0, 10, true);
-			}
-			if(longBottomLS->Get() == true){
-				longLiftMotor1->SetPosition(0);
-			}
-		}
-		else if(LongLevel == 0.3){
-			MotorOutput = longPID->GetOutput(longEncoderDistance, 1, 10, true);
-		}
-		else if(LongLevel == 0.5){
-			MotorOutput = longPID->GetOutput(longEncoderDistance, 0.5, 10, true);
-		}
-		else if(LongLevel == 0.8){
-			MotorOutput = longPID->GetOutput(longEncoderDistance, 1, 10, true);
-		}
-		else if(LongLevel == 1){
-			MotorOutput = longPID->GetOutput(longEncoderDistance, 1, 10, true);
-		}
-		else if(LongLevel == 1.3){
-			MotorOutput = longPID->GetOutput(longEncoderDistance, 1, 10, true);
-		}
-		else if(LongLevel == 1.5){
-			MotorOutput = longPID->GetOutput(longEncoderDistance, 1.5, 10, true);
-		}
-		else if(LongLevel == 1.8){
-			MotorOutput = longPID->GetOutput(longEncoderDistance, 1, 10, true);
-		}
-		else if(LongLevel == 2){
-			MotorOutput = longPID->GetOutput(longEncoderDistance, 2, 10, true);
-		}
-		else if(LongLevel == 2.3){
-			MotorOutput = longPID->GetOutput(longEncoderDistance, 1, 10, true);
-		}
-		else if(LongLevel == 2.5){
-			MotorOutput = longPID->GetOutput(longEncoderDistance, 2.5, 10, true);
-		}
-		else if(LongLevel == 2.4){
-			if(longEncoderDistance > 10){
-				MotorOutput = longPID->GetOutput(longEncoderDistance, 1, 10, true);
-			}
-			else if(longEncoderDistance <= 10){
-				MotorOutput = longPID->GetOutput(longEncoderDistance, 1.5, 10, true);
-				if(longEncoderDistance >= 15){
-					MotorOutput = 0;
-				}
-			}
-		}
-		else{
-			MotorOutput = 0;
-		}
+		SetSpeed(0, true, false);
 	}
-	longLiftMotor1->Set(MotorOutput);
-	longLiftMotor2->Set(MotorOutput);
-
+	else if(gamePad->GetRawButton(2)){
+		while((longLiftMotor1->GetPosition() * -1) < 1500){
+			SetSpeed(-0.8, true, false);
+		}
+		SetSpeed(0, true, false);
+	}
+	else if(gamePad->GetRawButton(3)){
+		while((longLiftMotor1->GetPosition() * -1) < 2900){
+			SetSpeed(-0.8, true, false);
+		}
+		SetSpeed(0, true, false);
+	}
+	else if(gamePad->GetRawButton(6)){
+		while((longLiftMotor1->GetPosition() * -1) > 750){
+			SetSpeed(0.4, true, false);
+		}
+		SetSpeed(0, true, false);
+	}
+	else if(gamePad->GetRawButton(7)){
+		while((longLiftMotor1->GetPosition() * -1) > 1500){
+			SetSpeed(0.4, true, false);
+		}
+		SetSpeed(0, true, false, true);
+	}
+	else if(gamePad->GetRawButton(8)){
+		while((longLiftMotor1->GetPosition() * -1) > 2900){
+			SetSpeed(0.4, true, false);
+		}
+		SetSpeed(0, true, false);
+	}
 }
 
 void LiftSystem::RunShortLift(Joystick *gamePad){
 	float MotorOutput = 0;
+	static int ShortLevel = 0;
 
-	static float Counter = 0;
-	static float ShortLevel = 0;
-	const long Limit = 128;
-
-	if(shortTopLS->Get() == true){
-		shortLiftMotor1->Set(0);
-		shortLiftMotor2->Set(0);
-
+	if(shortBottomLS->Get() == true){
 		shortLiftMotor1->SetPosition(0);
 	}
-	else{
-		if(shortToteTouchSensor->Get() == true){
-			gamePad->SetRumble(Joystick::RumbleType::kLeftRumble, 0.5);
-			gamePad->SetRumble(Joystick::RumbleType::kRightRumble, 0.5);
-		}
-		else{
-			gamePad->SetRumble(Joystick::RumbleType::kLeftRumble, 0);
-			gamePad->SetRumble(Joystick::RumbleType::kRightRumble, 0);
-		}
 
-		if(ShortLevel > 2.5){
-			ShortLevel = 2.5;
-		}
-		if(ShortLevel < 0){
-			ShortLevel= 0;
-		}
+	if(gamePad->GetRawButton(1) == true){
+		ShortLevel = 0;
+	}
+	else if(gamePad->GetRawButton(2) == true){
+		ShortLevel = 1;
+	}
 
-		Counter++;
-		if(gamePad->GetRawButton(1)){
-			if(Counter > Limit){
-				ShortLevel = 0.5;
-				Counter = 0;
-			}
-		}
-		else if(gamePad->GetRawButton(2)){
-			if(Counter > Limit){
-				ShortLevel = 1;
-				Counter = 0;
-			}
-		}
-		else if(gamePad->GetRawButton(3)){
-			if(Counter > Limit){
-				ShortLevel = 1.5;
-				Counter = 0;
-			}
-		}
-		else if(gamePad->GetRawButton(4)){
-			if(Counter > Limit){
-				ShortLevel = 2;
-				Counter = 0;
-			}
-		}
-		else if(gamePad->GetX() > 0.5){
-			if(Counter > Limit){
-				ShortLevel = 2.5;
-				Counter = 0;
-			}
-		}
 
-		if(ShortLevel == 0){
-			if(shortBottomLS->Get() == false){
-				MotorOutput = longPID->GetOutput(shortEncoderDistance, 0, 10, true);
-			}
-			if(shortBottomLS->Get() == true){
-				shortLiftMotor1->SetPosition(0);
-			}
+	if(ShortLevel == 0){
+		MotorOutput = 0;
+		while(shortEncoderDistance > 0){
+			MotorOutput = 1;
 		}
-		else if(ShortLevel == 0.5){
-			MotorOutput = longPID->GetOutput(longEncoderDistance, 0.5, 10, true);
+	}
+	else if(ShortLevel == 1){
+		MotorOutput = 0;
+		while(shortEncoderDistance < 950){
+			MotorOutput = -0.8;
 		}
-		else if(ShortLevel == 1){
-			MotorOutput = longPID->GetOutput(longEncoderDistance, 1, 10, true);
+		while(shortEncoderDistance > 1050){
+			MotorOutput = 0.4;
 		}
-		else if(ShortLevel == 1.5){
-			MotorOutput = longPID->GetOutput(longEncoderDistance, 1.5, 10, true);
-		}
-		else if(ShortLevel == 2){
-			MotorOutput = longPID->GetOutput(longEncoderDistance, 2, 10, true);
-		}
-		else if(ShortLevel == 2.5){
-			MotorOutput = longPID->GetOutput(longEncoderDistance, 2.5, 10, true);
-		}
-		else{
-			MotorOutput = 0;
-		}
+	}
+
+	if(shortTopLS->Get() == true && MotorOutput > 0){
+		MotorOutput = 0;
+	}
+	else if(shortBottomLS->Get() == true && MotorOutput < 0){
+		MotorOutput = 0;
 	}
 
 	shortLiftMotor1->Set(MotorOutput);

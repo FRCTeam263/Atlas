@@ -12,9 +12,6 @@ MecanumDrive::MecanumDrive(){
 	BRMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
 
 	FLWheel = new Encoder(0, 1, false, Encoder::k4X);
-	/*BLWheel = new Encoder(2, 3, false, Encoder::k1X);
-	FRWheel = new Encoder(4, 5, false, Encoder::k1X);
-	BRWheel = new Encoder(6, 7, false, Encoder::k1X);*/
 
 	mecanumGyro = new Gyro(0);
 	mecanumGyro->SetSensitivity(0.007);
@@ -25,6 +22,11 @@ MecanumDrive::MecanumDrive(){
 	BRMotor->Set(0);
 	FLMotor->Set(0);
 	BLMotor->Set(0);
+
+	FLMotor->SetPosition(0);
+	FRMotor->SetPosition(0);
+	BLMotor->SetPosition(0);
+	BRMotor->SetPosition(0);
 
 	FLSpeed = 0;
 	FRSpeed = 0;
@@ -47,6 +49,13 @@ MecanumDrive::~MecanumDrive(){
 }
 
 void MecanumDrive::Drive(Joystick *drivePad){
+	if(drivePad->GetRawButton(4) == true){
+		FLMotor->SetPosition(0);
+		FRMotor->SetPosition(0);
+		BLMotor->SetPosition(0);
+		BRMotor->SetPosition(0);
+	}
+
 	float YDrive;
 	float XDrive;
 	float Rotate;
@@ -61,12 +70,12 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	}
 
 	if(ThrottleEnabled == 1){
-		YDrive = drivePad->GetY() * -1 / 2.2;
-		XDrive = (drivePad->GetX()) / 2.2;
-		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 2.2;
+		YDrive = drivePad->GetY() * -1 / 1.7;
+		XDrive = (drivePad->GetX()) / 1.7;
+		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 1.7;
 	}
 	else if(ThrottleEnabled == 0){
-		YDrive = drivePad->GetY() * -1;
+		YDrive = drivePad->GetY()  * -1;
 		XDrive = drivePad->GetX();
 		Rotate = -drivePad->GetThrottle() + drivePad->GetTwist();
 	}
@@ -103,10 +112,24 @@ void MecanumDrive::Drive(Joystick *drivePad){
 		BRSpeed = BRSpeed / max;
 	}
 
-	FLMotor->Set(FLSpeed * -1);
-	FRMotor->Set(FRSpeed);
-	BLMotor->Set(BLSpeed * -1);
-	BRMotor->Set(BRSpeed);
+	if(drivePad->GetRawButton(5) == true){
+		FLMotor->Set(-1);
+		FRMotor->Set(-1);
+		BLMotor->Set(0);
+		BRMotor->Set(0);
+	}
+	else if(drivePad->GetRawButton(6) == true){
+		FLMotor->Set(1);
+		FRMotor->Set(1);
+		BLMotor->Set(0);
+		BRMotor->Set(0);
+	}
+	else{
+		FLMotor->Set(FLSpeed * -1);
+		FRMotor->Set(FRSpeed);
+		BLMotor->Set(BLSpeed * -1);
+		BRMotor->Set(BRSpeed);
+	}
 }
 
 void MecanumDrive::AutonDriveStraight(bool GyroEnabled, float Speed){

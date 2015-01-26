@@ -15,7 +15,10 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 
 	float LifterSetpoint = 0;
 
-	if(autoMode == Reset){
+
+	switch(autoMode){
+
+	case Reset:
 		if(lifter->longBottomLS->Get() == true){
 			lifter->longLiftMotor1->SetPosition(0);
 			drive->FLWheel->Reset();
@@ -30,9 +33,9 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 		else if(lifter->longBottomLS->Get() == false){
 			LifterSetpoint = -1;
 		}
-	}
+		break;
 
-	if(autoMode == Lift1Tote){
+	case Lift1Tote:
 
 		if(LifterDistance <= 100){//lift tote up
 			LifterSetpoint = 0.5;
@@ -53,9 +56,9 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 		if(LifterDistance >= 150 && WheelEncoder >= 1000){
 			autoMode = Stack1Tote;
 		}
-	}
+		break;
 
-	if(autoMode == Stack1Tote){
+	case Stack1Tote:
 
 		if(WheelEncoder >= 1000){//when reachs 2nd tote, reset encoder value.
 			drive->FLWheel->Reset();
@@ -80,9 +83,9 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 		if(LifterDistance <= 10 && WheelEncoder <= -20){
 			autoMode = Lift2Totes;
 		}
-	}
+		break;
 
-	if(autoMode == Lift2Totes){
+	case Lift2Totes:
 
 		if(lifter->longToteTouchSensor->Get() == false){//drive forward to 2nd tote.
 			drive->AutonDriveStraight(true, 0.5);
@@ -106,8 +109,9 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 		if(LifterDistance >= 150 && WheelEncoder >= 1000){
 			autoMode = Stack2Totes;
 		}
-	}
-	if(autoMode == Stack2Totes){
+		break;
+
+	case Stack2Totes:
 
 		if(WheelEncoder >= 1000){//when reaches 3rd tote, reset encoder value.
 			drive->FLWheel->Reset();
@@ -131,9 +135,9 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 		if(LifterDistance <= 10 && WheelEncoder <= -20){
 			autoMode = Lift3Totes;
 		}
-	}
+		break;
 
-	if(autoMode == Lift3Totes){
+	case Lift3Totes:
 
 		if(lifter->longToteTouchSensor->Get() == false){//drive forward to tote stack.
 			drive->AutonDriveStraight(true, 0.5);
@@ -154,6 +158,7 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 		if(WheelEncoder <= -200 && lifter->longBottomLS->Get()){
 			autoMode = DriveToAutoZone;
 		}
+		break;
 	}
 
 	if(autoMode == DriveToAutoZone && lifter->longBottomLS->Get() && WheelEncoder >= -300){

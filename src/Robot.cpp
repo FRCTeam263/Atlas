@@ -8,7 +8,7 @@ const int numberOfElevatorLevels = 7;
 const int elevatorLevels[numberOfElevatorLevels] = { 0, 800, 1000, 1800, 2000,
 		2800, 3000 };
 
-class Robot: public SampleRobot
+class Omega: public SampleRobot
 {
 public:
 	Joystick *drivePad;
@@ -21,9 +21,7 @@ public:
 
 	AutonomousSystem *auton;
 
-	int currentElevatorLevel = 0;
-
-	Robot()
+	Omega()
 	{
 		drivePad = new Joystick(0);
 		gamePad = new Joystick(1);
@@ -36,7 +34,7 @@ public:
 		auton = new AutonomousSystem();
 	}
 
-	~Robot(){
+	~Omega(){
 		delete drivePad;
 		delete gamePad;
 		delete autonMode;
@@ -48,22 +46,13 @@ public:
 
 	void Autonomous()
 	{
-		/*while(IsAutonomous() && IsEnabled()){
-
-			if(autonMode->GetRawButton(1)){
-				auton->Run3ToteAuto(drive, lifter);
+		while(IsAutonomous() && IsEnabled()){
+			printf("Encoder: %f\n", lifter->longLiftMotor1->GetPosition() * -1);
+			while((lifter->longLiftMotor1->GetPosition() * -1) < 800){
+				lifter->SetSpeed(-0.5, true, false);
 			}
-
-
-			else if(autonMode->GetRawButton(2)){
-
-			}
+			lifter->SetSpeed(0, false, false, true);
 		}
-
-		while(IsOperatorControl() && IsDisabled()){
-			lifter->ResetLifter();
-			drive->SetZero();
-		}*/
 	}
 
 	void OperatorControl()
@@ -72,9 +61,9 @@ public:
 		{
 			drive->Drive(drivePad);
 			lifter->TestLifter(gamePad);
-			printf("Encoder: %f\t 1:%d\n", lifter->longLiftMotor1->GetPosition(), lifter->longLiftMotor1->GetEncPosition());
+			printf("Encoder: %f\n", lifter->longLiftMotor1->GetPosition() * -1);
 			//lifter->RunShortLift(gamePad);
-			//lifter->RunLongLift(drivePad);
+			lifter->RunLongLift(gamePad);
 			//grabber->Extend(drivePad);
 			/*while (gamePad->GetRawButton(0) == false) {
 				if (gamePad->GetRawButton(1)) {
@@ -92,15 +81,10 @@ public:
 
 			}*/
 		}
-
-		/*while(IsOperatorControl() && IsDisabled()){
-			lifter->ResetLifter();
-			drive->SetZero();
-		}*/
 	}
 };
 
-START_ROBOT_CLASS(Robot);
+START_ROBOT_CLASS(Omega);
 
 
 

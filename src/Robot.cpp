@@ -65,9 +65,8 @@ public:
 		{
 			drive->Drive(drivePad);
 			lifter->TestLifter(gamePad);
-			printf("Encoder: %f\n", lifter->longLiftMotor1->GetPosition() * -1);
-			//lifter->RunShortLift(gamePad);
 			lifter->RunLongLift(gamePad);
+			printf("Encoder: %f\n", lifter->longLiftMotor1->GetPosition());
 			//grabber->Extend(drivePad);
 			/*while (gamePad->GetRawButton(0) == false) {
 				if (gamePad->GetRawButton(1)) {

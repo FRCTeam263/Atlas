@@ -1,10 +1,3 @@
-/*
- * Autonomous.h
- *
- *  Created on: Jan 9, 2015
- *      Author: Administrator
- */
-
 #ifndef SRC_SYSTEMS_AUTONOMOUS_H_
 #define SRC_SYSTEMS_AUTONOMOUS_H_
 
@@ -19,7 +12,7 @@ public:
 	~AutonomousSystem(void);
 
 	void Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter);
-	void Run2ToteAuto(MecanumDrive *drive, LiftSystem *lifter);
+	void RunNothing(MecanumDrive *drive, LiftSystem *lifter);
 
 private:
 	typedef enum{Reset, Lift1Tote, Stack1Tote, Lift2Totes, Stack2Totes, Lift3Totes, DriveToAutoZone} AutoMode;

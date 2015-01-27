@@ -23,11 +23,6 @@ public:
 	CANTalon *BLMotor;
 	CANTalon *BRMotor;
 
-	Encoder *FLWheel;
-	/*Encoder *BLWheel;
-	Encoder *FRWheel;
-	Encoder *BRWheel;*/
-
 private:
 	Utilities *utilities;
 

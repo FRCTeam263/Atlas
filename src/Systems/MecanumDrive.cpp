@@ -11,8 +11,6 @@ MecanumDrive::MecanumDrive(){
 	FRMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
 	BRMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
 
-	FLWheel = new Encoder(0, 1, false, Encoder::k4X);
-
 	mecanumGyro = new Gyro(0);
 	mecanumGyro->SetSensitivity(0.007);
 
@@ -22,11 +20,13 @@ MecanumDrive::MecanumDrive(){
 	BRMotor->Set(0);
 	FLMotor->Set(0);
 	BLMotor->Set(0);
-
 	FLMotor->SetPosition(0);
 	FRMotor->SetPosition(0);
 	BLMotor->SetPosition(0);
 	BRMotor->SetPosition(0);
+
+	FRMotor->SetSensorDirection(true);
+	BRMotor->SetSensorDirection(true);
 
 	FLSpeed = 0;
 	FRSpeed = 0;
@@ -41,8 +41,6 @@ MecanumDrive::~MecanumDrive(){
 	delete BRMotor;
 
 	delete mecanumGyro;
-
-	delete FLWheel;
 
 	delete utilities;
 

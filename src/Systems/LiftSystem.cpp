@@ -51,6 +51,8 @@ LiftSystem::~LiftSystem(void){
 	delete longToteTouchSensor;
 
 	delete utilities;
+	delete longPID;
+	delete shortPID;
 }
 
 void LiftSystem::TestLifter(Joystick *gamePad){
@@ -219,6 +221,10 @@ void LiftSystem::SetSpeed(float Speed, bool longSide, bool shortSide, bool BothS
 	}
 }
 
+void LiftSystem::SetZero(void){
+	longLiftMotor1->Set(0);
+	shortLiftMotor1->Set(0);
+}
 float LiftSystem::ElevatorSpeed(float Setpoint){
 	const float minVelocityInPercentThatOvercomesMotorInertia = 0.25;  // must be determined by empirical measurement.
 	const float accelerationStepSizeInPercent = 0.05;  // Increment used to adjust velocity per per time unit.

@@ -17,6 +17,7 @@ CanGrabber::CanGrabber() {
 
 CanGrabber::~CanGrabber() {
 	delete grabber;
+	delete canExtend;
 }
 
 void CanGrabber::Extend(Joystick *gamePad){

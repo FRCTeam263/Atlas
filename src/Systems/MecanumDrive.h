@@ -6,6 +6,7 @@
 #include "Joystick.h"
 #include "LiftSystem.h"
 #include "Utilities.h"
+#include "../Defines.h"
 #include <math.h>
 
 class MecanumDrive{

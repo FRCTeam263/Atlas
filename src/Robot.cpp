@@ -4,9 +4,9 @@
 #include "Systems/CanGrabber.h"
 #include "Systems/Autonomous.h"
 
-const int numberOfElevatorLevels = 7;
+/*const int numberOfElevatorLevels = 7;
 const int elevatorLevels[numberOfElevatorLevels] = {0, 800, 1000, 1800, 2000,
-		2800, 3000};
+		2800, 3000};*/
 
 class Omega: public SampleRobot
 {

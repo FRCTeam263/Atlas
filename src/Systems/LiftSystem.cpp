@@ -1,17 +1,17 @@
 #include "LiftSystem.h"
 
 LiftSystem::LiftSystem(void){
-	shortLiftMotor1 = new CANTalon(1);
-	shortLiftMotor2 = new CANTalon(2);
-	longLiftMotor1 = new CANTalon(7);
-	longLiftMotor2 = new CANTalon(8);
+	shortLiftMotor1 = new CANTalon(SHORT_LIFT_MOTOR_1);
+	shortLiftMotor2 = new CANTalon(SHORT_LIFT_MOTOR_2);
+	longLiftMotor1 = new CANTalon(LONG_LIFT_MOTOR_1);
+	longLiftMotor2 = new CANTalon(LONG_LIFT_MOTOR_2);
 
-	shortBottomLS = new DigitalInput(0);
-	shortTopLS = new DigitalInput(1);
-	longBottomLS = new DigitalInput(2);
-	longTopLS = new DigitalInput(3);
-	longToteTouchSensor = new DigitalInput(4);
-	shortToteTouchSensor = new DigitalInput(5);
+	shortBottomLS = new DigitalInput(SHORT_BOTTOM_LS);
+	shortTopLS = new DigitalInput(SHORT_TOP_LS);
+	longBottomLS = new DigitalInput(LONG_BOTTOM_LS);
+	longTopLS = new DigitalInput(LONG_TOP_LS);
+	longToteTouchSensor = new DigitalInput(LONG_TOTE_SENSOR);
+	shortToteTouchSensor = new DigitalInput(SHORT_TOTE_SENSOR);
 
 	utilities = new Utilities();
 	shortPID = new AfterPID();
@@ -51,8 +51,6 @@ LiftSystem::~LiftSystem(void){
 	delete longToteTouchSensor;
 
 	delete utilities;
-	delete longPID;
-	delete shortPID;
 }
 
 void LiftSystem::TestLifter(Joystick *gamePad){

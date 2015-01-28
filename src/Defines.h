@@ -1,0 +1,28 @@
+#ifndef SRC_SYSTEMS_DEFINES_H_
+#define SRC_SYSTEMS_DEFINES_H_
+
+//CAN Motors
+#define FRONT_LEFT_MOTOR 5
+#define FRONT_RIGHT_MOTOR 0
+#define BACK_LEFT_MOTOR 6
+#define BACK_RIGHT_MOTOR 4
+
+#define LONG_LIFT_MOTOR_1 7
+#define LONG_LIFT_MOTOR_2 8
+#define SHORT_LIFT_MOTOR_1 1
+#define SHORT_LIFT_MOTOR_2 2
+
+//DIO
+#define SHORT_BOTTOM_LS 0
+#define SHORT_TOP_LS 1
+#define LONG_BOTTOM_LS 2
+#define LONG_TOP_LS 3
+#define LONG_TOTE_SENSOR 4
+#define SHORT_TOTE_SENSOR 5
+
+//Analog Input
+#define GYRO 0
+
+
+
+#endif /* SRC_SYSTEMS_DEFINES_H_ */

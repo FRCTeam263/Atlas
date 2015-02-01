@@ -33,8 +33,8 @@ public:
 
 		auton = new AutonomousSystem();
 
-		CameraServer::GetInstance()->SetQuality(50);
-		CameraServer::GetInstance()->StartAutomaticCapture("cam0");
+		/*CameraServer::GetInstance()->SetQuality(50);
+		CameraServer::GetInstance()->StartAutomaticCapture("cam0");*/
 	}
 
 	~Omega(){
@@ -65,8 +65,8 @@ public:
 		{
 			drive->Drive(drivePad);
 			lifter->TestLifter(gamePad);
-			lifter->RunLongLift(gamePad);
-			printf("Encoder: %f\n", lifter->longLiftMotor1->GetPosition());
+			//lifter->RunLongLift(gamePad);
+			printf("WideEncoder: %f\t ShortEncoder: %f\n", lifter->longLiftMotor1->GetPosition(), lifter->shortLiftMotor1->GetPosition());
 			//grabber->Extend(drivePad);
 			/*while (gamePad->GetRawButton(0) == false) {
 				if (gamePad->GetRawButton(1)) {

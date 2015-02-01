@@ -1,15 +1,15 @@
 #include "LiftSystem.h"
 
 LiftSystem::LiftSystem(void){
-	shortLiftMotor1 = new CANTalon(1);
-	shortLiftMotor2 = new CANTalon(2);
-	longLiftMotor1 = new CANTalon(7);
-	longLiftMotor2 = new CANTalon(8);
+	shortLiftMotor1 = new CANTalon(7);
+	shortLiftMotor2 = new CANTalon(6);
+	longLiftMotor1 = new CANTalon(4);
+	longLiftMotor2 = new CANTalon(3);
 
-	shortBottomLS = new DigitalInput(0);
-	shortTopLS = new DigitalInput(1);
-	longBottomLS = new DigitalInput(2);
-	longTopLS = new DigitalInput(3);
+	shortBottomLS = new DigitalInput(2);
+	shortTopLS = new DigitalInput(3);
+	longBottomLS = new DigitalInput(1);
+	longTopLS = new DigitalInput(0);
 	longToteTouchSensor = new DigitalInput(4);
 	shortToteTouchSensor = new DigitalInput(5);
 
@@ -26,9 +26,9 @@ LiftSystem::LiftSystem(void){
 	longLiftMotor1->SetSensorDirection(true);
 
 	longLiftMotor2->SetControlMode(CANTalon::kFollower);
-	longLiftMotor2->Set(7);
+	longLiftMotor2->Set(4);
 	shortLiftMotor2->SetControlMode(CANTalon::kFollower);
-	shortLiftMotor2->Set(1);
+	shortLiftMotor2->Set(7);
 
 	shortLiftMotor1->SetPosition(0);
 	longLiftMotor1->SetPosition(0);
@@ -51,8 +51,6 @@ LiftSystem::~LiftSystem(void){
 	delete longToteTouchSensor;
 
 	delete utilities;
-	delete longPID;
-	delete shortPID;
 }
 
 void LiftSystem::TestLifter(Joystick *gamePad){
@@ -63,17 +61,17 @@ void LiftSystem::TestLifter(Joystick *gamePad){
 		shortLiftMotor1->SetPosition(0);
 	}
 
-	if(longBottomLS->Get() == true && gamePad->GetRawButton(16)){
+	if(longBottomLS->Get() == true && gamePad->GetRawButton(6)){
 		longLiftMotor1->Set(0);
 	}
-	else if(longTopLS->Get() == true && gamePad->GetRawButton(15)){
+	else if(longTopLS->Get() == true && gamePad->GetRawButton(5)){
 		longLiftMotor1->Set(0);
 	}
-	else if((longTopLS->Get() == false || longTopLS->Get() == true) && gamePad->GetRawButton(16)){
-		longLiftMotor1->Set(0.4);
+	else if((longTopLS->Get() == false || longTopLS->Get() == true) && gamePad->GetRawButton(6)){
+		longLiftMotor1->Set(0.7);
 	}
-	else if((longBottomLS->Get() == false || longBottomLS->Get() == true) && gamePad->GetRawButton(15)){
-		longLiftMotor1->Set(-0.8);
+	else if((longBottomLS->Get() == false || longBottomLS->Get() == true) && gamePad->GetRawButton(5)){
+		longLiftMotor1->Set(-1);
 	}
 	else{
 		longLiftMotor1->Set(0);
@@ -85,11 +83,11 @@ void LiftSystem::TestLifter(Joystick *gamePad){
 	else if(shortTopLS->Get() == true && gamePad->GetRawButton(8)){
 		shortLiftMotor1->Set(0);
 	}
-	else if((shortTopLS->Get() == false || shortTopLS->Get() == true) && gamePad->GetRawButton(7)){
-		shortLiftMotor1->Set(0.5);
+	else if((shortTopLS->Get() == false || shortTopLS->Get() == true) && gamePad->GetRawButton(8)){
+		shortLiftMotor1->Set(0.4);
 	}
-	else if((shortBottomLS->Get() == false || shortBottomLS->Get() == true) && gamePad->GetRawButton(8)){
-		shortLiftMotor1->Set(-0.5);
+	else if((shortBottomLS->Get() == false || shortBottomLS->Get() == true) && gamePad->GetRawButton(7)){
+		shortLiftMotor1->Set(-0.8);
 	}
 	else{
 		shortLiftMotor1->Set(0);

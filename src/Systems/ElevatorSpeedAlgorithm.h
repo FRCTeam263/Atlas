@@ -20,16 +20,12 @@ class ElevatorSpeedAlgorithm {
 	bool firstTimeCalled = true;
 
 public:
-//	ElevatorSpeedAlgorithm();
-	ElevatorSpeedAlgorithm(const float theMinVelocityInPercentThatOvercomesMotorInertia = 0.15,
+	ElevatorSpeedAlgorithm(const float theMinVelocityInPercentThatOvercomesMotorInertia = 0.1,
 						   float theAccelerationStepSizeInPercent = 0.025,
 						   int theDeadbandInEncoderCounts = 50,
-						   float theMaxSpeedUpwardInPercent = 0.8,
+						   float theMaxSpeedUpwardInPercent = 0.6,
 						   float theMaxSpeedDownwardInPercent = 0.4,
-						   float delayBetweeenSpeedEvaluations = 0.025
-
-
-							);
+						   float delayBetweeenSpeedEvaluations = 0.005);
 	virtual ~ElevatorSpeedAlgorithm();
 	float ComputeNextMotorSpeedCommand(int currentEncoderCount,	int targetEncoderCount);
 

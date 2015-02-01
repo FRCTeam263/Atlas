@@ -4,10 +4,6 @@
 #include "Systems/CanGrabber.h"
 #include "Systems/Autonomous.h"
 
-/*const int numberOfElevatorLevels = 7;
-const int elevatorLevels[numberOfElevatorLevels] = {0, 800, 1000, 1800, 2000,
-		2800, 3000};*/
-
 class Omega: public SampleRobot
 {
 public:
@@ -65,8 +61,9 @@ public:
 		{
 			drive->Drive(drivePad);
 			lifter->TestLifter(gamePad);
+			lifter->RunShortLift(gamePad);
 			//lifter->RunLongLift(gamePad);
-			printf("WideEncoder: %f\t ShortEncoder: %f\n", lifter->longLiftMotor1->GetPosition(), lifter->shortLiftMotor1->GetPosition());
+			//printf("WideEncoder: %f\t ShortEncoder: %f\n", lifter->longLiftMotor1->GetPosition(), lifter->shortLiftMotor1->GetPosition());
 			//grabber->Extend(drivePad);
 			/*while (gamePad->GetRawButton(0) == false) {
 				if (gamePad->GetRawButton(1)) {

@@ -10,11 +10,6 @@
 #include <cmath>
 #include <time.h>
 
-//ElevatorSpeedAlgorithm::ElevatorSpeedAlgorithm() {
-//	// TODO Auto-generated constructor stub
-//
-//}
-
 ElevatorSpeedAlgorithm::ElevatorSpeedAlgorithm(
 						   const float theMinVelocityInPercentThatOvercomesMotorInertia,
 						   float theAccelerationStepSizeInPercent,
@@ -32,7 +27,6 @@ ElevatorSpeedAlgorithm::ElevatorSpeedAlgorithm(
 }
 
 ElevatorSpeedAlgorithm::~ElevatorSpeedAlgorithm() {
-	// TODO Auto-generated destructor stub
 }
 
 // Return [-1.0 .. 1.0] to command motor.
@@ -76,7 +70,7 @@ float ElevatorSpeedAlgorithm::ComputeNextMotorSpeedCommand(
 				float roomForRampDownInEncoderCounts =
 						fabs(measuredVelocityInEncoderCounts) * numberOfIterationsItWillTakeToStop / 2.0;
 //						fabs(measuredVelocityInEncoderCounts) *
-//					(fabs(measuredVelocityInEncoderCounts) / (1/accelerationStepSizeInPercent)) / 2; //TODO check into this
+//					(fabs(measuredVelocityInEncoderCounts) / (1/accelerationStepSizeInPercent)) / 2;
 				printf("room=%f, ", roomForRampDownInEncoderCounts);
 				// compare room required to room remaining.  Anticipate an extra
 				// iteration at current speed, and add the ramp down room to it.

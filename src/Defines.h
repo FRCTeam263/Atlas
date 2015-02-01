@@ -23,6 +23,8 @@
 //Analog Input
 #define GYRO 0
 
+//Const
+const int elevatorShortLevels[5] = {0, 750, 1500, 2300, 2900};
 
 
 #endif /* SRC_SYSTEMS_DEFINES_H_ */

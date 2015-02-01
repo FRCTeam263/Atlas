@@ -22,9 +22,6 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 			lifter->longLiftMotor1->SetPosition(0);
 			drive->FLMotor->SetPosition(0);
 
-			lifter->longPID->ResetPID();
-			lifter->shortPID->ResetPID();
-
 			LifterSetpoint = 0;
 
 			autoMode = Lift1Tote;

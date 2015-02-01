@@ -5,6 +5,7 @@
 #include "Joystick.h"
 #include "DigitalInput.h"
 #include "Utilities.h"
+#include "ElevatorSpeedAlgorithm.h"
 #include "../Misc/AfterPID.h"
 #include "../Defines.h"
 
@@ -19,7 +20,6 @@ public:
 	void SetZero(void);
 	void TestLifter(Joystick *gamePad);
 	void SetSpeed(float Speed, bool longSide, bool shortSide, bool BothSides = false);
-	float ElevatorSpeed(float Setpoint);
 
 	CANTalon *shortLiftMotor1;
 	CANTalon *shortLiftMotor2;
@@ -33,10 +33,9 @@ public:
 	DigitalInput *shortToteTouchSensor;
 	DigitalInput *longToteTouchSensor;
 
-	AfterPID *shortPID;
-	AfterPID *longPID;
 private:
 	Utilities *utilities;
+	ElevatorSpeedAlgorithm *lifterOutput;
 
 	float shortEncoderDistance;
 	float longEncoderDistance;

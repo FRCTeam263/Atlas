@@ -1,17 +1,23 @@
 #include "MecanumDrive.h"
 
 MecanumDrive::MecanumDrive(){
+/*<<<<<<< HEAD
 	FRMotor = new CANTalon(0);
 	FLMotor = new CANTalon(1);
 	BRMotor = new CANTalon(5);
 	BLMotor = new CANTalon(2);
+=======*/
+	FRMotor = new CANTalon(FRONT_RIGHT_MOTOR);
+	FLMotor = new CANTalon(FRONT_LEFT_MOTOR);
+	BRMotor = new CANTalon(BACK_RIGHT_MOTOR);
+	BLMotor = new CANTalon(BACK_LEFT_MOTOR);
 
 	FLMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
 	BLMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
 	FRMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
 	BRMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
 
-	mecanumGyro = new Gyro(0);
+	mecanumGyro = new Gyro(GYRO);
 	mecanumGyro->SetSensitivity(0.007);
 
 	utilities = new Utilities();

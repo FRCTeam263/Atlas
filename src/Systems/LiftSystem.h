@@ -6,6 +6,7 @@
 #include "DigitalInput.h"
 #include "Utilities.h"
 #include "../Misc/AfterPID.h"
+#include "../Defines.h"
 
 class LiftSystem{
 public:

@@ -1,6 +1,7 @@
 #include "LiftSystem.h"
 
 LiftSystem::LiftSystem(void){
+/*<<<<<<< HEAD
 	shortLiftMotor1 = new CANTalon(7);
 	shortLiftMotor2 = new CANTalon(6);
 	longLiftMotor1 = new CANTalon(4);
@@ -12,6 +13,19 @@ LiftSystem::LiftSystem(void){
 	longTopLS = new DigitalInput(0);
 	longToteTouchSensor = new DigitalInput(4);
 	shortToteTouchSensor = new DigitalInput(5);
+=======*/
+	shortLiftMotor1 = new CANTalon(SHORT_LIFT_MOTOR_1);
+	shortLiftMotor2 = new CANTalon(SHORT_LIFT_MOTOR_2);
+	longLiftMotor1 = new CANTalon(LONG_LIFT_MOTOR_1);
+	longLiftMotor2 = new CANTalon(LONG_LIFT_MOTOR_2);
+
+	shortBottomLS = new DigitalInput(SHORT_BOTTOM_LS);
+	shortTopLS = new DigitalInput(SHORT_TOP_LS);
+	longBottomLS = new DigitalInput(LONG_BOTTOM_LS);
+	longTopLS = new DigitalInput(LONG_TOP_LS);
+	longToteTouchSensor = new DigitalInput(LONG_TOTE_SENSOR);
+	shortToteTouchSensor = new DigitalInput(SHORT_TOTE_SENSOR);
+/*>>>>>>> origin/master*/
 
 	utilities = new Utilities();
 	shortPID = new AfterPID();

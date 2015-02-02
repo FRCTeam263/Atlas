@@ -23,9 +23,8 @@
 //Analog Input
 #define GYRO 0
 
-//Const
+//Preset Encoder Values
 const int elevatorShortLevels[5] = {0, 750, 1500, 2300, 2900};
 const int elevatorLongLevels[5] = {0, 750, 1500, 2300, 2900};
-
 
 #endif /* SRC_SYSTEMS_DEFINES_H_ */

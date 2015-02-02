@@ -35,9 +35,9 @@ LiftSystem::LiftSystem(void){
 	longLiftMotor1->SetSensorDirection(true);
 
 	longLiftMotor2->SetControlMode(CANTalon::kFollower);
-	longLiftMotor2->Set(4);
+	longLiftMotor2->Set(LONG_LIFT_MOTOR_1);
 	shortLiftMotor2->SetControlMode(CANTalon::kFollower);
-	shortLiftMotor2->Set(7);
+	shortLiftMotor2->Set(SHORT_LIFT_MOTOR_1);
 
 	shortLiftMotor1->SetPosition(0);
 	longLiftMotor1->SetPosition(0);

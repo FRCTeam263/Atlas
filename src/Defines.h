@@ -7,16 +7,15 @@
 #define BACK_LEFT_MOTOR 2
 #define BACK_RIGHT_MOTOR 5
 
-#define LONG_LIFT_MOTOR_1 4
-#define LONG_LIFT_MOTOR_2 3
+#define CAN_LIFT_MOTOR 4
 #define SHORT_LIFT_MOTOR_1 7
 #define SHORT_LIFT_MOTOR_2 6
 
 //DIO
 #define SHORT_BOTTOM_LS 3
 #define SHORT_TOP_LS 2
-#define LONG_BOTTOM_LS 1
-#define LONG_TOP_LS 0
+#define CAN_BOTTOM_LS 1
+#define CAN_TOP_LS 0
 #define LONG_TOTE_SENSOR 4
 #define SHORT_TOTE_SENSOR 5
 
@@ -24,8 +23,8 @@
 #define GYRO 0
 
 //Const
-const int elevatorShortLevels[5] = {0, 750, 1500, 2300, 2900};
-const int elevatorLongLevels[5] = {0, 750, 1500, 2300, 2900};
+const int elevatorShortLevels[5] = {0, 416, 1360, 2700, 3750};
+const int elevatorCanLevels[4] = {0, 500, 1000, 3750};
 
 
 #endif /* SRC_SYSTEMS_DEFINES_H_ */

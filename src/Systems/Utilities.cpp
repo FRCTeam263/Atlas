@@ -34,7 +34,7 @@ bool Utilities::GetJoystickButton(int RawButton, Joystick *HID){
 		// action multiple times.  The users press and release of a joystick
 		// button probably lasts much longer than the OperatorControl loop iteration.
 			static bool firstTimeCalled = true;
-			const clock_t DelayBeforeRecognizeNextPress = 0.5 * CLOCKS_PER_SEC;
+			const clock_t DelayBeforeRecognizeNextPress = 0.5 * 141052.6316;
 			const int maxButtons = 20;
 			static clock_t ButtonTimeLastPressed[maxButtons];
 			bool currentPressedState = false;

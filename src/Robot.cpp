@@ -60,26 +60,10 @@ public:
 		while (IsOperatorControl() && IsEnabled())
 		{
 			drive->Drive(drivePad);
-			lifter->TestLifter(gamePad);
-			lifter->RunShortLift(gamePad);
-			//lifter->RunLongLift(gamePad);
-			//printf("WideEncoder: %f\t ShortEncoder: %f\n", lifter->longLiftMotor1->GetPosition(), lifter->shortLiftMotor1->GetPosition());
+			lifter->RunLifter(gamePad);
+			//lifter->TestLifter(gamePad);
+			//printf("WideEncoder: %f\t ShortEncoder: %f\n", lifter->canLiftMotor->GetPosition(), lifter->shortLiftMotor1->GetPosition());
 			//grabber->Extend(drivePad);
-			/*while (gamePad->GetRawButton(0) == false) {
-				if (gamePad->GetRawButton(1)) {
-					if (++currentElevatorLevel > numberOfElevatorLevels)
-						currentElevatorLevel = numberOfElevatorLevels;
-				}
-
-				if (gamePad->GetRawButton(2)) {
-					if (--currentElevatorLevel < 0)
-						currentElevatorLevel = 0;
-				}
-
-				lifter->SetSpeed(lifter->ElevatorSpeed(elevatorLevels[currentElevatorLevel]),
-						true, false);
-
-			}*/
 		}
 	}
 };

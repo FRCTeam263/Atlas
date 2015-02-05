@@ -14,6 +14,7 @@ public:
 	LiftSystem(void);
 	~LiftSystem(void);
 
+	void RunLifter(Joystick *gamePad);
 	void RunLongLift(Joystick *gamePad);
 	void RunShortLift(Joystick *gamePad);
 	void ResetLifter(void);
@@ -23,13 +24,12 @@ public:
 
 	CANTalon *shortLiftMotor1;
 	CANTalon *shortLiftMotor2;
-	CANTalon *longLiftMotor1;
-	CANTalon *longLiftMotor2;
+	CANTalon *canLiftMotor;
 
 	DigitalInput *shortBottomLS;
-	DigitalInput *longBottomLS;
+	DigitalInput *canBottomLS;
 	DigitalInput *shortTopLS;
-	DigitalInput *longTopLS;
+	DigitalInput *canTopLS;
 	DigitalInput *shortToteTouchSensor;
 	DigitalInput *longToteTouchSensor;
 

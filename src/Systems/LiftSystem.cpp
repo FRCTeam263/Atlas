@@ -97,7 +97,8 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 		}
 	}
 	else if(manualEnabled == false){
-		float MotorOutput = 0;
+		float canMotorOutput = 0;
+		float shortMotorOutput = 0;
 		static int ShortLevel = 0;
 		static int CanLevel = 0;
 
@@ -123,65 +124,41 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 		else if(gamePad->GetRawButton(10) == true){
 			ShortLevel = 4;
 		}
-
-		MotorOutput = lifterOutput->ComputeNextMotorSpeedCommand(shortLiftMotor1->GetPosition(), elevatorShortLevels[ShortLevel]);
-
-		if(shortTopLS->Get() == true && MotorOutput > 0){
-			MotorOutput = 0;
+		else if(gamePad->GetRawButton(1) == true){
+			CanLevel = 0;
 		}
-		else if(shortBottomLS->Get() == true && MotorOutput < 0){
-			MotorOutput = 0;
+		else if(gamePad->GetRawButton(1) == true){
+			CanLevel = 1;
+		}
+		else if(gamePad->GetRawButton(1) == true){
+			CanLevel = 2;
+		}
+		else if(gamePad->GetRawButton(1) == true){
+			CanLevel = 3;
 		}
 
-		SetSpeed(MotorOutput * -1, false, true);
+		shortMotorOutput = lifterOutput->ComputeNextMotorSpeedCommand(shortLiftMotor1->GetPosition(), elevatorShortLevels[ShortLevel]);
+		canMotorOutput = lifterOutput->ComputeNextMotorSpeedCommand(canLiftMotor->GetPosition(), elevatorCanLevels[CanLevel]);
+
+		if(shortTopLS->Get() == true && shortMotorOutput > 0){
+			shortMotorOutput = 0;
+		}
+		else if(shortBottomLS->Get() == true && shortMotorOutput < 0){
+			shortMotorOutput = 0;
+		}
+		else if(canBottomLS->Get() == true && canMotorOutput < 0){
+			canMotorOutput = 0;
+		}
+		else if(canTopLS->Get() == true && canMotorOutput > 0){
+			canMotorOutput = 0;
+		}
+
+		SetToteSpeed(shortMotorOutput);
+		SetCanSpeed(canMotorOutput);
 	}
 	else{
 		SetZero();
 	}
-}
-
-void LiftSystem::TestLifter(Joystick *gamePad){
-	//printf("LB: %d\t LT: %d\t SB: %d\t ST: %d\n", longBottomLS->Get(),longTopLS->Get(), shortBottomLS->Get(), shortTopLS->Get());
-	if(canBottomLS->Get() == true){
-		canLiftMotor->SetPosition(0);
-	}
-	if(shortBottomLS->Get() == true){
-		shortLiftMotor1->SetPosition(0);
-	}
-
-	if(canBottomLS->Get() == true && gamePad->GetRawButton(11)){
-		canLiftMotor->Set(0);
-		canLiftMotor->SetPosition(0);
-	}
-	else if(canTopLS->Get() == true && gamePad->GetRawButton(12)){
-		canLiftMotor->Set(0);
-	}
-	else if((canTopLS->Get() == false || canTopLS->Get() == true) && gamePad->GetRawButton(11)){
-		canLiftMotor->Set(0.7);
-	}
-	else if((canBottomLS->Get() == false || canBottomLS->Get() == true) && gamePad->GetRawButton(12)){
-		canLiftMotor->Set(-1);
-	}
-	else{
-		canLiftMotor->Set(0);
-	}
-	if(shortBottomLS->Get() == true && gamePad->GetRawButton(13) == true){
-		shortLiftMotor1->Set(0);
-		shortLiftMotor1->SetPosition(0);
-	}
-	else if(shortTopLS->Get() == true && gamePad->GetRawButton(14) == true){
-		shortLiftMotor1->Set(0);
-	}
-	else if((shortTopLS->Get() == false || shortTopLS->Get() == true) && gamePad->GetRawButton(13)){
-		shortLiftMotor1->Set(0.4);
-	}
-	else if((shortBottomLS->Get() == false || shortBottomLS->Get() == true) && gamePad->GetRawButton(14)){
-		shortLiftMotor1->Set(-1);
-	}
-	else{
-		shortLiftMotor1->Set(0);
-	}
-	//printf("MotorShort: %f\n", shortLiftMotor1->Get());
 }
 
 void LiftSystem::ResetLifter(){
@@ -200,23 +177,12 @@ void LiftSystem::ResetLifter(){
 	}
 }
 
-void LiftSystem::SetSpeed(float Speed, bool longSide, bool shortSide, bool BothSides){
-	if(longSide == true){
-		canLiftMotor->Set(Speed);
-		shortLiftMotor1->Set(0);
-	}
-	else if(shortSide == true){
-		shortLiftMotor1->Set(Speed);
-		canLiftMotor->Set(0);
-	}
-	else if(BothSides == true){
-		shortLiftMotor1->Set(Speed);
-		canLiftMotor->Set(Speed);
-	}
-	else{
-		shortLiftMotor1->Set(0);
-		canLiftMotor->Set(0);
-	}
+void LiftSystem::SetCanSpeed(float Speed){
+	canLiftMotor->Set(Speed * -1);
+}
+
+void LiftSystem::SetToteSpeed(float Speed){
+	shortLiftMotor1->Set(Speed * -1);
 }
 
 void LiftSystem::SetZero(void){

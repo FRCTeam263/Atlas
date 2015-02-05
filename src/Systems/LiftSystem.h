@@ -20,7 +20,8 @@ public:
 	void ResetLifter(void);
 	void SetZero(void);
 	void TestLifter(Joystick *gamePad);
-	void SetSpeed(float Speed, bool longSide, bool shortSide, bool BothSides = false);
+	void SetCanSpeed(float Speed);
+	void SetToteSpeed(float Speed);
 
 	CANTalon *shortLiftMotor1;
 	CANTalon *shortLiftMotor2;

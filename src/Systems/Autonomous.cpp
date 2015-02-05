@@ -190,7 +190,7 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 		break;
 	}
 
-	lifter->SetSpeed(LifterSetpoint * -1, true, false);
+	lifter->SetToteSpeed(LifterSetpoint);
 }
 
 void AutonomousSystem::RunNothing(MecanumDrive *drive, LiftSystem *lifter){

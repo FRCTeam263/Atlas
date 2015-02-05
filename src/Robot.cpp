@@ -1,6 +1,7 @@
 #include "WPILib.h"
 #include "Systems/MecanumDrive.h"
 #include "Systems/LiftSystem.h"
+#include "Systems/CanGrabber.h"
 #include "Systems/Autonomous.h"
 
 class Omega: public SampleRobot
@@ -12,6 +13,7 @@ public:
 
 	MecanumDrive *drive;
 	LiftSystem *lifter;
+	CanGrabber *grabber;
 
 	AutonomousSystem *auton;
 
@@ -23,6 +25,7 @@ public:
 
 		drive = new MecanumDrive();
 		lifter = new LiftSystem();
+		grabber = new CanGrabber();
 
 		auton = new AutonomousSystem();
 
@@ -36,6 +39,7 @@ public:
 		delete autonMode;
 		delete drive;
 		delete lifter;
+		delete grabber;
 		delete auton;
 	}
 

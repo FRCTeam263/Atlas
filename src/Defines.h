@@ -26,5 +26,4 @@
 const int elevatorShortLevels[5] = {0, 416, 1360, 2700, 3750};
 const int elevatorCanLevels[4] = {0, 500, 1000, 3750};
 
-
 #endif /* SRC_SYSTEMS_DEFINES_H_ */

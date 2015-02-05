@@ -52,7 +52,7 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 		manualEnabled = !manualEnabled;
 	}
 
-	printf("Enabled: %d\n", manualEnabled);
+	//printf("Enabled: %d\n", manualEnabled);
 
 	if(manualEnabled == true){
 		if(shortBottomLS->Get() == true){
@@ -223,3 +223,4 @@ void LiftSystem::SetZero(void){
 	canLiftMotor->Set(0);
 	shortLiftMotor1->Set(0);
 }
+

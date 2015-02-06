@@ -59,7 +59,6 @@ public:
 			lifter->RunLifter(gamePad);
 			//lifter->TestLifter(gamePad);
 			//printf("WideEncoder: %f\t ShortEncoder: %f\n", lifter->canLiftMotor->GetPosition(), lifter->shortLiftMotor1->GetPosition());
-			//grabber->Extend(drivePad);
 		}
 	}
 };

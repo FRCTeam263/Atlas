@@ -4,11 +4,7 @@
  *  Created on: Jan 23, 2015
  *      Author: James
  */
-
-#include "WPILib.h"
 #include "ElevatorSpeedAlgorithm.h"
-#include <cmath>
-#include <time.h>
 
 ElevatorSpeedAlgorithm::ElevatorSpeedAlgorithm(
 		const float theMinVelocityInPercentThatOvercomesMotorInertia,
@@ -24,6 +20,8 @@ ElevatorSpeedAlgorithm::ElevatorSpeedAlgorithm(
 	delayBetweeenSpeedEvaluations = theDelayBetweeenSpeedEvaluations;
 	slowBandMultiplier = theSlowBandMultiplier;
 	speedDownDivisor = theSpeedDownDivisor;
+
+	levelTimer.Start();
 }
 
 ElevatorSpeedAlgorithm::~ElevatorSpeedAlgorithm() {
@@ -34,24 +32,28 @@ float ElevatorSpeedAlgorithm::ComputeNextMotorSpeedCommand(
 		int currentEncoderCount,
 		int targetEncoderCount )
 {
-	const clock_t clockDelayBetweeenSpeedEvaluations = delayBetweeenSpeedEvaluations * 141052.6316;
+	/*const clock_t clockDelayBetweeenSpeedEvaluations = delayBetweeenSpeedEvaluations * 141052.6316;
 	static clock_t lastEvaluationTimestamp = clock()
 						- clockDelayBetweeenSpeedEvaluations;
-	clock_t currentTick = -1;
+	clock_t currentTick = -1;*/
 
-	currentTick = clock();
-	if ((currentTick - lastEvaluationTimestamp)
+	//currentTick = clock();
+	/*if ((currentTick - lastEvaluationTimestamp)
 			>= clockDelayBetweeenSpeedEvaluations) {
-		lastEvaluationTimestamp = currentTick;
+		lastEvaluationTimestamp = currentTick;*/
+	int remainingEncoderCountsToDeadbandWidened;
 
-		int remainingEncoderCountsToTarget = targetEncoderCount
-				- currentEncoderCount;
+	if (levelTimer.HasPeriodPassed(delayBetweeenSpeedEvaluations) == true) {
+
+		levelTimer.Reset();
+
+		int remainingEncoderCountsToTarget = targetEncoderCount - currentEncoderCount;
 		/*printf("T=%d, d=%d, t=%d, r=%d, ", (int) currentTick,
 				currentEncoderCount, targetEncoderCount,
 				remainingEncoderCountsToTarget);*/
 		if (fabs(remainingEncoderCountsToTarget) > deadbandInEncoderCounts) {
 
-			int remainingEncoderCountsToDeadbandWidened = (fabs(
+			remainingEncoderCountsToDeadbandWidened = (fabs(
 					remainingEncoderCountsToTarget)
 					- (deadbandInEncoderCounts * slowBandMultiplier));
 			bool needToRampDown = (remainingEncoderCountsToDeadbandWidened < 0);
@@ -84,6 +86,10 @@ float ElevatorSpeedAlgorithm::ComputeNextMotorSpeedCommand(
 
 	// Keep motor command within motor range -1.0 .. 1.0 (actually the defined minimum and maximum for up and down)
 	// If within deadband, snap it to zero.
+	if((targetEncoderCount == 0) && (currentEncoderCount < remainingEncoderCountsToDeadbandWidened)){
+		currentVelocityCommandInPercent = -minVelocityInPercentThatOvercomesMotorInertia * 2;
+	}
+
 	if (currentVelocityCommandInPercent > maxSpeedUpwardInPercent)
 		currentVelocityCommandInPercent = maxSpeedUpwardInPercent;
 	else if (currentVelocityCommandInPercent < -maxSpeedDownwardInPercent)

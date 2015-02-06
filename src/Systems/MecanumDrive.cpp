@@ -1,12 +1,6 @@
 #include "MecanumDrive.h"
 
 MecanumDrive::MecanumDrive(){
-/*<<<<<<< HEAD
-	FRMotor = new CANTalon(0);
-	FLMotor = new CANTalon(1);
-	BRMotor = new CANTalon(5);
-	BLMotor = new CANTalon(2);
-=======*/
 	FRMotor = new CANTalon(FRONT_RIGHT_MOTOR);
 	FLMotor = new CANTalon(FRONT_LEFT_MOTOR);
 	BRMotor = new CANTalon(BACK_RIGHT_MOTOR);
@@ -19,6 +13,7 @@ MecanumDrive::MecanumDrive(){
 
 	mecanumGyro = new Gyro(GYRO);
 	mecanumGyro->SetSensitivity(0.007);
+	mecanumGyro->Reset();
 
 	utilities = new Utilities();
 
@@ -53,12 +48,6 @@ MecanumDrive::~MecanumDrive(){
 }
 
 void MecanumDrive::Drive(Joystick *drivePad){
-	if(drivePad->GetRawButton(4) == true){
-		FLMotor->SetPosition(0);
-		FRMotor->SetPosition(0);
-		BLMotor->SetPosition(0);
-		BRMotor->SetPosition(0);
-	}
 
 	float YDrive;
 	float XDrive;
@@ -137,9 +126,19 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	}
 }
 
-void MecanumDrive::AutonDriveStraight(bool GyroEnabled, float Speed){
-	float driveX = 0;
-	float driveY = Speed;
+void MecanumDrive::AutonDriveStraight(bool GyroEnabled, float Speed, bool Strafe){
+	float driveX;
+	float driveY;
+
+	if(Strafe == true){
+		driveX = Speed;
+		driveY = 0;
+	}
+	else if(Strafe == false){
+		driveY = Speed;
+		driveX = 0;
+	}
+
 	float twist = mecanumGyro->GetAngle() * 3 / 180;
 
 	float angle = mecanumGyro->GetAngle() * -1;
@@ -148,10 +147,15 @@ void MecanumDrive::AutonDriveStraight(bool GyroEnabled, float Speed){
 		angle = angle + 360;
 	}
 
-	if(GyroEnabled){
+	if(GyroEnabled && Strafe == false){
 		float temp = driveY * cos(angle *(M_PIl/180)) - driveX * sin(angle * (M_PIl/180));
 		driveX = driveY * sin(angle * (M_PIl/180)) - driveX * cos(angle * (M_PIl/180));
 		driveY = temp;
+	}
+	else if(GyroEnabled && Strafe == true){
+		float temp = driveX * cos(angle *(M_PIl/180)) - driveY * sin(angle * (M_PIl/180));
+		driveY = driveX * sin(angle * (M_PIl/180)) - driveY * cos(angle * (M_PIl/180));
+		driveX = temp;
 	}
 	else if(GyroEnabled == false){
 		twist = 0;

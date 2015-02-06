@@ -15,8 +15,10 @@ public:
 	~MecanumDrive(void);
 
 	void Drive(Joystick *drivePad);
-	void AutonDriveStraight(bool GyroEnabled, float Speed);
-	void AutonTurn(float Speed);
+	void AutonDriveStraight(bool GyroEnabled = false,
+							float Speed = 0,
+							bool Strafe = false);
+	void AutonTurn(float Speed = 0);
 	void SetZero(void);
 
 	CANTalon *FLMotor;

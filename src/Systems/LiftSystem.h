@@ -6,7 +6,6 @@
 #include "DigitalInput.h"
 #include "Utilities.h"
 #include "ElevatorSpeedAlgorithm.h"
-#include "../Misc/AfterPID.h"
 #include "../Defines.h"
 
 class LiftSystem{
@@ -20,8 +19,8 @@ public:
 	void ResetLifter(void);
 	void SetZero(void);
 	void TestLifter(Joystick *gamePad);
-	void SetCanSpeed(float Speed);
-	void SetToteSpeed(float Speed);
+	void SetCanSpeed(float Speed = 0);
+	void SetToteSpeed(float Speed = 0);
 
 	CANTalon *shortLiftMotor1;
 	CANTalon *shortLiftMotor2;
@@ -36,10 +35,12 @@ public:
 
 private:
 	Utilities *utilities;
-	ElevatorSpeedAlgorithm *lifterOutput;
+	ElevatorSpeedAlgorithm *toteLifterOutput;
+	ElevatorSpeedAlgorithm *canLifterOutput;
 
-	float shortEncoderDistance;
-	float longEncoderDistance;
+
+	float toteEncoderDistance;
+	float canEncoderDistance;
 
 };
 

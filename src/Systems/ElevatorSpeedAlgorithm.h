@@ -4,9 +4,12 @@
  *  Created on: Jan 23, 2015
  *      Author: James
  */
-
 #ifndef ELEVATORSPEEDALGORITHM_H_
 #define ELEVATORSPEEDALGORITHM_H_
+
+#include "Timer.h"
+#include <cmath>
+#include <time.h>
 
 class ElevatorSpeedAlgorithm {
 	float minVelocityInPercentThatOvercomesMotorInertia;   // must be determined by empirical measurement.
@@ -20,14 +23,17 @@ class ElevatorSpeedAlgorithm {
 		float speedDownDivisor;
 		bool firstTimeCalled = true;
 
+		Timer levelTimer;
+
 public:
-	ElevatorSpeedAlgorithm(const float theMinVelocityInPercentThatOvercomesMotorInertia = 0.1,
-						   float theAccelerationStepSizeInPercent = 0.03,
-						   int theDeadbandInEncoderCounts = 50,
+	ElevatorSpeedAlgorithm(const float theMinVelocityInPercentThatOvercomesMotorInertia = 0.15,
+						   float theAccelerationStepSizeInPercent = 0.01,
+						   int theDeadbandInEncoderCounts = 25,
 						   float theMaxSpeedUpwardInPercent = 0.9,
-						   float theMaxSpeedDownwardInPercent = 0.7,
-						   float delayBetweeenSpeedEvaluations = 0.005, float theSlowBandMultiplier = 3,
-						   float theSpeedDownDivisor = 2);//was 2
+						   float theMaxSpeedDownwardInPercent = 0.5,
+						   float delayBetweeenSpeedEvaluations = 0.005,
+						   float theSlowBandMultiplier = 5,
+						   float theSpeedDownDivisor = 5);
 	virtual ~ElevatorSpeedAlgorithm();
 	float ComputeNextMotorSpeedCommand(int currentEncoderCount,	int targetEncoderCount);
 

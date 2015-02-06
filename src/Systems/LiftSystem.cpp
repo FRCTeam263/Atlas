@@ -50,7 +50,7 @@ LiftSystem::~LiftSystem(void){
 
 void LiftSystem::RunLifter(Joystick *gamePad){
 	static bool manualEnabled = false;
-	if(utilities->GetJoystickButton(16, gamePad)){
+	if(utilities->GetJoystickButton(15, gamePad)){
 		manualEnabled = !manualEnabled;
 	}
 
@@ -142,25 +142,23 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 			CanLevel = 3;
 		}
 
-		int encoderSetpoint = 0;
+		static int encoderOffset = 0;
 
 		if(utilities->GetJoystickButton(11, gamePad)){
-			encoderSetpoint += 350;
+			encoderOffset = 350;
+		}
+		else if(utilities->GetJoystickButton(13, gamePad)){
+			encoderOffset = - 350;
 		}
 		else if(utilities->GetJoystickButton(12, gamePad)){
-			encoderSetpoint -= 350;
+			encoderOffset = 0;
 		}
 
-		if(encoderSetpoint < 0){
-			encoderSetpoint = 0;
-		}
-		else if(encoderSetpoint > 3800){
-			encoderSetpoint = 3800;
-		}
-
-		shortMotorOutput = toteLifterOutput->ComputeNextMotorSpeedCommand(toteEncoderDistance, encoderSetpoint);
-				//toteLifterOutput->ComputeNextMotorSpeedCommand(shortLiftMotor1->GetPosition(), elevatorShortLevels[ShortLevel]);
+		shortMotorOutput = toteLifterOutput->ComputeNextMotorSpeedCommand(shortLiftMotor1->GetPosition(), elevatorShortLevels[ShortLevel] + encoderOffset);
 		canMotorOutput = canLifterOutput->ComputeNextMotorSpeedCommand(canEncoderDistance, elevatorCanLevels[CanLevel]);
+
+
+		printf("Current: %f\t Setpoint: %d\n", toteEncoderDistance, encoderOffset);
 
 		if(shortTopLS->Get() == true && shortMotorOutput > 0){
 			shortMotorOutput = 0;

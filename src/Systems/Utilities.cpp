@@ -29,18 +29,31 @@ float Utilities::MaxValue(float input, float min, float max){
 }
 
 bool Utilities::GetJoystickButton(int RawButton, Joystick *HID){
-	static int lastButtonValue = 0;
+	const int maxButtons = 25;
+	static int lastButtonValue[maxButtons];
 	int currentButtonValue = 0;
 	bool currentPressedState = false;
 
+	static bool firstTimeCalled = true;
+	if(firstTimeCalled){
+		for(int i = 0; i < maxButtons; i++){
+			lastButtonValue[i] = 0;
+		}
+		firstTimeCalled = false;
+	}
+
 	currentButtonValue = HID->GetRawButton(RawButton);
-	if ((lastButtonValue == 0) && (currentButtonValue == 1)) {
+
+	//printf("Current %d\t Last: %d\n", currentButtonValue, lastButtonValue[RawButton]);
+
+	if ((lastButtonValue[RawButton] == 0) && (currentButtonValue == 1)) {
 		currentPressedState = true;
+
 	}
 	else{
 		currentPressedState = false;
 	}
-	lastButtonValue = currentButtonValue;
+	lastButtonValue[RawButton] = currentButtonValue;
 
 	return currentPressedState;
 }

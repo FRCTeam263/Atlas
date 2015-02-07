@@ -49,60 +49,20 @@ LiftSystem::~LiftSystem(void){
 }
 
 void LiftSystem::RunLifter(Joystick *gamePad){
-	static bool manualEnabled = false;
-	if(utilities->GetJoystickButton(15, gamePad)){
+	static bool toteManualEnabled = false;
+	static bool canManualEnabled = false;
+	float canMotorOutput = 0;
+	float shortMotorOutput = 0;
+	static int ShortLevel = 0;
+	static int CanLevel = 0;
+	static int targetCount = 0;
+	/*if(utilities->GetJoystickButton(15, gamePad)){
 		manualEnabled = !manualEnabled;
-	}
+	}*/
 
-	//printf("Enabled: %d\n", manualEnabled);
+	//printf("Enabled: %d\n", manualEnabled); 2516942100
 
-	if(manualEnabled == true){
-		if(shortBottomLS->Get() == true){
-			shortLiftMotor1->SetPosition(0);
-		}
-		else if(shortTopLS->Get() == true){
-			shortLiftMotor1->SetPosition(3830);
-		}
-
-		if(canBottomLS->Get() == true && gamePad->GetRawButton(6)){
-			canLiftMotor->Set(0);
-			canLiftMotor->SetPosition(0);
-		}
-		else if(canTopLS->Get() == true && gamePad->GetRawButton(7)){
-			canLiftMotor->Set(0);
-		}
-		else if((canTopLS->Get() == false || canTopLS->Get() == true) && gamePad->GetRawButton(6)){
-			canLiftMotor->Set(0.7);
-		}
-		else if((canBottomLS->Get() == false || canBottomLS->Get() == true) && gamePad->GetRawButton(7)){
-			canLiftMotor->Set(-0.7);
-		}
-		else{
-			canLiftMotor->Set(0);
-		}
-
-		if(shortBottomLS->Get() == true && gamePad->GetRawButton(8) == true){
-			shortLiftMotor1->Set(0);
-			shortLiftMotor1->SetPosition(0);
-		}
-		else if(shortTopLS->Get() == true && gamePad->GetRawButton(9) == true){
-			shortLiftMotor1->Set(0);
-		}
-		else if((shortTopLS->Get() == false || shortTopLS->Get() == true) && gamePad->GetRawButton(8)){
-			shortLiftMotor1->Set(0.3);
-		}
-		else if((shortBottomLS->Get() == false || shortBottomLS->Get() == true) && gamePad->GetRawButton(9)){
-			shortLiftMotor1->Set(-0.8);
-		}
-		else{
-			shortLiftMotor1->Set(0);
-		}
-	}
-	else if(manualEnabled == false){
-		float canMotorOutput = 0;
-		float shortMotorOutput = 0;
-		static int ShortLevel = 0;
-		static int CanLevel = 0;
+	//if(manualEnabled == true){
 
 		if(shortBottomLS->Get() == true){
 			shortLiftMotor1->SetPosition(0);
@@ -110,75 +70,132 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 		if(canBottomLS->Get() == true){
 			canLiftMotor->SetPosition(0);
 		}
+
+		if(canBottomLS->Get() == true && gamePad->GetRawButton(6)){
+			canLiftMotor->Set(0);
+			canLiftMotor->SetPosition(0);
+			canManualEnabled = true;
+		}
+		else if(canTopLS->Get() == true && gamePad->GetRawButton(7)){
+			canLiftMotor->Set(0);
+			canManualEnabled = true;
+		}
+		else if((canTopLS->Get() == false || canTopLS->Get() == true) && gamePad->GetRawButton(6)){
+			canLiftMotor->Set(0.7);
+			canManualEnabled = true;
+		}
+		else if((canBottomLS->Get() == false || canBottomLS->Get() == true) && gamePad->GetRawButton(7)){
+			canLiftMotor->Set(-0.7);
+			canManualEnabled = true;
+		}
+		else{
+			if(canManualEnabled){
+				canLiftMotor->Set(0);
+			}
+		}
+
+		if(shortBottomLS->Get() == true && gamePad->GetRawButton(8) == true){
+			shortLiftMotor1->Set(0);
+			shortLiftMotor1->SetPosition(0);
+			toteManualEnabled = true;
+		}
+		else if(shortTopLS->Get() == true && gamePad->GetRawButton(9) == true){
+			shortLiftMotor1->Set(0);
+			toteManualEnabled = true;
+		}
+		else if((shortTopLS->Get() == false || shortTopLS->Get() == true) && gamePad->GetRawButton(8)){
+			shortLiftMotor1->Set(0.3);
+			toteManualEnabled = true;
+		}
+		else if((shortBottomLS->Get() == false || shortBottomLS->Get() == true) && gamePad->GetRawButton(9)){
+			shortLiftMotor1->Set(-0.8);
+			toteManualEnabled = true;
+		}
+		else{
+			if(toteManualEnabled){
+				shortLiftMotor1->Set(0);
+			}
+		}
+
 		/*else if(shortTopLS->Get() == true){
 			shortLiftMotor1->SetPosition(3830);
 		}*/
 
-		if(gamePad->GetRawButton(6) == true){
+		if(gamePad->GetRawButton(11) == true){
 			ShortLevel = 0;
+			toteManualEnabled = false;
+			targetCount = elevatorShortLevels[ShortLevel];
 		}
-		else if(gamePad->GetRawButton(7) == true){
+		else if(gamePad->GetRawButton(12) == true){
 			ShortLevel = 1;
+			toteManualEnabled = false;
+			targetCount = elevatorShortLevels[ShortLevel];
 		}
-		else if(gamePad->GetRawButton(8) == true){//1 tote high
+		else if(gamePad->GetRawButton(13) == true){//1 tote high
 			ShortLevel = 2;
+			toteManualEnabled = false;
+			targetCount = elevatorShortLevels[ShortLevel];
 		}
-		else if(gamePad->GetRawButton(9) == true){
+		else if(gamePad->GetRawButton(14) == true){
 			ShortLevel = 3;
+			toteManualEnabled = false;
+			targetCount = elevatorShortLevels[ShortLevel];
 		}
-		else if(gamePad->GetRawButton(10) == true){
+		else if(gamePad->GetRawButton(15) == true){
 			ShortLevel = 4;
+			toteManualEnabled = false;
+			targetCount = elevatorShortLevels[ShortLevel];
 		}
 		else if(gamePad->GetRawButton(1) == true){
 			CanLevel = 0;
+			canManualEnabled = false;
 		}
 		else if(gamePad->GetRawButton(2) == true){
 			CanLevel = 1;
+			canManualEnabled = false;
 		}
 		else if(gamePad->GetRawButton(3) == true){
 			CanLevel = 2;
+			canManualEnabled = false;
 		}
 		else if(gamePad->GetRawButton(4) == true){
 			CanLevel = 3;
+			canManualEnabled = false;
 		}
 
-		static int encoderOffset = 0;
+		if(toteManualEnabled == false){
 
-		if(utilities->GetJoystickButton(11, gamePad)){
-			encoderOffset = 350;
-		}
-		else if(utilities->GetJoystickButton(13, gamePad)){
-			encoderOffset = - 350;
-		}
-		else if(utilities->GetJoystickButton(12, gamePad)){
-			encoderOffset = 0;
-		}
+			if(gamePad->GetRawButton(5)){
+				targetCount = targetCount + 25;
+			}
+			else if(gamePad->GetRawButton(10)){
+				targetCount = targetCount - 25;
+			}
 
-		shortMotorOutput = toteLifterOutput->ComputeNextMotorSpeedCommand(shortLiftMotor1->GetPosition(), elevatorShortLevels[ShortLevel] + encoderOffset);
-		canMotorOutput = canLifterOutput->ComputeNextMotorSpeedCommand(canEncoderDistance, elevatorCanLevels[CanLevel]);
+			printf("Target: %d\n", targetCount);
 
+			shortMotorOutput = toteLifterOutput->ComputeNextMotorSpeedCommand(shortLiftMotor1->GetPosition(), targetCount);
 
-		printf("Current: %f\t Setpoint: %d\n", toteEncoderDistance, encoderOffset);
+			if(shortTopLS->Get() == true && shortMotorOutput > 0){
+				shortMotorOutput = 0;
+			}
+			else if(shortBottomLS->Get() == true && shortMotorOutput < 0){
+				shortMotorOutput = 0;
+			}
 
-		if(shortTopLS->Get() == true && shortMotorOutput > 0){
-			shortMotorOutput = 0;
+			SetToteSpeed(shortMotorOutput);
 		}
-		else if(shortBottomLS->Get() == true && shortMotorOutput < 0){
-			shortMotorOutput = 0;
-		}
-		else if(canBottomLS->Get() == true && canMotorOutput < 0){
-			canMotorOutput = 0;
-		}
-		else if(canTopLS->Get() == true && canMotorOutput > 0){
-			canMotorOutput = 0;
-		}
+		if(canManualEnabled == false){
+			canMotorOutput = canLifterOutput->ComputeNextMotorSpeedCommand(canEncoderDistance, elevatorCanLevels[CanLevel]);
 
-		SetToteSpeed(shortMotorOutput);
-		SetCanSpeed(canMotorOutput);
-	}
-	else{
-		SetZero();
-	}
+			if(canBottomLS->Get() == true && canMotorOutput < 0){
+				canMotorOutput = 0;
+			}
+			else if(canTopLS->Get() == true && canMotorOutput > 0){
+				canMotorOutput = 0;
+			}
+			SetCanSpeed(canMotorOutput);
+		}
 }
 
 void LiftSystem::ResetLifter(){

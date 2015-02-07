@@ -49,6 +49,13 @@ MecanumDrive::~MecanumDrive(){
 
 void MecanumDrive::Drive(Joystick *drivePad){
 
+	if(drivePad->GetRawButton(4)){
+		FLMotor->SetPosition(0);
+		FRMotor->SetPosition(0);
+		BLMotor->SetPosition(0);
+		BRMotor->SetPosition(0);
+	}
+
 	float YDrive;
 	float XDrive;
 	float Rotate;

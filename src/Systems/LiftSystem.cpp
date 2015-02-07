@@ -9,8 +9,8 @@ LiftSystem::LiftSystem(void){
 	shortTopLS = new DigitalInput(SHORT_TOP_LS);
 	canBottomLS = new DigitalInput(CAN_BOTTOM_LS);
 	canTopLS = new DigitalInput(CAN_TOP_LS);
-	longToteTouchSensor = new DigitalInput(LONG_TOTE_SENSOR);
-	shortToteTouchSensor = new DigitalInput(SHORT_TOTE_SENSOR);
+	toteTouchSensor = new DigitalInput(LONG_TOTE_SENSOR);
+	canTouchSensor = new DigitalInput(SHORT_TOTE_SENSOR);
 
 	utilities = new Utilities();
 	toteLifterOutput = new ElevatorSpeedAlgorithm();
@@ -40,8 +40,8 @@ LiftSystem::~LiftSystem(void){
 	delete shortTopLS;
 	delete canBottomLS;
 	delete canTopLS;
-	delete shortToteTouchSensor;
-	delete longToteTouchSensor;
+	delete toteTouchSensor;
+	delete canTouchSensor;
 
 	delete utilities;
 	delete toteLifterOutput;
@@ -51,18 +51,11 @@ LiftSystem::~LiftSystem(void){
 void LiftSystem::RunLifter(Joystick *gamePad){
 	static bool toteManualEnabled = false;
 	static bool canManualEnabled = false;
-	float canMotorOutput = 0;
-	float shortMotorOutput = 0;
 	static int ShortLevel = 0;
 	static int CanLevel = 0;
 	static int targetCount = 0;
-	/*if(utilities->GetJoystickButton(15, gamePad)){
-		manualEnabled = !manualEnabled;
-	}*/
-
-	//printf("Enabled: %d\n", manualEnabled); 2516942100
-
-	//if(manualEnabled == true){
+	float canMotorOutput = 0;
+	float shortMotorOutput = 0;
 
 		if(shortBottomLS->Get() == true){
 			shortLiftMotor1->SetPosition(0);
@@ -104,7 +97,7 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 			toteManualEnabled = true;
 		}
 		else if((shortTopLS->Get() == false || shortTopLS->Get() == true) && gamePad->GetRawButton(8)){
-			shortLiftMotor1->Set(0.3);
+			shortLiftMotor1->Set(0.5);
 			toteManualEnabled = true;
 		}
 		else if((shortBottomLS->Get() == false || shortBottomLS->Get() == true) && gamePad->GetRawButton(9)){
@@ -166,11 +159,13 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 		if(toteManualEnabled == false){
 
 			if(gamePad->GetRawButton(5)){
-				targetCount = targetCount + 25;
+				targetCount = targetCount + 40;
 			}
 			else if(gamePad->GetRawButton(10)){
-				targetCount = targetCount - 25;
+				targetCount = targetCount - 40;
 			}
+
+			targetCount = utilities->MaxValue(targetCount, 0, 3850);
 
 			printf("Target: %d\n", targetCount);
 

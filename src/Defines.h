@@ -12,18 +12,19 @@
 #define SHORT_LIFT_MOTOR_2 6
 
 //DIO
-#define SHORT_BOTTOM_LS 3
-#define SHORT_TOP_LS 2
+#define SHORT_BOTTOM_LS 4
+#define SHORT_TOP_LS 3
 #define CAN_BOTTOM_LS 1
 #define CAN_TOP_LS 0
-#define LONG_TOTE_SENSOR 4
-#define SHORT_TOTE_SENSOR 5
+#define LONG_TOTE_SENSOR 6
+#define SHORT_TOTE_SENSOR 8
 
 //Analog Input
 #define GYRO 0
 
 //Const
 const int elevatorShortLevels[5] = {0, 700, 1460, 2700, 3700};
-const int elevatorCanLevels[4] = {0, 500, 1000, 3750};
+const int elevatorCanLevels[5] = {0, 500, 1000, 3750, 2050};
+const int autonDrive[4] = {0, 340, 680, 1000};
 
 #endif /* SRC_SYSTEMS_DEFINES_H_ */

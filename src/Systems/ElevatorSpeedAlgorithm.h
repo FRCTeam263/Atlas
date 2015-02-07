@@ -26,10 +26,10 @@ class ElevatorSpeedAlgorithm {
 		Timer levelTimer;
 
 public:
-	ElevatorSpeedAlgorithm(const float theMinVelocityInPercentThatOvercomesMotorInertia = 0.15,
-						   float theAccelerationStepSizeInPercent = 0.01,
+	ElevatorSpeedAlgorithm(const float theMinVelocityInPercentThatOvercomesMotorInertia = 0.3,
+						   float theAccelerationStepSizeInPercent = 0.02,
 						   int theDeadbandInEncoderCounts = 25,
-						   float theMaxSpeedUpwardInPercent = 0.9,
+						   float theMaxSpeedUpwardInPercent = 1,
 						   float theMaxSpeedDownwardInPercent = 0.5,
 						   float delayBetweeenSpeedEvaluations = 0.005,
 						   float theSlowBandMultiplier = 5,

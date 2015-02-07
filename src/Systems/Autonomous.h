@@ -4,7 +4,7 @@
 #include "WPILib.h"
 #include "LiftSystem.h"
 #include "MecanumDrive.h"
-#include "../Misc/AfterPID.h"
+#include "ElevatorSpeedAlgorithm.h"
 
 class AutonomousSystem{
 public:
@@ -18,6 +18,9 @@ private:
 	typedef enum{Reset, Lift1Tote, Stack1Tote, Lift2Totes, Stack2Totes, Lift3Totes, DriveToAutoZone} AutoMode;
 
 	AutoMode autoMode;
+	ElevatorSpeedAlgorithm *toteLifterOutput;
+	ElevatorSpeedAlgorithm *canLifterOutput;
+	ElevatorSpeedAlgorithm *driveOutput;
 };
 
 

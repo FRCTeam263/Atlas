@@ -1,63 +1,95 @@
 #include "Autonomous.h"
 
 AutonomousSystem::AutonomousSystem(){
-	autoMode = Reset;
+	autoMode = Lift1Tote;
+	toteLifterOutput = new ElevatorSpeedAlgorithm();
+	canLifterOutput = new ElevatorSpeedAlgorithm();
+	driveOutput = new ElevatorSpeedAlgorithm();
 }
 
 AutonomousSystem::~AutonomousSystem(){
-
+	delete toteLifterOutput;
+	delete canLifterOutput;
+	delete driveOutput;
 }
 
 void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 
-	float LifterDistance = lifter->shortLiftMotor1->GetPosition();
+	float toteLifterDistance = lifter->shortLiftMotor1->GetPosition();
 	float WheelEncoder = drive->FLMotor->GetPosition();
+	float canLifterDistance = lifter->canLiftMotor->GetPosition();
 
-	float LifterSetpoint = 0;
+	float toteLifterSetpoint = 0;
+	float canLifterSetpoint = 0;
+
+	if(lifter->shortBottomLS->Get() == true){
+		lifter->shortLiftMotor1->SetPosition(0);
+	}
+	if(lifter->canBottomLS->Get() == true){
+		lifter->canLiftMotor->SetPosition(0);
+	}
 
 
 	switch(autoMode){
 	case Reset:
-		if(lifter->shortBottomLS->Get() == true){
+		if(lifter->shortBottomLS->Get() == true && lifter->canBottomLS->Get() == true){
 			lifter->shortLiftMotor1->SetPosition(0);
 			drive->FLMotor->SetPosition(0);
 
-			LifterSetpoint = 0;
+			toteLifterSetpoint = 0;
+			canLifterSetpoint = 0;
 
 			autoMode = Lift1Tote;
 		}
-		else if(lifter->canBottomLS->Get() == false){
-			LifterSetpoint = -1;
+		else if(lifter->shortBottomLS->Get() == false){
+			toteLifterSetpoint = -1;
 		}
+		else if(lifter->canBottomLS->Get() == false){
+			canLifterSetpoint = -1;
+		}
+		drive->FLMotor->SetPosition(0);
+		drive->FRMotor->SetPosition(0);
+		drive->BLMotor->SetPosition(0);
+		drive->BRMotor->SetPosition(0);
 		break;
 
 	case Lift1Tote:
-
-		if(LifterDistance <= 100){//lift tote up
-			LifterSetpoint = 0.5;
+		if(canLifterDistance <= elevatorCanLevels[4]){
+			canLifterSetpoint = canLifterOutput->ComputeNextMotorSpeedCommand(canLifterDistance, elevatorCanLevels[4]);
+		}
+		else if(canLifterDistance >= elevatorCanLevels[4] && WheelEncoder < autonDrive[1]){
+			drive->AutonDriveStraight(false, -0.5);
+		}
+		else if(canLifterDistance >= elevatorCanLevels[4] && WheelEncoder > autonDrive[1]){
+			drive->AutonDriveStraight(false, 0);
+			toteLifterSetpoint = toteLifterOutput->ComputeNextMotorSpeedCommand(toteLifterDistance, elevatorShortLevels[2]);
 		}
 
-		else if((LifterDistance >= 100 && LifterDistance <= 150) && WheelEncoder <= 100){//rotate left 90. and lift to 1.5 totes high lift > 150, wheel > 100
+		/*if(toteLifterDistance <= elevatorShortLevels[1]){//lift tote up
+			toteLifterSetpoint = toteLifterOutput->ComputeNextMotorSpeedCommand(toteLifterDistance, elevatorShortLevels[2]);
+		}*/
+
+		/*else if((LifterDistance >= elevatorShortLevels[2] && LifterDistance <= elevatorShortLevels[3]) && WheelEncoder <= 100){//rotate left 90. and lift to 1.5 totes high lift > 150, wheel > 100
 			drive->AutonTurn(0.5);
 
-			LifterSetpoint = 0.5;
+			toteLifterSetpoint = elevatorShortLevels[3];
 		}
 
 		else if(LifterDistance >= 150 && (WheelEncoder >= 100 && WheelEncoder <= 1000)){//drive Forward x distance to 2nd tote. and set to step 2.
 			drive->AutonDriveStraight(true, 0.5);
 
-			LifterSetpoint = 0;
+			toteLifterSetpoint = 0;
 		}
 
 		else if(LifterDistance >= 150 && WheelEncoder >= 1000){
 			autoMode = Stack1Tote;
-		}
+		}*/
 		else{
 			drive->SetZero();
 			lifter->SetZero();
 		}
 		break;
-
+	/*
 	case Stack1Tote:
 
 		if(WheelEncoder >= 1000){//when reachs 2nd tote, reset encoder value.
@@ -69,18 +101,18 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 		}
 
 		else if(LifterDistance >= 90 && WheelEncoder >= 100){//lowers 1st tote onto 2nd tote
-			LifterSetpoint = -0.5;
+			LifterSetpoint = lifterOutput->ComputeNextMotorSpeedCommand(LifterDistance, elevatorShortLevels[0]);
 			drive->FLMotor->SetPosition(0);
 		}
-
-		else if(((LifterDistance >= 0 && LifterDistance <= 95) && WheelEncoder >= -20)){//drive back to wheel <= -20 lift <= 0. set mode to step3
-			drive->AutonDriveStraight(true, -0.5);
-
-			if(lifter->canBottomLS->Get() == false){
-				LifterSetpoint = -1;
-			}
-		}
-		else if(LifterDistance <= 10 && WheelEncoder <= -20){
+//
+//		else if(((LifterDistance >= 0 && LifterDistance <= 95) && WheelEncoder >= -20)){//drive back to wheel <= -20 lift <= 0. set mode to step3
+//			drive->AutonDriveStraight(true, -0.5);
+//
+//			if(lifter->shortBottomLS->Get() == false){
+//				LifterSetpoint = -1;
+//			}
+//		}
+		else if(LifterDistance == 0 && WheelEncoder <= -20){
 			autoMode = Lift2Totes;
 		}
 		else{
@@ -91,19 +123,17 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 
 	case Lift2Totes:
 
-		if(lifter->longToteTouchSensor->Get() == false){//drive forward to 2nd tote.
+		if(lifter->toteTouchSensor->Get() == false){//drive forward to 2nd tote.
 			drive->AutonDriveStraight(true, 0.5);
 			drive->FLMotor->SetPosition(0);
 		}
 
-		else if(LifterDistance <= 110){//move totes up
-			LifterSetpoint = 0.5;
+		else if(LifterDistance <= elevatorShortLevels[3]){//move totes up
+			LifterSetpoint = lifterOutput->ComputeNextMotorSpeedCommand(LifterDistance, elevatorShortLevels[3]);
 		}
 
 		else if((LifterDistance >= 110 && LifterDistance <= 160) && WheelEncoder <= 100){//rotate and move totes higher
 			drive->AutonTurn(0.5);
-
-			LifterSetpoint = 0.5;
 		}
 
 		else if(LifterDistance >= 150 && (WheelEncoder >= 100 && WheelEncoder <= 1000)){//move forward to 3rd tote
@@ -134,13 +164,13 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 			drive->FLMotor->SetPosition(0);
 		}
 
-		else if(((LifterDistance >= 0 && LifterDistance <= 95) && WheelEncoder >= -20)){//drive back to wheel <= -20 lift <= 0. set mode to step3
-			drive->AutonDriveStraight(true, -0.5);
-
-			if(lifter->canBottomLS->Get() == false){
-				LifterSetpoint = -1;
-			}
-		}
+//		else if(((LifterDistance >= 0 && LifterDistance <= 95) && WheelEncoder >= -20)){//drive back to wheel <= -20 lift <= 0. set mode to step3
+//			drive->AutonDriveStraight(true, -0.5);
+//
+//			if(lifter->canBottomLS->Get() == false){
+//				LifterSetpoint = -1;
+//			}
+//		}
 		else if(LifterDistance <= 10 && WheelEncoder <= -20){
 			autoMode = Lift3Totes;
 		}
@@ -153,7 +183,7 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 
 	case Lift3Totes:
 
-		if(lifter->longToteTouchSensor->Get() == false){//drive forward to tote stack.
+		if(lifter->toteTouchSensor->Get() == false){//drive forward to tote stack.
 			drive->AutonDriveStraight(true, 0.5);
 			drive->FLMotor->SetPosition(0);
 		}
@@ -187,10 +217,11 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 			drive->SetZero();
 			lifter->SetZero();
 		}
-		break;
+		break;*/
 	}
 
-	lifter->SetToteSpeed(LifterSetpoint);
+	lifter->SetToteSpeed(toteLifterSetpoint);
+	lifter->SetCanSpeed(canLifterSetpoint);
 }
 
 void AutonomousSystem::RunNothing(MecanumDrive *drive, LiftSystem *lifter){

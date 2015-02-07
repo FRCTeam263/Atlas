@@ -30,18 +30,16 @@ public:
 	DigitalInput *canBottomLS;
 	DigitalInput *shortTopLS;
 	DigitalInput *canTopLS;
-	DigitalInput *shortToteTouchSensor;
-	DigitalInput *longToteTouchSensor;
+	DigitalInput *toteTouchSensor;
+	DigitalInput *canTouchSensor;
 
 private:
 	Utilities *utilities;
 	ElevatorSpeedAlgorithm *toteLifterOutput;
 	ElevatorSpeedAlgorithm *canLifterOutput;
 
-
 	float toteEncoderDistance;
 	float canEncoderDistance;
-
 };
 
 #endif /* SRC_SYSTEMS_LIFTSYSTEM_H_ */

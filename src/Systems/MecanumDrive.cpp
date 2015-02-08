@@ -126,9 +126,9 @@ void MecanumDrive::Drive(Joystick *drivePad){
 		BRMotor->Set(0.7);
 	}
 	else{
-		FLMotor->Set(FLSpeed * -1);
+		FLMotor->Set(-FLSpeed/ 1.005);
 		FRMotor->Set(FRSpeed);
-		BLMotor->Set(BLSpeed * -1);
+		BLMotor->Set(-BLSpeed / 1.005);
 		BRMotor->Set(BRSpeed);
 	}
 }
@@ -251,4 +251,11 @@ void MecanumDrive::SetZero(void){
 	FRMotor->Set(0);
 	BLMotor->Set(0);
 	BRMotor->Set(0);
+}
+
+void MecanumDrive::ResetEncoders(void){
+	FLMotor->SetPosition(0);
+	FRMotor->SetPosition(0);
+	BLMotor->SetPosition(0);
+	BRMotor->SetPosition(0);
 }

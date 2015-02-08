@@ -42,6 +42,7 @@ public:
 	void Autonomous()
 	{
 		while(IsAutonomous() && IsEnabled()){
+			//drive->AutonTurn(1);
 			auton->Run3ToteAuto(drive, lifter);
 		}
 	}

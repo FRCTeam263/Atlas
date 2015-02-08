@@ -26,8 +26,8 @@ public:
 
 		auton = new AutonomousSystem();
 
-		/*CameraServer::GetInstance()->SetQuality(50);
-		CameraServer::GetInstance()->StartAutomaticCapture("cam0");*/
+		CameraServer::GetInstance()->SetQuality(50);
+		CameraServer::GetInstance()->StartAutomaticCapture("cam0");
 	}
 
 	~Omega(){
@@ -42,7 +42,8 @@ public:
 	void Autonomous()
 	{
 		while(IsAutonomous() && IsEnabled()){
-			//drive->AutonTurn(1);
+			//drive->AutonDriveStraight(false, 1, true);
+			//drive->AutonDriveStraight(false, 0.5);
 			auton->Run3ToteAuto(drive, lifter);
 		}
 	}
@@ -53,7 +54,7 @@ public:
 		{
 			drive->Drive(drivePad);
 			lifter->RunLifter(gamePad);
-			printf("FL: %f\t FR: %f \t BL: %f\t BR: %f\n", drive->FLMotor->GetPosition(), drive->FRMotor->GetPosition(), drive->BLMotor->GetPosition(), drive->BRMotor->GetPosition());
+			//printf("FL: %f\t FR: %f \t BL: %f\t BR: %f\n", drive->FLMotor->GetPosition(), drive->FRMotor->GetPosition(), drive->BLMotor->GetPosition(), drive->BRMotor->GetPosition());
 			//printf("WideEncoder: %f\t ShortEncoder: %f\n", lifter->canLiftMotor->GetPosition(), lifter->shortLiftMotor1->GetPosition());
 		}
 	}

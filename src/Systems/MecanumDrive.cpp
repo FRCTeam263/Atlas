@@ -60,21 +60,18 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	float XDrive;
 	float Rotate;
 
-	static int ThrottleEnabled = 0;
+	static bool ThrottleEnabled = false;
 
-	if(drivePad->GetRawButton(1)){
-		ThrottleEnabled = 1;
-	}
-	if(drivePad->GetRawButton(2)){
-		ThrottleEnabled = 0;
+	if(utilities->GetJoystickButton(1, drivePad)){
+		ThrottleEnabled = !ThrottleEnabled;
 	}
 
-	if(ThrottleEnabled == 1){
-		YDrive = drivePad->GetY() / 1.7;
-		XDrive = (drivePad->GetX()  * -1) / 1.7;
-		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 1.7;
+	if(ThrottleEnabled == true){
+		YDrive = drivePad->GetY() / 2.4;
+		XDrive = (drivePad->GetX()  * -1) / 2.4;
+		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 2.4;
 	}
-	else if(ThrottleEnabled == 0){
+	else if(ThrottleEnabled == false){
 		YDrive = drivePad->GetY();
 		XDrive = drivePad->GetX() * -1;
 		Rotate = -drivePad->GetThrottle() + drivePad->GetTwist();
@@ -114,22 +111,38 @@ void MecanumDrive::Drive(Joystick *drivePad){
 
 	if(drivePad->GetRawButton(5) == true){
 		//rotate around a point outside the robot instead of rotating around the center of the robot.
-		FLMotor->Set(0);
-		FRMotor->Set(0);
-		BLMotor->Set(-0.7);
-		BRMotor->Set(-0.7);
+		if(ThrottleEnabled == true){
+			FLMotor->Set(0);
+			FRMotor->Set(0);
+			BLMotor->Set(-0.35);
+			BRMotor->Set(-0.35 / 1.02);
+		}
+		else if(ThrottleEnabled == false){
+			FLMotor->Set(0);
+			FRMotor->Set(0);
+			BLMotor->Set(-0.7);
+			BRMotor->Set(-0.7 / 1.02);
+		}
 	}
 	else if(drivePad->GetRawButton(6) == true){
-		FLMotor->Set(0);
-		FRMotor->Set(0);
-		BLMotor->Set(0.7);
-		BRMotor->Set(0.7);
+		if(ThrottleEnabled == true){
+			FLMotor->Set(0);
+			FRMotor->Set(0);
+			BLMotor->Set(0.35);
+			BRMotor->Set(0.35 / 1.02);
+		}
+		else if(ThrottleEnabled == false){
+			FLMotor->Set(0);
+			FRMotor->Set(0);
+			BLMotor->Set(0.7);
+			BRMotor->Set(0.7 / 1.02);
+		}
 	}
 	else{
-		FLMotor->Set(-FLSpeed/ 1.005);
-		FRMotor->Set(FRSpeed);
-		BLMotor->Set(-BLSpeed / 1.005);
-		BRMotor->Set(BRSpeed);
+		FLMotor->Set(-FLSpeed);
+		FRMotor->Set(FRSpeed / 1.02);
+		BLMotor->Set(-BLSpeed);
+		BRMotor->Set(BRSpeed / 1.02);
 	}
 }
 
@@ -198,10 +211,10 @@ void MecanumDrive::AutonDriveStraight(bool GyroEnabled, float Speed, bool Strafe
 		BRSpeed = BRSpeed / Max;
 	}
 
-	FLMotor->Set(FLSpeed * -1);
-	FRMotor->Set(FRSpeed);
-	BLMotor->Set(BLSpeed * -1);
-	BRMotor->Set(BRSpeed);
+	FLMotor->Set(-FLSpeed);
+	FRMotor->Set(FRSpeed / 1.02);
+	BLMotor->Set(-BLSpeed);
+	BRMotor->Set(BRSpeed / 1.02);
 }
 
 void MecanumDrive::AutonTurn(float Speed){
@@ -240,10 +253,10 @@ void MecanumDrive::AutonTurn(float Speed){
 		BRSpeed = BRSpeed / Max;
 	}
 
-	FLMotor->Set(FLSpeed * -1);
-	FRMotor->Set(FRSpeed);
-	BLMotor->Set(BLSpeed * -1);
-	BRMotor->Set(BRSpeed);
+	FLMotor->Set(-FLSpeed);
+	FRMotor->Set(FRSpeed / 1.02);
+	BLMotor->Set(-BLSpeed);
+	BRMotor->Set(BRSpeed / 1.02);
 }
 
 void MecanumDrive::SetZero(void){
@@ -253,6 +266,22 @@ void MecanumDrive::SetZero(void){
 	BRMotor->Set(0);
 }
 
+int MecanumDrive::AverageEncoders(void){
+	int average = (FLMotor->GetPosition() + FRMotor->GetPosition() + BLMotor->GetPosition() + BRMotor->GetPosition()) / 4;
+	return average;
+}
+
+int MecanumDrive::AverageTurnRightEncoders(void){
+	int average;
+	average = (FLMotor->GetPosition() + BLMotor->GetPosition() + -FRMotor->GetPosition() + -BRMotor->GetPosition()) / 4;
+	return average;
+}
+
+int MecanumDrive::AverageTurnLeftEncoders(void){
+	int average;
+	average = (-FLMotor->GetPosition() + -BLMotor->GetPosition() + FRMotor->GetPosition() + BRMotor->GetPosition()) / 4;
+	return average;
+}
 void MecanumDrive::ResetEncoders(void){
 	FLMotor->SetPosition(0);
 	FRMotor->SetPosition(0);

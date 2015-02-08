@@ -20,6 +20,9 @@ public:
 							bool Strafe = false);
 	void AutonTurn(float Speed = 0);
 	void SetZero(void);
+	int AverageEncoders(void);
+	int AverageTurnRightEncoders(void);
+	int AverageTurnLeftEncoders(void);
 	void ResetEncoders(void);
 
 	CANTalon *FLMotor;

@@ -140,9 +140,9 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	}
 	else{
 		FLMotor->Set(-FLSpeed);
-		FRMotor->Set(FRSpeed / 1.02);
+		FRMotor->Set(FRSpeed);// / 1.02
 		BLMotor->Set(-BLSpeed);
-		BRMotor->Set(BRSpeed / 1.02);
+		BRMotor->Set(BRSpeed);// / 1.02
 	}
 }
 

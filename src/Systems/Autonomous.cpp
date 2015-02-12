@@ -103,6 +103,7 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 		}
 		else if(WheelEncoder >= autonDrive1[3] && toteLifterDistance >= elevatorShortLevels[0]){
 			toteLifterSetpoint = -1;
+			drive->SetZero();
 			if(lifter->shortBottomLS->Get() == true){
 				toteLifterSetpoint = 0;
 				drive->ResetEncoders();
@@ -118,14 +119,14 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 		break;
 
 	case Lift2Totes:
-		if(WheelEncoder < autonDrive2[1]){
+		if(drive->AverageEncoders() < autonDrive2[1]){
 			drive->AutonDriveStraight(false, -0.5);
-			if(WheelEncoder >= autonDrive2[1]){
+			if(drive->AverageEncoders() >= autonDrive2[1]){
 				drive->SetZero();
 			}
 			printf("lineuptotes");
 		}
-		else if(WheelEncoder >= autonDrive2[1] && toteLifterDistance < elevatorShortLevels[2]){
+		else if(drive->AverageEncoders() >= autonDrive2[1] && toteLifterDistance < elevatorShortLevels[2]){
 			drive->SetZero();
 			toteLifterSetpoint = toteLifterOutput->ComputeNextMotorSpeedCommand(toteLifterDistance, elevatorShortLevels[2]);
 			if(toteLifterDistance > elevatorShortLevels[2]){

@@ -55,7 +55,7 @@ public:
 			drive->Drive(drivePad);
 			lifter->RunLifter(gamePad);
 			//printf("FL: %f\t FR: %f \t BL: %f\t BR: %f\n", drive->FLMotor->GetPosition(), drive->FRMotor->GetPosition(), drive->BLMotor->GetPosition(), drive->BRMotor->GetPosition());
-			//printf("WideEncoder: %f\t ShortEncoder: %f\n", lifter->canLiftMotor->GetPosition(), lifter->shortLiftMotor1->GetPosition());
+			printf("WideEncoder: %f\t ShortEncoder: %f\n", lifter->canLiftMotor->GetPosition(), lifter->shortLiftMotor1->GetPosition());
 		}
 	}
 };

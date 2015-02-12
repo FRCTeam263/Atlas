@@ -14,7 +14,7 @@ LiftSystem::LiftSystem(void){
 
 	utilities = new Utilities();
 	toteLifterOutput = new ElevatorSpeedAlgorithm();
-	canLifterOutput = new ElevatorSpeedAlgorithm();
+	canLifterOutput = new ElevatorSpeedAlgorithm(0.1, 0.01, 25, 0.7, 0.5, 0.005, 5, 5);
 
 	shortLiftMotor1->SetFeedbackDevice(CANTalon::QuadEncoder);
 	shortLiftMotor1->SetSensorDirection(true);
@@ -83,7 +83,7 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 			canLiftMotor->Set(0.35);
 		}
 		else if(lifterToggle == false){
-			canLiftMotor->Set(0.7);
+			canLiftMotor->Set(0.5);
 		}
 		canManualEnabled = true;
 	}
@@ -165,7 +165,8 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 		toteManualEnabled = false;
 		targetCount = elevatorShortLevels[ShortLevel];
 	}
-	else if(gamePad->GetRawButton(1) == true){
+
+	if(gamePad->GetRawButton(1) == true){
 		CanLevel = 0;
 		canManualEnabled = false;
 	}
@@ -193,7 +194,7 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 
 		targetCount = utilities->MaxValue(targetCount, 0, 3850);
 
-		printf("Target: %d\n", targetCount);
+		//printf("Target: %d\n", targetCount);
 
 		shortMotorOutput = toteLifterOutput->ComputeNextMotorSpeedCommand(shortLiftMotor1->GetPosition(), targetCount);
 
@@ -206,8 +207,11 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 
 		SetToteSpeed(shortMotorOutput);
 	}
+
 	if(canManualEnabled == false){
-		canMotorOutput = canLifterOutput->ComputeNextMotorSpeedCommand(canEncoderDistance, elevatorCanLevels[CanLevel]);
+		canMotorOutput = canLifterOutput->ComputeNextMotorSpeedCommand(canLiftMotor->GetPosition(), elevatorCanLevels[CanLevel]);
+
+		//printf("Encoder: %f\t CMO: %f\t Level: %d\n", canLiftMotor->GetPosition(), canMotorOutput, CanLevel);
 
 		if(canBottomLS->Get() == true && canMotorOutput < 0){
 			canMotorOutput = 0;

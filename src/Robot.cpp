@@ -36,8 +36,8 @@ public:
 
 		sonicSensor->SetAutomaticMode(true);
 
-		CameraServer::GetInstance()->SetQuality(25);
-		CameraServer::GetInstance()->StartAutomaticCapture("cam0");
+		/*CameraServer::GetInstance()->SetQuality(25);
+		CameraServer::GetInstance()->StartAutomaticCapture("cam0");*/
 	}
 
 	~Omega(){
@@ -53,11 +53,11 @@ public:
 	{
 		drive->mecanumGyro->Reset();
 		while(IsAutonomous() && IsEnabled()){
-			//drive->AutonDriveStraight(false, 1, true);
+			//drive->AutonDriveStraight(false, 0.5, true);
 			//drive->AutonDriveStraight(true, 0.5);
-			//auton->Run3ToteAuto(drive, lifter);
-			auton->Run1Tote1CanAuto(drive, lifter);
-			//drive->AutonTurn(-auton->turnOutput->ComputeNextMotorSpeedCommand(drive->mecanumGyro->GetAngle(), 174.5)/2);
+			auton->Run3ToteAuto(drive, lifter);
+			//auton->Run1Tote1CanAuto(drive, lifter);
+			//drive->AutonTurn(-auton->turnOutput->ComputeNextMotorSpeedCommand(drive->mecanumGyro->GetAngle(), 174.5));
 			//printf("Angle: %f\n", drive->mecanumGyro->GetAngle());
 		}
 	}
@@ -69,8 +69,8 @@ public:
 			drive->Drive(drivePad);
 			lifter->RunLifter(gamePad);
 			//printf("Angle: %f\n", drive->mecanumGyro->GetAngle());
-			//printf("FL: %f\t FR: %f \t BL: %f\t BR: %f\n", drive->FLMotor->GetPosition(), drive->FRMotor->GetPosition(), drive->BLMotor->GetPosition(), drive->BRMotor->GetPosition());
-			printf("WideEncoder: %f\t ShortEncoder: %f\n", lifter->canLiftMotor->GetPosition(), lifter->shortLiftMotor1->GetPosition());
+			printf("FL: %f\t FR: %f \t BL: %f\t BR: %f\t Avg: %d\n", drive->FLMotor->GetPosition(), drive->FRMotor->GetPosition(), drive->BLMotor->GetPosition(), drive->BRMotor->GetPosition(), drive->AverageLeftStrafe());
+			//printf("WideEncoder: %f\t ShortEncoder: %f\n", lifter->canLiftMotor->GetPosition(), lifter->shortLiftMotor1->GetPosition());
 		}
 	}
 };

@@ -24,8 +24,8 @@
 
 //Const
 const int elevatorShortLevels[6] = {0, 856, 1560, 2700, 3750, 1660};
-const int elevatorCanLevels[5] = {0, 1000, 1973, 3500, 1950};
-const int autonDrive1[6] = {0, 480, 4300, 6340, 6470, 8300};
+const int elevatorCanLevels[6] = {0, 1000, 1973, 3500, 1950, 2400};
+const int autonDrive1[8] = {0, 480, 4300, 6340, 6470, 8300, 7640, 9000};
 const int autonDrive2[5] = {0, 450, 200, 300, 400};
 
 #endif /* SRC_SYSTEMS_DEFINES_H_ */

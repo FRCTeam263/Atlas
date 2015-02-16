@@ -16,6 +16,7 @@ MecanumDrive::MecanumDrive(){
 	mecanumGyro->Reset();
 
 	utilities = new Utilities();
+	turnOutput = new ElevatorSpeedAlgorithm(0.1, 0.02, 1, 1, 1, 0.001, 2, 13);
 
 	FRMotor->Set(0);
 	BRMotor->Set(0);
@@ -42,6 +43,7 @@ MecanumDrive::~MecanumDrive(){
 	delete BRMotor;
 
 	delete mecanumGyro;
+	delete turnOutput;
 
 	delete utilities;
 
@@ -60,16 +62,16 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	float XDrive;
 	float Rotate;
 
-	static bool ThrottleEnabled = false;
+	static bool ThrottleEnabled = true;
 
 	if(utilities->GetJoystickButton(1, drivePad)){
 		ThrottleEnabled = !ThrottleEnabled;
 	}
 
 	if(ThrottleEnabled == true){
-		YDrive = drivePad->GetY() / 2.4;
-		XDrive = (drivePad->GetX()  * -1) / 2.4;
-		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 2.4;
+		YDrive = drivePad->GetY() / 2.35;
+		XDrive = (drivePad->GetX()  * -1) / 2.35;
+		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 2.35;
 	}
 	else if(ThrottleEnabled == false){
 		YDrive = drivePad->GetY();
@@ -115,13 +117,13 @@ void MecanumDrive::Drive(Joystick *drivePad){
 			FLMotor->Set(0);
 			FRMotor->Set(0);
 			BLMotor->Set(-0.35);
-			BRMotor->Set(-0.35 / 1.02);
+			BRMotor->Set(-0.35);
 		}
 		else if(ThrottleEnabled == false){
 			FLMotor->Set(0);
 			FRMotor->Set(0);
 			BLMotor->Set(-0.7);
-			BRMotor->Set(-0.7 / 1.02);
+			BRMotor->Set(-0.7);
 		}
 	}
 	else if(drivePad->GetRawButton(6) == true){
@@ -129,13 +131,13 @@ void MecanumDrive::Drive(Joystick *drivePad){
 			FLMotor->Set(0);
 			FRMotor->Set(0);
 			BLMotor->Set(0.35);
-			BRMotor->Set(0.35 / 1.02);
+			BRMotor->Set(0.35);
 		}
 		else if(ThrottleEnabled == false){
 			FLMotor->Set(0);
 			FRMotor->Set(0);
 			BLMotor->Set(0.7);
-			BRMotor->Set(0.7 / 1.02);
+			BRMotor->Set(0.7);
 		}
 	}
 	else{
@@ -144,6 +146,27 @@ void MecanumDrive::Drive(Joystick *drivePad){
 		BLMotor->Set(-BLSpeed);
 		BRMotor->Set(BRSpeed);// / 1.02
 	}
+}
+
+void MecanumDrive::TurnToAngle(Joystick *drivePad){
+	float Speed = 0;
+	if(drivePad->GetRawButton(3)){
+		if(mecanumGyro->GetAngle() < 285){
+			Speed = -turnOutput->ComputeNextMotorSpeedCommand(mecanumGyro->GetAngle(), 285);
+		}
+		else if(mecanumGyro->GetAngle() > 285){
+			Speed = turnOutput->ComputeNextMotorSpeedCommand(mecanumGyro->GetAngle(), 285);
+		}
+	}
+	else if(drivePad->GetRawButton(4)){
+		if(mecanumGyro->GetAngle() > -15){
+			Speed = turnOutput->ComputeNextMotorSpeedCommand(mecanumGyro->GetAngle(), -15);
+		}
+		else if(mecanumGyro->GetAngle() < -15){
+			Speed = -turnOutput->ComputeNextMotorSpeedCommand(mecanumGyro->GetAngle(), -15);
+		}
+	}
+	AutonTurn(Speed);
 }
 
 void MecanumDrive::AutonDriveStraight(bool GyroEnabled, float Speed, bool Strafe){
@@ -212,9 +235,9 @@ void MecanumDrive::AutonDriveStraight(bool GyroEnabled, float Speed, bool Strafe
 	}
 
 	FLMotor->Set(-FLSpeed);
-	FRMotor->Set(FRSpeed / 1.02);
+	FRMotor->Set(FRSpeed);
 	BLMotor->Set(-BLSpeed);
-	BRMotor->Set(BRSpeed / 1.02);
+	BRMotor->Set(BRSpeed);
 }
 
 void MecanumDrive::AutonTurn(float Speed){
@@ -254,9 +277,9 @@ void MecanumDrive::AutonTurn(float Speed){
 	}
 
 	FLMotor->Set(-FLSpeed);
-	FRMotor->Set(FRSpeed / 1.02);
+	FRMotor->Set(FRSpeed);
 	BLMotor->Set(-BLSpeed);
-	BRMotor->Set(BRSpeed / 1.02);
+	BRMotor->Set(BRSpeed);
 }
 
 void MecanumDrive::SetZero(void){
@@ -267,21 +290,44 @@ void MecanumDrive::SetZero(void){
 }
 
 int MecanumDrive::AverageEncoders(void){
-	int average = (FLMotor->GetPosition() + FRMotor->GetPosition() + BLMotor->GetPosition() + BRMotor->GetPosition()) / 4;
-	return average;
+	return (FLMotor->GetPosition() + FRMotor->GetPosition() + BLMotor->GetPosition() + BRMotor->GetPosition()) / 4;
 }
 
 int MecanumDrive::AverageTurnRightEncoders(void){
-	int average;
-	average = (FLMotor->GetPosition() + BLMotor->GetPosition() + -FRMotor->GetPosition() + -BRMotor->GetPosition()) / 4;
-	return average;
+	return (FLMotor->GetPosition() + BLMotor->GetPosition() + -FRMotor->GetPosition() + -BRMotor->GetPosition()) / 4;
 }
 
 int MecanumDrive::AverageTurnLeftEncoders(void){
+	return (-FLMotor->GetPosition() + -BLMotor->GetPosition() + FRMotor->GetPosition() + BRMotor->GetPosition()) / 4;
+}
+
+int MecanumDrive::AverageLeftStrafe(){
+	return (-FLMotor->GetPosition() + BLMotor->GetPosition() + -BRMotor->GetPosition() + FRMotor->GetPosition()) / 4;
+}
+
+int MecanumDrive::AverageEncoder(bool Straight, bool TurnRight, bool TurnLeft, bool StrafeLeft, bool StrafeRight){
 	int average;
-	average = (-FLMotor->GetPosition() + -BLMotor->GetPosition() + FRMotor->GetPosition() + BRMotor->GetPosition()) / 4;
+	if(Straight == true){
+		average = (FLMotor->GetPosition() + FRMotor->GetPosition() + BLMotor->GetPosition() + BRMotor->GetPosition()) / 4;
+	}
+	else if(TurnRight == true){
+		average = (FLMotor->GetPosition() + BLMotor->GetPosition() + -FRMotor->GetPosition() + -BRMotor->GetPosition()) / 4;
+	}
+	else if(TurnLeft == true){
+		average = (-FLMotor->GetPosition() + -BLMotor->GetPosition() + FRMotor->GetPosition() + BRMotor->GetPosition()) / 4;
+	}
+	else if(StrafeLeft == true){
+		average = (-FLMotor->GetPosition() + BLMotor->GetPosition() + -BRMotor->GetPosition() + FRMotor->GetPosition()) / 4;
+	}
+	else if(StrafeRight == true){
+		average = (FLMotor->GetPosition() + -BLMotor->GetPosition() + BRMotor->GetPosition() + -FRMotor->GetPosition()) / 4;
+	}
+	else{
+		average = 0;
+	}
 	return average;
 }
+
 void MecanumDrive::ResetEncoders(void){
 	FLMotor->SetPosition(0);
 	FRMotor->SetPosition(0);

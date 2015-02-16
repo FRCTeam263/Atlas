@@ -6,6 +6,7 @@
 #include "Joystick.h"
 #include "LiftSystem.h"
 #include "Utilities.h"
+#include "ElevatorSpeedAlgorithm.h"
 #include "../Defines.h"
 #include <math.h>
 
@@ -23,6 +24,10 @@ public:
 	int AverageEncoders(void);
 	int AverageTurnRightEncoders(void);
 	int AverageTurnLeftEncoders(void);
+	int AverageLeftStrafe(void);
+	int AverageRightStrafe(void);
+	void TurnToAngle(Joystick *drivePad);
+	int AverageEncoder(bool Straight, bool TurnRight, bool TurnLeft, bool StrafeLeft, bool StrafeRight);
 	void ResetEncoders(void);
 
 	CANTalon *FLMotor;
@@ -30,10 +35,10 @@ public:
 	CANTalon *BLMotor;
 	CANTalon *BRMotor;
 
+	Gyro *mecanumGyro;
+	ElevatorSpeedAlgorithm *turnOutput;
 private:
 	Utilities *utilities;
-
-	Gyro *mecanumGyro;
 
 	float FLSpeed;
 	float FRSpeed;

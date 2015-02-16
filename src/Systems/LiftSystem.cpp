@@ -49,8 +49,8 @@ LiftSystem::~LiftSystem(void){
 }
 
 void LiftSystem::RunLifter(Joystick *gamePad){
-	static bool toteManualEnabled = false;
-	static bool canManualEnabled = false;
+	static bool toteManualEnabled = true;
+	static bool canManualEnabled = true;
 	static int ShortLevel = 0;
 	static int CanLevel = 0;
 	static int targetCount = 0;
@@ -80,7 +80,7 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 	}
 	else if((canTopLS->Get() == false || canTopLS->Get() == true) && gamePad->GetRawButton(6)){
 		if(lifterToggle == true){
-			canLiftMotor->Set(0.35);
+			canLiftMotor->Set(0.4);
 		}
 		else if(lifterToggle == false){
 			canLiftMotor->Set(0.5);
@@ -90,7 +90,7 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 	else if((canBottomLS->Get() == false || canBottomLS->Get() == true) && gamePad->GetRawButton(7)){
 
 		if(lifterToggle == true){
-			canLiftMotor->Set(-0.35);
+			canLiftMotor->Set(-0.4);
 		}
 		else if(lifterToggle == false){
 			canLiftMotor->Set(-0.7);
@@ -114,7 +114,7 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 	}
 	else if((shortTopLS->Get() == false || shortTopLS->Get() == true) && gamePad->GetRawButton(8)){
 		if(lifterToggle == true){
-			shortLiftMotor1->Set(0.25);
+			shortLiftMotor1->Set(0.35);
 		}
 		else if(lifterToggle == false){
 			shortLiftMotor1->Set(0.5);
@@ -123,10 +123,10 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 	}
 	else if((shortBottomLS->Get() == false || shortBottomLS->Get() == true) && gamePad->GetRawButton(9)){
 		if(lifterToggle == true){
-			shortLiftMotor1->Set(-0.4);
+			shortLiftMotor1->Set(-0.65);
 		}
 		else if(lifterToggle == false){
-			shortLiftMotor1->Set(-0.8);
+			shortLiftMotor1->Set(-1);
 		}
 		toteManualEnabled = true;
 	}

@@ -23,9 +23,9 @@
 #define GYRO 0
 
 //Const
-const int elevatorShortLevels[5] = {0, 856, 1460, 2700, 3700};
-const int elevatorCanLevels[5] = {0, 500, 1000, 1973, 2050};
-const int autonDrive1[5] = {0, 280, 4300, 6340, 6470};
-const int autonDrive2[5] = {0, 550, 200, 300, 400};
+const int elevatorShortLevels[6] = {0, 856, 1560, 2700, 3750, 1660};
+const int elevatorCanLevels[5] = {0, 1000, 1973, 3500, 1950};
+const int autonDrive1[6] = {0, 480, 4300, 6340, 6470, 8300};
+const int autonDrive2[5] = {0, 450, 200, 300, 400};
 
 #endif /* SRC_SYSTEMS_DEFINES_H_ */

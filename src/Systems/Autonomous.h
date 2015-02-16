@@ -12,15 +12,20 @@ public:
 	~AutonomousSystem(void);
 
 	void Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter);
+	void Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter);
 	void RunNothing(MecanumDrive *drive, LiftSystem *lifter);
 
+	ElevatorSpeedAlgorithm *turnOutput;
+
 private:
-	typedef enum{Reset, Lift1Tote, Stack1Tote, Lift2Totes, Stack2Totes, Lift3Totes, DriveToAutoZone} AutoMode;
+	typedef enum{Reset, Lift1Tote, Stack1Tote, Lift2Totes, Stack2Totes, Lift3Totes, DriveToAutoZone, Drop1Tote, DriveTo3rdTote} AutoMode;
 
 	AutoMode autoMode;
 	ElevatorSpeedAlgorithm *toteLifterOutput;
 	ElevatorSpeedAlgorithm *canLifterOutput;
 	ElevatorSpeedAlgorithm *driveOutput;
+	Timer *timer;
+
 };
 
 

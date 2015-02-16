@@ -32,15 +32,6 @@ float ElevatorSpeedAlgorithm::ComputeNextMotorSpeedCommand(
 		int currentEncoderCount,
 		int targetEncoderCount )
 {
-	/*const clock_t clockDelayBetweeenSpeedEvaluations = delayBetweeenSpeedEvaluations * 141052.6316;
-	static clock_t lastEvaluationTimestamp = clock()
-						- clockDelayBetweeenSpeedEvaluations;
-	clock_t currentTick = -1;*/
-
-	//currentTick = clock();
-	/*if ((currentTick - lastEvaluationTimestamp)
-			>= clockDelayBetweeenSpeedEvaluations) {
-		lastEvaluationTimestamp = currentTick;*/
 	int remainingEncoderCountsToDeadbandWidened;
 
 	if (levelTimer.HasPeriodPassed(delayBetweeenSpeedEvaluations) == true) {
@@ -53,9 +44,7 @@ float ElevatorSpeedAlgorithm::ComputeNextMotorSpeedCommand(
 				remainingEncoderCountsToTarget);*/
 		if (fabs(remainingEncoderCountsToTarget) > deadbandInEncoderCounts) {
 
-			remainingEncoderCountsToDeadbandWidened = (fabs(
-					remainingEncoderCountsToTarget)
-					- (deadbandInEncoderCounts * slowBandMultiplier));
+			remainingEncoderCountsToDeadbandWidened = (fabs(remainingEncoderCountsToTarget) - (deadbandInEncoderCounts * slowBandMultiplier));
 			bool needToRampDown = (remainingEncoderCountsToDeadbandWidened < 0);
 
 			if (needToRampDown) {

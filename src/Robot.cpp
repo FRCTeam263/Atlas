@@ -13,6 +13,10 @@ public:
 	MecanumDrive *drive;
 	LiftSystem *lifter;
 
+	DigitalOutput *vexSonicTrigger;
+	DigitalInput *vexSonicEchoDetector;
+	Ultrasonic *sonicSensor;
+
 	AutonomousSystem *auton;
 
 	Omega()
@@ -26,7 +30,13 @@ public:
 
 		auton = new AutonomousSystem();
 
-		CameraServer::GetInstance()->SetQuality(50);
+		vexSonicTrigger = new DigitalOutput(8);		// labeled input on vex
+		vexSonicEchoDetector = new DigitalInput(9);	// labeled output on vex
+		sonicSensor = new Ultrasonic(vexSonicTrigger, vexSonicEchoDetector);
+
+		sonicSensor->SetAutomaticMode(true);
+
+		CameraServer::GetInstance()->SetQuality(25);
 		CameraServer::GetInstance()->StartAutomaticCapture("cam0");
 	}
 
@@ -41,10 +51,14 @@ public:
 
 	void Autonomous()
 	{
+		drive->mecanumGyro->Reset();
 		while(IsAutonomous() && IsEnabled()){
 			//drive->AutonDriveStraight(false, 1, true);
-			//drive->AutonDriveStraight(false, 0.5);
-			auton->Run3ToteAuto(drive, lifter);
+			//drive->AutonDriveStraight(true, 0.5);
+			//auton->Run3ToteAuto(drive, lifter);
+			auton->Run1Tote1CanAuto(drive, lifter);
+			//drive->AutonTurn(-auton->turnOutput->ComputeNextMotorSpeedCommand(drive->mecanumGyro->GetAngle(), 174.5)/2);
+			//printf("Angle: %f\n", drive->mecanumGyro->GetAngle());
 		}
 	}
 
@@ -54,6 +68,7 @@ public:
 		{
 			drive->Drive(drivePad);
 			lifter->RunLifter(gamePad);
+			//printf("Angle: %f\n", drive->mecanumGyro->GetAngle());
 			//printf("FL: %f\t FR: %f \t BL: %f\t BR: %f\n", drive->FLMotor->GetPosition(), drive->FRMotor->GetPosition(), drive->BLMotor->GetPosition(), drive->BRMotor->GetPosition());
 			printf("WideEncoder: %f\t ShortEncoder: %f\n", lifter->canLiftMotor->GetPosition(), lifter->shortLiftMotor1->GetPosition());
 		}

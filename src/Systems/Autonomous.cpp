@@ -1,7 +1,7 @@
 #include "Autonomous.h"
 
 AutonomousSystem::AutonomousSystem(){
-	autoMode = Lift1Tote;
+	autoMode = LiftCan;
 	toteLifterOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 25, 1, 1, 0.005, 5, 5);
 	canLifterOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 10, 1, 0.5, 0.005, 5, 5);
 	driveOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 25, 1, 1, 0.005, 5, 5);
@@ -57,16 +57,23 @@ void AutonomousSystem::Run3ToteAuto(MecanumDrive *drive, LiftSystem *lifter){
 		drive->BLMotor->SetPosition(0);
 		drive->BRMotor->SetPosition(0);
 		break;
-
-	case Lift1Tote:
+	case LiftCan:
 		if(canLifterDistance < elevatorCanLevels[5]){
 			canLifterSetpoint = canLifterOutput->ComputeNextMotorSpeedCommand(canLifterDistance, elevatorCanLevels[3]);
 			drive->ResetEncoders();
 			drive->mecanumGyro->Reset();
+			if(canLifterDistance >= elevatorCanLevels[3]){
+				autoMode = Lift1Tote;
+			}
 			printf("canlift");
 		}
-		else if((canLifterDistance >= elevatorCanLevels[5]) && (WheelEncoder < autonDrive1[1]) && (toteLifterDistance < elevatorShortLevels[3])){
-
+		else{
+			drive->SetZero();
+			lifter->SetZero();
+		}
+		break;
+	case Lift1Tote:
+		if((canLifterDistance >= elevatorCanLevels[5]) && (WheelEncoder < autonDrive1[1]) && (toteLifterDistance < elevatorShortLevels[3])){
 			drive->AutonDriveStraight(true, driveOutput->ComputeNextMotorSpeedCommand(WheelEncoder, autonDrive1[1]) * -1);
 			if(WheelEncoder > autonDrive1[1]){
 				drive->AutonDriveStraight(false, 0);

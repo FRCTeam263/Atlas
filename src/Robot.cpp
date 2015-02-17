@@ -13,9 +13,9 @@ public:
 	MecanumDrive *drive;
 	LiftSystem *lifter;
 
-	DigitalOutput *vexSonicTrigger;
+	/*DigitalOutput *vexSonicTrigger;
 	DigitalInput *vexSonicEchoDetector;
-	Ultrasonic *sonicSensor;
+	Ultrasonic *sonicSensor;*/
 
 	AutonomousSystem *auton;
 
@@ -30,11 +30,11 @@ public:
 
 		auton = new AutonomousSystem();
 
-		vexSonicTrigger = new DigitalOutput(8);		// labeled input on vex
+		/*vexSonicTrigger = new DigitalOutput(8);		// labeled input on vex
 		vexSonicEchoDetector = new DigitalInput(9);	// labeled output on vex
 		sonicSensor = new Ultrasonic(vexSonicTrigger, vexSonicEchoDetector);
 
-		sonicSensor->SetAutomaticMode(true);
+		sonicSensor->SetAutomaticMode(true);*/
 
 		/*CameraServer::GetInstance()->SetQuality(25);
 		CameraServer::GetInstance()->StartAutomaticCapture("cam0");*/
@@ -68,8 +68,9 @@ public:
 		{
 			drive->Drive(drivePad);
 			lifter->RunLifter(gamePad);
+			printf("Tote: %f\n", lifter->shortLiftMotor1->Get());
 			//printf("Angle: %f\n", drive->mecanumGyro->GetAngle());
-			printf("FL: %f\t FR: %f \t BL: %f\t BR: %f\t Avg: %d\n", drive->FLMotor->GetPosition(), drive->FRMotor->GetPosition(), drive->BLMotor->GetPosition(), drive->BRMotor->GetPosition(), drive->AverageLeftStrafe());
+			//printf("FL: %f\t FR: %f \t BL: %f\t BR: %f\t Avg: %d\n", drive->FLMotor->GetPosition(), drive->FRMotor->GetPosition(), drive->BLMotor->GetPosition(), drive->BRMotor->GetPosition(), drive->AverageLeftStrafe());
 			//printf("WideEncoder: %f\t ShortEncoder: %f\n", lifter->canLiftMotor->GetPosition(), lifter->shortLiftMotor1->GetPosition());
 		}
 	}

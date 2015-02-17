@@ -13,10 +13,6 @@ public:
 	MecanumDrive *drive;
 	LiftSystem *lifter;
 
-	/*DigitalOutput *vexSonicTrigger;
-	DigitalInput *vexSonicEchoDetector;
-	Ultrasonic *sonicSensor;*/
-
 	AutonomousSystem *auton;
 
 	Omega()
@@ -29,15 +25,6 @@ public:
 		lifter = new LiftSystem();
 
 		auton = new AutonomousSystem();
-
-		/*vexSonicTrigger = new DigitalOutput(8);		// labeled input on vex
-		vexSonicEchoDetector = new DigitalInput(9);	// labeled output on vex
-		sonicSensor = new Ultrasonic(vexSonicTrigger, vexSonicEchoDetector);
-
-		sonicSensor->SetAutomaticMode(true);*/
-
-		/*CameraServer::GetInstance()->SetQuality(25);
-		CameraServer::GetInstance()->StartAutomaticCapture("cam0");*/
 	}
 
 	~Omega(){
@@ -53,9 +40,7 @@ public:
 	{
 		drive->mecanumGyro->Reset();
 		while(IsAutonomous() && IsEnabled()){
-			//drive->AutonDriveStraight(false, 0.5, true);
-			//drive->AutonDriveStraight(true, 0.5);
-			auton->Run3ToteAuto(drive, lifter);
+			auton->Run2Tote1CanAuto(drive, lifter);
 			//auton->Run1Tote1CanAuto(drive, lifter);
 			//drive->AutonTurn(-auton->turnOutput->ComputeNextMotorSpeedCommand(drive->mecanumGyro->GetAngle(), 174.5));
 			//printf("Angle: %f\n", drive->mecanumGyro->GetAngle());

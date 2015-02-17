@@ -282,6 +282,13 @@ void MecanumDrive::AutonTurn(float Speed){
 	BRMotor->Set(BRSpeed);
 }
 
+void MecanumDrive::AutonRotateTotes(float Speed){
+	FLMotor->Set(0);
+	FRMotor->Set(0);
+	BLMotor->Set(Speed);
+	BRMotor->Set(Speed);
+}
+
 void MecanumDrive::SetZero(void){
 	FLMotor->Set(0);
 	FRMotor->Set(0);

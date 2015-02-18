@@ -117,8 +117,8 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 			shortLiftMotor2->Set(0.3);
 		}
 		else if(lifterToggle == false){
-			shortLiftMotor1->Set(0.5);
-			shortLiftMotor2->Set(0.5);
+			shortLiftMotor1->Set(0.4);
+			shortLiftMotor2->Set(0.4);
 		}
 		toteManualEnabled = true;
 	}

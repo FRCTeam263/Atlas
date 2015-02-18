@@ -16,7 +16,8 @@ MecanumDrive::MecanumDrive(){
 	mecanumGyro->Reset();
 
 	utilities = new Utilities();
-	turnOutput = new ElevatorSpeedAlgorithm(0.1, 0.02, 1, 1, 1, 0.001, 2, 13);
+	turnOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 1, 1, 1, 0.0001, 2, 50);//0.1, 0.02, 1, 1, 1, 0.001, 2, 13
+	//TODO need to check these values, dont remember if they work or not. Changing it to the values in autonomous
 
 	FRMotor->Set(0);
 	BRMotor->Set(0);
@@ -166,7 +167,7 @@ void MecanumDrive::TurnToAngle(Joystick *drivePad){
 			Speed = -turnOutput->ComputeNextMotorSpeedCommand(mecanumGyro->GetAngle(), -15);
 		}
 	}
-	AutonTurn(Speed);
+	AutonTurn(Speed / 1.5);
 }
 
 void MecanumDrive::AutonDriveStraight(bool GyroEnabled, float Speed, bool Strafe){
@@ -282,13 +283,6 @@ void MecanumDrive::AutonTurn(float Speed){
 	BRMotor->Set(BRSpeed);
 }
 
-void MecanumDrive::AutonRotateTotes(float Speed){
-	FLMotor->Set(0);
-	FRMotor->Set(0);
-	BLMotor->Set(Speed);
-	BRMotor->Set(Speed);
-}
-
 void MecanumDrive::SetZero(void){
 	FLMotor->Set(0);
 	FRMotor->Set(0);
@@ -310,29 +304,6 @@ int MecanumDrive::AverageTurnLeftEncoders(void){
 
 int MecanumDrive::AverageLeftStrafe(){
 	return (-FLMotor->GetPosition() + BLMotor->GetPosition() + -BRMotor->GetPosition() + FRMotor->GetPosition()) / 4;
-}
-
-int MecanumDrive::AverageEncoder(bool Straight, bool TurnRight, bool TurnLeft, bool StrafeLeft, bool StrafeRight){
-	int average;
-	if(Straight == true){
-		average = (FLMotor->GetPosition() + FRMotor->GetPosition() + BLMotor->GetPosition() + BRMotor->GetPosition()) / 4;
-	}
-	else if(TurnRight == true){
-		average = (FLMotor->GetPosition() + BLMotor->GetPosition() + -FRMotor->GetPosition() + -BRMotor->GetPosition()) / 4;
-	}
-	else if(TurnLeft == true){
-		average = (-FLMotor->GetPosition() + -BLMotor->GetPosition() + FRMotor->GetPosition() + BRMotor->GetPosition()) / 4;
-	}
-	else if(StrafeLeft == true){
-		average = (-FLMotor->GetPosition() + BLMotor->GetPosition() + -BRMotor->GetPosition() + FRMotor->GetPosition()) / 4;
-	}
-	else if(StrafeRight == true){
-		average = (FLMotor->GetPosition() + -BLMotor->GetPosition() + BRMotor->GetPosition() + -FRMotor->GetPosition()) / 4;
-	}
-	else{
-		average = 0;
-	}
-	return average;
 }
 
 void MecanumDrive::ResetEncoders(void){

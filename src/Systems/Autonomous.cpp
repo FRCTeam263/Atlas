@@ -33,7 +33,7 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		lifter->canLiftMotor->SetPosition(0);
 	}
 
-	printf("Wheel: %f\t Avg: %d\t Turn: %d\t Angle: %f\t Strafe: %d\t, TurnReach: %d\n", WheelEncoder, drive->AverageEncoders(), drive->AverageTurnRightEncoders(), drive->mecanumGyro->GetAngle(), drive->AverageLeftStrafe(), TurnReached);
+	//printf("Wheel: %f\t Avg: %d\t Turn: %d\t Angle: %f\t Strafe: %d\t, TurnReach: %d\n", WheelEncoder, drive->AverageEncoders(), drive->AverageTurnRightEncoders(), drive->mecanumGyro->GetAngle(), drive->AverageLeftStrafe(), TurnReached);
 
 	switch(autoMode){
 	case LiftCan:
@@ -232,7 +232,7 @@ void AutonomousSystem::Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		lifter->canLiftMotor->SetPosition(0);
 	}
 
-	printf("Tote: %f\t Can: %f\t Wheel: %f\t Avg: %d\t Turn: %d\t Angle: %f\t Strafe: %d\t, TurnReach: %d\n", toteLifterDistance, canLifterDistance, WheelEncoder, drive->AverageEncoders(), drive->AverageTurnRightEncoders(), drive->mecanumGyro->GetAngle(), drive->AverageLeftStrafe(), TurnReached);
+	//printf("Tote: %f\t Can: %f\t Wheel: %f\t Avg: %d\t Turn: %d\t Angle: %f\t Strafe: %d\t, TurnReach: %d\n", toteLifterDistance, canLifterDistance, WheelEncoder, drive->AverageEncoders(), drive->AverageTurnRightEncoders(), drive->mecanumGyro->GetAngle(), drive->AverageLeftStrafe(), TurnReached);
 
 	switch(autoMode){
 	case LiftCan:
@@ -339,7 +339,7 @@ void AutonomousSystem::Run1CanPickup(MecanumDrive *drive, LiftSystem *lifter){
 		lifter->canLiftMotor->SetPosition(0);
 	}
 
-	printf("Avg: %d\n", drive->AverageEncoders());
+	//printf("Avg: %d\n", drive->AverageEncoders());
 
 	switch(autoMode){
 	case LiftCan:

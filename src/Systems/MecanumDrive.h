@@ -16,16 +16,19 @@ public:
 	~MecanumDrive(void);
 
 	void Drive(Joystick *drivePad);
-	void TurnToAngle(Joystick *drivePad);
-	void AutonDriveStraight(bool GyroEnabled = false, float Speed = 0,
+	void AutonDriveStraight(bool GyroEnabled = false,
+							float Speed = 0,
 							bool Strafe = false);
 	void AutonTurn(float Speed = 0);
+	void AutonRotateTotes(float Speed = 0);
 	void SetZero(void);
 	int AverageEncoders(void);
 	int AverageTurnRightEncoders(void);
 	int AverageTurnLeftEncoders(void);
 	int AverageLeftStrafe(void);
 	int AverageRightStrafe(void);
+	void TurnToAngle(Joystick *drivePad);
+	int AverageEncoder(bool Straight, bool TurnRight, bool TurnLeft, bool StrafeLeft, bool StrafeRight);
 	void ResetEncoders(void);
 
 	CANTalon *FLMotor;

@@ -1,51 +1,50 @@
 #include "LiftSystem.h"
 
 LiftSystem::LiftSystem(void){
-	shortLiftMotor1 = new CANTalon(SHORT_LIFT_MOTOR_1);
-	shortLiftMotor2 = new CANTalon(SHORT_LIFT_MOTOR_2);
+	toteLiftMotor1 = new CANTalon(SHORT_LIFT_MOTOR_1);
+	toteLiftMotor2 = new CANTalon(SHORT_LIFT_MOTOR_2);
 	canLiftMotor = new CANTalon(CAN_LIFT_MOTOR);
 
-	shortBottomLS = new DigitalInput(SHORT_BOTTOM_LS);
-	shortTopLS = new DigitalInput(SHORT_TOP_LS);
+	toteBottomLS = new DigitalInput(SHORT_BOTTOM_LS);
+	toteTopLS = new DigitalInput(SHORT_TOP_LS);
 	canBottomLS = new DigitalInput(CAN_BOTTOM_LS);
 	canTopLS = new DigitalInput(CAN_TOP_LS);
-	toteTouchSensor = new DigitalInput(LONG_TOTE_SENSOR);
-	canTouchSensor = new DigitalInput(SHORT_TOTE_SENSOR);
 
 	utilities = new Utilities();
 	toteLifterOutput = new ElevatorSpeedAlgorithm();
 	canLifterOutput = new ElevatorSpeedAlgorithm(0.1, 0.01, 25, 0.7, 0.5, 0.005, 5, 5);
 
-	shortLiftMotor1->SetFeedbackDevice(CANTalon::QuadEncoder);
-	shortLiftMotor1->SetSensorDirection(true);
+	toteLiftMotor1->SetFeedbackDevice(CANTalon::QuadEncoder);
+	toteLiftMotor1->SetSensorDirection(true);
 	canLiftMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
 	canLiftMotor->SetSensorDirection(true);
 
-	shortLiftMotor1->SetPosition(0);
+	toteLiftMotor1->SetPosition(0);
+	toteLiftMotor1->Set(0);
+	toteLiftMotor2->Set(0);
 	canLiftMotor->SetPosition(0);
+	canLiftMotor->Set(0);
 
-	toteEncoderDistance = shortLiftMotor1->GetPosition();
+	toteEncoderDistance = toteLiftMotor1->GetPosition();
 	canEncoderDistance = canLiftMotor->GetPosition();
 }
 
 LiftSystem::~LiftSystem(void){
-	delete shortLiftMotor1;
-	delete shortLiftMotor2;
+	delete toteLiftMotor1;
+	delete toteLiftMotor2;
 	delete canLiftMotor;
 
-	delete shortBottomLS;
-	delete shortTopLS;
+	delete toteBottomLS;
+	delete toteTopLS;
 	delete canBottomLS;
 	delete canTopLS;
-	delete toteTouchSensor;
-	delete canTouchSensor;
 
 	delete utilities;
 	delete toteLifterOutput;
 	delete canLifterOutput;
 }
 
-void LiftSystem::RunLifter(Joystick *gamePad){
+void LiftSystem::RunLifter(Joystick *gamePad, Joystick *drivePad){
 	static bool toteManualEnabled = true;
 	static bool canManualEnabled = true;
 	static int ShortLevel = 0;
@@ -55,12 +54,14 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 	float shortMotorOutput = 0;
 	static bool lifterToggle = false;
 
+	utilities->LimitSwitchRumble(drivePad, toteBottomLS);
+
 	if(utilities->GetJoystickButton(10, gamePad)){
 		lifterToggle = !lifterToggle;
 	}
 
-	if(shortBottomLS->Get() == true){
-		shortLiftMotor1->SetPosition(0);
+	if(toteBottomLS->Get() == true){
+		toteLiftMotor1->SetPosition(0);
 	}
 	if(canBottomLS->Get() == true){
 		canLiftMotor->SetPosition(0);
@@ -100,49 +101,45 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 		}
 	}
 
-	if(shortBottomLS->Get() == true && gamePad->GetRawButton(8) == true){
-		shortLiftMotor1->Set(0);
-		shortLiftMotor2->Set(0);
-		shortLiftMotor1->SetPosition(0);
+	if(toteBottomLS->Get() == true && gamePad->GetRawButton(8) == true){
+		toteLiftMotor1->Set(0);
+		toteLiftMotor2->Set(0);
+		toteLiftMotor1->SetPosition(0);
 		toteManualEnabled = true;
 	}
-	else if(shortTopLS->Get() == true && gamePad->GetRawButton(9) == true){
-		shortLiftMotor1->Set(0);
-		shortLiftMotor2->Set(0);
+	else if(toteTopLS->Get() == true && gamePad->GetRawButton(9) == true){
+		toteLiftMotor1->Set(0);
+		toteLiftMotor2->Set(0);
 		toteManualEnabled = true;
 	}
-	else if((shortTopLS->Get() == false || shortTopLS->Get() == true) && gamePad->GetRawButton(8)){
+	else if((toteTopLS->Get() == false || toteTopLS->Get() == true) && gamePad->GetRawButton(8)){
 		if(lifterToggle == true){
-			shortLiftMotor1->Set(0.3);
-			shortLiftMotor2->Set(0.3);
+			toteLiftMotor1->Set(0.3);
+			toteLiftMotor2->Set(0.3);
 		}
 		else if(lifterToggle == false){
-			shortLiftMotor1->Set(0.4);
-			shortLiftMotor2->Set(0.4);
+			toteLiftMotor1->Set(0.4);
+			toteLiftMotor2->Set(0.4);
 		}
 		toteManualEnabled = true;
 	}
-	else if((shortBottomLS->Get() == false || shortBottomLS->Get() == true) && gamePad->GetRawButton(9)){
+	else if((toteBottomLS->Get() == false || toteBottomLS->Get() == true) && gamePad->GetRawButton(9)){
 		if(lifterToggle == true){
-			shortLiftMotor1->Set(-0.65);
-			shortLiftMotor2->Set(-0.65);
+			toteLiftMotor1->Set(-0.65);
+			toteLiftMotor2->Set(-0.65);
 		}
 		else if(lifterToggle == false){
-			shortLiftMotor1->Set(-1);
-			shortLiftMotor2->Set(-1);
+			toteLiftMotor1->Set(-1);
+			toteLiftMotor2->Set(-1);
 		}
 		toteManualEnabled = true;
 	}
 	else{
 		if(toteManualEnabled){
-			shortLiftMotor1->Set(0);
-			shortLiftMotor2->Set(0);
+			toteLiftMotor1->Set(0);
+			toteLiftMotor2->Set(0);
 		}
 	}
-
-	/*else if(shortTopLS->Get() == true){
-			shortLiftMotor1->SetPosition(3830);
-		}*/
 
 	if(gamePad->GetRawButton(11) == true){
 		ShortLevel = 0;
@@ -200,12 +197,12 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 
 		//printf("Target: %d\n", targetCount);
 
-		shortMotorOutput = toteLifterOutput->ComputeNextMotorSpeedCommand(shortLiftMotor1->GetPosition(), targetCount);
+		shortMotorOutput = toteLifterOutput->ComputeNextMotorSpeedCommand(toteLiftMotor1->GetPosition(), targetCount);
 
-		if(shortTopLS->Get() == true && shortMotorOutput > 0){
+		if(toteTopLS->Get() == true && shortMotorOutput > 0){
 			shortMotorOutput = 0;
 		}
-		else if(shortBottomLS->Get() == true && shortMotorOutput < 0){
+		else if(toteBottomLS->Get() == true && shortMotorOutput < 0){
 			shortMotorOutput = 0;
 		}
 
@@ -228,11 +225,11 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 }
 
 void LiftSystem::ResetLifter(){
-	if(shortBottomLS->Get() == false){
-		shortLiftMotor1->Set(1);
+	if(toteBottomLS->Get() == false){
+		toteLiftMotor1->Set(1);
 	}
-	else if(shortBottomLS->Get() == true){
-		shortLiftMotor1->Set(0);
+	else if(toteBottomLS->Get() == true){
+		toteLiftMotor1->Set(0);
 	}
 
 	if(canBottomLS->Get() == false){
@@ -248,13 +245,13 @@ void LiftSystem::SetCanSpeed(float Speed){
 }
 
 void LiftSystem::SetToteSpeed(float Speed){
-	shortLiftMotor1->Set(Speed * -1);
-	shortLiftMotor2->Set(Speed * -1);
+	toteLiftMotor1->Set(Speed * -1);
+	toteLiftMotor2->Set(Speed * -1);
 }
 
 void LiftSystem::SetZero(void){
 	canLiftMotor->Set(0);
-	shortLiftMotor1->Set(0);
-	shortLiftMotor2->Set(0);
+	toteLiftMotor1->Set(0);
+	toteLiftMotor2->Set(0);
 }
 

@@ -18,7 +18,7 @@ AutonomousSystem::~AutonomousSystem(){
 }
 
 void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter){
-	float toteLifterDistance = lifter->shortLiftMotor1->GetPosition();
+	float toteLifterDistance = lifter->toteLiftMotor1->GetPosition();
 	float WheelEncoder = drive->FLMotor->GetPosition();
 	float canLifterDistance = lifter->canLiftMotor->GetPosition();
 	static bool TurnReached = false;
@@ -26,8 +26,8 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 	float toteLifterSetpoint = 0;
 	float canLifterSetpoint = 0;
 
-	if(lifter->shortBottomLS->Get() == true){
-		lifter->shortLiftMotor1->SetPosition(0);
+	if(lifter->toteBottomLS->Get() == true){
+		lifter->toteLiftMotor1->SetPosition(0);
 	}
 	if(lifter->canBottomLS->Get() == true){
 		lifter->canLiftMotor->SetPosition(0);
@@ -72,7 +72,7 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 
 		}
 		else if((WheelEncoder >= autonDrive1[1]) && (WheelEncoder < autonDrive1[2]) && (toteLifterDistance >= (elevatorShortLevels[3]) - 40)){
-			autoMode = Stack1Tote;
+			autoMode = Rotate1Tote;
 			printf("StackEntered");
 		}
 		else {
@@ -85,10 +85,9 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 
-	case Stack1Tote:
+	case Rotate1Tote:
 		if(TurnReached == false){
 			drive->AutonTurn(-driveOutput->ComputeNextMotorSpeedCommand(drive->AverageTurnRightEncoders(), 4325) / 1.5);
-			//drive->AutonTurn(-turnOutput->ComputeNextMotorSpeedCommand(drive->mecanumGyro->GetAngle(), 175) / 2);
 			timer->Start();
 			if(timer->HasPeriodPassed(2.8)){
 				TurnReached = true;
@@ -116,42 +115,18 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 			printf("Wrong3");
 		}
 		break;
-	/*case LineUp2Tote:
-		if(drive->AverageLeftStrafe() < 190){
-			drive->AutonDriveStraight(false, 0.3, true);
-			printf("Strafe");
-			if(drive->AverageLeftStrafe() >= 190){
-				drive->SetZero();
-				autoMode = Drop1Tote;
-				printf("DropEntered1");
-			}
-		}
-		else if(drive->AverageLeftStrafe() >= 190){
-			drive->SetZero();
-			autoMode = Drop1Tote;
-			printf("DropEntered2");
-		}
-		else{
-			toteLifterSetpoint = 0;
-			canLifterSetpoint = 0;
-			drive->AutonTurn(0);
-			drive->SetZero();
-			lifter->SetZero();
-			printf("Wrong4");
-		}
-		break;*/
 	case Drop1Tote:
-		if(lifter->shortLiftMotor1->GetPosition() > 790){
+		if(lifter->toteLiftMotor1->GetPosition() > 790){
 			toteLifterSetpoint = -1;
 			drive->SetZero();
 			canLifterSetpoint = 0;
 			printf("drop1tote");
 		}
-		else if(lifter->shortLiftMotor1->GetPosition() <= 790){
+		else if(lifter->toteLiftMotor1->GetPosition() <= 790){
 			toteLifterSetpoint = 0;
 			drive->ResetEncoders();
 			timer->Stop();
-			autoMode = Lift2Totes;
+			autoMode = Lineup2Totes;
 			printf("changed");
 		}
 		else {
@@ -163,7 +138,7 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 			printf("Wrong5");
 		}
 		break;
-	case Lift2Totes:
+	case Lineup2Totes:
 		if(drive->AverageEncoders() < 300){
 			drive->AutonDriveStraight(false, -0.5);
 			timer->Stop();
@@ -173,15 +148,6 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 			}
 			printf("lineuptotes");
 		}
-		/*else if(drive->AverageEncoders() >= 150 && toteLifterDistance < elevatorShortLevels[1]){
-			timer->Start();
-			drive->SetZero();
-			toteLifterSetpoint = toteLifterOutput->ComputeNextMotorSpeedCommand(toteLifterDistance, elevatorShortLevels[1]);
-			if(toteLifterDistance > elevatorShortLevels[1]){
-				toteLifterSetpoint = 0;
-			}
-			printf("lift2totes");
-		}*/
 		else if(drive->AverageEncoders() >= 150 && toteLifterDistance >= 500){
 			printf("EnterAutoRotate");
 			timer->Stop();
@@ -251,7 +217,7 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 }
 
 void AutonomousSystem::Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter){
-	float toteLifterDistance = lifter->shortLiftMotor1->GetPosition();
+	float toteLifterDistance = lifter->toteLiftMotor1->GetPosition();
 	float WheelEncoder = drive->FLMotor->GetPosition();
 	float canLifterDistance = lifter->canLiftMotor->GetPosition();
 	static bool TurnReached = false;
@@ -259,8 +225,8 @@ void AutonomousSystem::Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 	float toteLifterSetpoint = 0;
 	float canLifterSetpoint = 0;
 
-	if(lifter->shortBottomLS->Get() == true){
-		lifter->shortLiftMotor1->SetPosition(0);
+	if(lifter->toteBottomLS->Get() == true){
+		lifter->toteLiftMotor1->SetPosition(0);
 	}
 	if(lifter->canBottomLS->Get() == true){
 		lifter->canLiftMotor->SetPosition(0);
@@ -305,7 +271,7 @@ void AutonomousSystem::Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 
 		}
 		else if((WheelEncoder >= autonDrive1[1]) && (WheelEncoder < autonDrive1[2]) && (toteLifterDistance >= (elevatorShortLevels[3]) - 40)){
-			autoMode = Stack1Tote;
+			autoMode = Rotate1Tote;
 			printf("StackEntered");
 		}
 		else {
@@ -318,7 +284,7 @@ void AutonomousSystem::Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 
-	case Stack1Tote:
+	case Rotate1Tote:
 		if(TurnReached == false){
 			drive->AutonTurn(-turnOutput->ComputeNextMotorSpeedCommand(drive->mecanumGyro->GetAngle(), 90));
 			timer->Start();
@@ -445,179 +411,6 @@ void AutonomousSystem::RunDriveForward(MecanumDrive *drive){
 		}
 		break;
 	}
-}
-
-void AutonomousSystem::Run1Can1ToteSameBox(MecanumDrive *drive, LiftSystem *lifter){
-	float toteLifterDistance = lifter->shortLiftMotor1->GetPosition();
-	float WheelEncoder = drive->FLMotor->GetPosition();
-	float canLifterDistance = lifter->canLiftMotor->GetPosition();
-	static bool TurnReached = false;
-
-	float toteLifterSetpoint = 0;
-	float canLifterSetpoint = 0;
-
-	if(lifter->shortBottomLS->Get() == true){
-		lifter->shortLiftMotor1->SetPosition(0);
-	}
-	if(lifter->canBottomLS->Get() == true){
-		lifter->canLiftMotor->SetPosition(0);
-	}
-
-	printf("Wheel: %f\t Avg: %d\t Turn: %d\t Angle: %f\t Strafe: %d\t, TurnReach: %d\n", WheelEncoder, drive->AverageEncoders(), drive->AverageTurnRightEncoders(), drive->mecanumGyro->GetAngle(), drive->AverageLeftStrafe(), TurnReached);
-
-	switch(autoMode){
-	case LiftCan:
-		if(canLifterDistance < elevatorCanLevels[5]){
-			canLifterSetpoint = canLifterOutput->ComputeNextMotorSpeedCommand(canLifterDistance, elevatorCanLevels[5]);
-			drive->ResetEncoders();
-			drive->mecanumGyro->Reset();
-			if(canLifterDistance >= elevatorCanLevels[2]){
-				autoMode = Stack1Tote;
-			}
-			printf("canlift");
-		}
-		else if(canLifterDistance >= elevatorCanLevels[2] || lifter->canTopLS->Get()){
-			autoMode = Stack1Tote;
-		}
-		else{
-			toteLifterSetpoint = 0;
-			canLifterSetpoint = 0;
-			drive->AutonTurn(0);
-			drive->SetZero();
-			lifter->SetZero();
-			printf("Wrong1");
-		}
-		break;
-	case Stack1Tote:
-		if(TurnReached == false){
-			drive->AutonTurn(-driveOutput->ComputeNextMotorSpeedCommand(drive->AverageTurnRightEncoders(), 4325) / 1.5);
-			//drive->AutonTurn(-turnOutput->ComputeNextMotorSpeedCommand(drive->mecanumGyro->GetAngle(), 175) / 2);
-			timer->Start();
-			if(timer->HasPeriodPassed(2.8)){
-				TurnReached = true;
-				drive->AutonTurn(0);
-				drive->SetZero();
-				timer->Stop();
-				printf("true");
-			}
-			printf("turn");
-		}
-		else if(TurnReached == true){
-			drive->AutonDriveStraight(false, -driveOutput->ComputeNextMotorSpeedCommand(WheelEncoder, 6440) / 2);
-			if(WheelEncoder >= 6440){
-				drive->SetZero();
-				autoMode = Drop1Tote;
-			}
-			printf("drivefwd2");
-		}
-		else {
-			toteLifterSetpoint = 0;
-			canLifterSetpoint = 0;
-			drive->AutonTurn(0);
-			drive->SetZero();
-			lifter->SetZero();
-			printf("Wrong3");
-		}
-		break;
-	case Drop1Tote:
-		if(lifter->shortLiftMotor1->GetPosition() > 790){
-			toteLifterSetpoint = -1;
-			drive->SetZero();
-			canLifterSetpoint = 0;
-			printf("drop1tote");
-		}
-		else if(lifter->shortLiftMotor1->GetPosition() <= 790){
-			toteLifterSetpoint = 0;
-			drive->ResetEncoders();
-			timer->Stop();
-			autoMode = Lift2Totes;
-			printf("changed");
-		}
-		else {
-			toteLifterSetpoint = 0;
-			canLifterSetpoint = 0;
-			drive->AutonTurn(0);
-			drive->SetZero();
-			lifter->SetZero();
-			printf("Wrong5");
-		}
-		break;
-	case Lift2Totes:
-		if(drive->AverageEncoders() < 300){
-			drive->AutonDriveStraight(false, -0.5);
-			timer->Stop();
-			if(drive->AverageEncoders() >= 160){
-				drive->SetZero();
-				autoMode = RotateToAutoZone;
-			}
-			printf("lineuptotes");
-		}
-		else if(drive->AverageEncoders() >= 150 && toteLifterDistance >= 500){
-			printf("EnterAutoRotate");
-			timer->Stop();
-			autoMode = RotateToAutoZone;
-		}
-		else {
-			toteLifterSetpoint = 0;
-			canLifterSetpoint = 0;
-			drive->AutonTurn(0);
-			drive->SetZero();
-			lifter->SetZero();
-			printf("Wrong6");
-		}
-		break;
-	case RotateToAutoZone:
-		if(drive->AverageTurnLeftEncoders() < 2200){
-			timer->Start();
-			if(timer->HasPeriodPassed(0.05)){
-				drive->AutonTurn(0.4);
-				if(drive->AverageTurnLeftEncoders() >= 2200){
-					drive->SetZero();
-				}
-			}
-			printf("TurnToAutoZone");
-		}
-		else if(drive->AverageTurnLeftEncoders() >= 2200){
-			drive->SetZero();
-			autoMode = DriveToAutoZone;
-		}
-		else{
-			toteLifterSetpoint = 0;
-			canLifterSetpoint = 0;
-			drive->AutonTurn(0);
-			drive->SetZero();
-			lifter->SetZero();
-			printf("Wrong7");
-		}
-		break;
-	case DriveToAutoZone:
-		if(drive->AverageEncoders() < 6280){
-			drive->AutonDriveStraight(false, -0.5);
-			printf("DriveToAuto");
-		}
-		else if(drive->AverageEncoders() >= 6280){
-			drive->SetZero();
-			autoMode = RotateInAutoZone;
-			printf("InAuto");
-		}
-		break;
-	case RotateInAutoZone:
-		if(drive->AverageTurnRightEncoders() < -1000){
-			drive->AutonTurn(-0.5);
-			printf("RotateInAUto");
-		}
-		else if(drive->AverageTurnRightEncoders() >= -1000){
-			drive->SetZero();
-			printf("Done");
-		}
-		break;
-	}
-	canLifterSetpoint += 0.05;
-	if(lifter->canTopLS->Get() && canLifterSetpoint > 0){
-		canLifterSetpoint = 0;
-	}
-	lifter->SetToteSpeed(toteLifterSetpoint);
-	lifter->SetCanSpeed(canLifterSetpoint);
 }
 void AutonomousSystem::RunNothing(MecanumDrive *drive, LiftSystem *lifter){
 	drive->SetZero();

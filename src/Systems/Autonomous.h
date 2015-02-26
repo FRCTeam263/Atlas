@@ -15,14 +15,13 @@ public:
 	void Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter);
 	void RunDriveForward(MecanumDrive *drive);
 	void Run1CanPickup(MecanumDrive *drive, LiftSystem *lifter);
-	void Run1Can1ToteSameBox(MecanumDrive *drive, LiftSystem *lifter);
 	void RunNothing(MecanumDrive *drive, LiftSystem *lifter);
 
 	ElevatorSpeedAlgorithm *turnOutput;
 
 private:
-	typedef enum{Reset, LiftCan, Lift1Tote, Stack1Tote, Lift2Totes, Stack2Totes, RotateToAutoZone,
-		DriveToAutoZone, Drop1Tote, LineUp2Tote, RotateInAutoZone} AutoMode;
+	typedef enum{LiftCan, Lift1Tote, Rotate1Tote, Drop1Tote, Lineup2Totes, RotateToAutoZone,
+		DriveToAutoZone, RotateInAutoZone} AutoMode;
 
 	AutoMode autoMode;
 	ElevatorSpeedAlgorithm *toteLifterOutput;

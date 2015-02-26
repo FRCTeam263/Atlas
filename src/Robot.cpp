@@ -43,7 +43,7 @@ public:
 			//auton->Run2Tote1CanAuto(drive, lifter);
 			//auton->Run1Tote1CanAuto(drive, lifter);
 			//auton->Run1CanPickup(drive, lifter);
-			auton->Run1Can1ToteSameBox(drive, lifter);
+			//auton->Run1Can1ToteSameBox(drive, lifter);
 			//drive->AutonTurn(-auton->turnOutput->ComputeNextMotorSpeedCommand(drive->mecanumGyro->GetAngle(), 174.5));
 			//printf("Angle: %f\n", drive->mecanumGyro->GetAngle());
 		}
@@ -55,7 +55,7 @@ public:
 		{
 			drive->Drive(drivePad);
 			lifter->RunLifter(gamePad);
-			printf("Tote: %f\n", lifter->shortLiftMotor1->Get());
+			//printf("Tote: %f\n", lifter->shortLiftMotor1->Get());
 			//printf("Angle: %f\n", drive->mecanumGyro->GetAngle());
 			//printf("FL: %f\t FR: %f \t BL: %f\t BR: %f\t Avg: %d\n", drive->FLMotor->GetPosition(), drive->FRMotor->GetPosition(), drive->BLMotor->GetPosition(), drive->BRMotor->GetPosition(), drive->AverageLeftStrafe());
 			//printf("WideEncoder: %f\t ShortEncoder: %f\n", lifter->canLiftMotor->GetPosition(), lifter->shortLiftMotor1->GetPosition());

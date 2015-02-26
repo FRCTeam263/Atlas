@@ -33,15 +33,15 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		lifter->canLiftMotor->SetPosition(0);
 	}
 
-	//printf("Wheel: %f\t Avg: %d\t Turn: %d\t Angle: %f\t Strafe: %d\t, TurnReach: %d\n", WheelEncoder, drive->AverageEncoders(), drive->AverageTurnRightEncoders(), drive->mecanumGyro->GetAngle(), drive->AverageLeftStrafe(), TurnReached);
+	printf("Wheel: %f\t Avg: %d\t Turn: %d\t Angle: %f\t Strafe: %d\t, TurnReach: %d\n", WheelEncoder, drive->AverageEncoders(), drive->AverageTurnRightEncoders(), drive->mecanumGyro->GetAngle(), drive->AverageLeftStrafe(), TurnReached);
 
 	switch(autoMode){
 	case LiftCan:
-		if(canLifterDistance < elevatorCanLevels[5]){
+		if(canLifterDistance < elevatorCanLevels[2]){
 			canLifterSetpoint = canLifterOutput->ComputeNextMotorSpeedCommand(canLifterDistance, elevatorCanLevels[5]);
 			drive->ResetEncoders();
 			drive->mecanumGyro->Reset();
-			if(canLifterDistance >= elevatorCanLevels[2]){
+			if(canLifterDistance >= elevatorCanLevels[1]){
 				autoMode = Lift1Tote;
 			}
 			printf("canlift");
@@ -102,7 +102,7 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 			drive->AutonDriveStraight(false, -driveOutput->ComputeNextMotorSpeedCommand(WheelEncoder, 6440) / 2);
 			if(WheelEncoder >= 6440){
 				drive->SetZero();
-				autoMode = Drop1Tote;
+				autoMode = StrafeRight;
 			}
 			printf("drivefwd2");
 		}
@@ -113,6 +113,30 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 			drive->SetZero();
 			lifter->SetZero();
 			printf("Wrong3");
+		}
+		break;
+	case StrafeRight:
+		if(drive->AverageLeftStrafe() > 210){
+			drive->AutonDriveStraight(false, -0.3, true);
+			printf("Strafe");
+			if(drive->AverageLeftStrafe() <= 210){
+				drive->SetZero();
+				autoMode = Drop1Tote;
+				printf("DropEntered1");
+			}
+		}
+		else if(drive->AverageLeftStrafe() <= 210){
+			drive->SetZero();
+			autoMode = Drop1Tote;
+			printf("DropEntered2");
+		}
+		else{
+			toteLifterSetpoint = 0;
+			canLifterSetpoint = 0;
+			drive->AutonTurn(0);
+			drive->SetZero();
+			lifter->SetZero();
+			printf("Wrong4");
 		}
 		break;
 	case Drop1Tote:

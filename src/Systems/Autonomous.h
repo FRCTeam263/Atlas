@@ -20,7 +20,7 @@ public:
 	ElevatorSpeedAlgorithm *turnOutput;
 
 private:
-	typedef enum{LiftCan, Lift1Tote, Rotate1Tote, Drop1Tote, Lineup2Totes, RotateToAutoZone,
+	typedef enum{LiftCan, Lift1Tote, Rotate1Tote, StrafeRight, Drop1Tote, Lineup2Totes, RotateToAutoZone,
 		DriveToAutoZone, RotateInAutoZone} AutoMode;
 
 	AutoMode autoMode;

@@ -7,6 +7,12 @@
 #include "LiftSystem.h"
 #include "Utilities.h"
 #include "ElevatorSpeedAlgorithm.h"
+#include "../NavXLib/AHRS.h"
+#include "../NavXLib/AHRSProtocol.h"
+#include "../NavXLib/IMU.h"
+#include "../NavXLib/IMUAdvanced.h"
+#include "../NavXLib/IMUProtocol.h"
+#include "../NavXLib/IMURegisters.h"
 #include "../Defines.h"
 #include <math.h>
 
@@ -16,6 +22,7 @@ public:
 	~MecanumDrive(void);
 
 	void Drive(Joystick *drivePad);
+	void CalibrateNavX(void);
 	void TurnToAngle(Joystick *drivePad);
 	void AutonDriveStraight(bool GyroEnabled = false, float Speed = 0,
 							bool Strafe = false);
@@ -37,6 +44,9 @@ public:
 	ElevatorSpeedAlgorithm *turnOutput;
 private:
 	Utilities *utilities;
+	SerialPort *serialPort;
+	IMU *NavX;
+	bool FirstRun;
 
 	float FLSpeed;
 	float FRSpeed;

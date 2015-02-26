@@ -15,6 +15,11 @@ MecanumDrive::MecanumDrive(){
 	mecanumGyro->SetSensitivity(0.007);
 	mecanumGyro->Reset();
 
+	serialPort = new SerialPort(57600, SerialPort::kMXP);
+	uint8_t updateRateHZ = 50;
+	NavX = new IMU(serialPort, updateRateHZ);
+	FirstRun = true;
+
 	utilities = new Utilities();
 	turnOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 1, 1, 1, 0.0001, 2, 50);//0.1, 0.02, 1, 1, 1, 0.001, 2, 13
 	//TODO need to check these values, dont remember if they work or not. Changing it to the values in autonomous
@@ -43,11 +48,25 @@ MecanumDrive::~MecanumDrive(){
 	delete BLMotor;
 	delete BRMotor;
 
+	delete NavX;
+	delete serialPort;
+
 	delete mecanumGyro;
 	delete turnOutput;
 
 	delete utilities;
 
+}
+
+void MecanumDrive::CalibrateNavX(void){
+	if (FirstRun) {
+		bool is_calibrating = NavX->IsCalibrating();
+		if ( !is_calibrating ) {
+			Wait( 0.3 );
+			NavX->ZeroYaw();
+			FirstRun = false;
+		}
+	}
 }
 
 void MecanumDrive::Drive(Joystick *drivePad){
@@ -151,6 +170,14 @@ void MecanumDrive::Drive(Joystick *drivePad){
 
 void MecanumDrive::TurnToAngle(Joystick *drivePad){
 	float Speed = 0;
+	float NavXAngle = NavX->GetYaw();
+	if(NavXAngle >= 360){
+		NavXAngle -= 360;
+	}
+	else if(NavXAngle <= -360){
+		NavXAngle += 360;
+	}
+	printf("NavX Yaw: %f\n", NavXAngle);
 	if(drivePad->GetRawButton(3)){
 		if(mecanumGyro->GetAngle() < 285){
 			Speed = -turnOutput->ComputeNextMotorSpeedCommand(mecanumGyro->GetAngle(), 285);
@@ -186,6 +213,7 @@ void MecanumDrive::AutonDriveStraight(bool GyroEnabled, float Speed, bool Strafe
 	float twist = mecanumGyro->GetAngle() * 3 / 180;
 
 	float angle = mecanumGyro->GetAngle() * -1;
+	float NavXAngle = NavX->GetYaw();
 
 	if(angle < 0){
 		angle = angle + 360;

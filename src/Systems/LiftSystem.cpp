@@ -55,8 +55,6 @@ void LiftSystem::RunLifter(Joystick *gamePad){
 	float shortMotorOutput = 0;
 	static bool lifterToggle = false;
 
-	printf("SBLS: %d\t CBLS: %d\n", shortBottomLS->Get(), canBottomLS->Get());
-
 	if(utilities->GetJoystickButton(10, gamePad)){
 		lifterToggle = !lifterToggle;
 	}

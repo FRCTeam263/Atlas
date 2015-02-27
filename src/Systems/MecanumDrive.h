@@ -23,7 +23,6 @@ public:
 
 	void Drive(Joystick *drivePad);
 	void CalibrateNavX(void);
-	void TurnToAngle(Joystick *drivePad);
 	void AutonDriveStraight(bool GyroEnabled = false, float Speed = 0,
 							bool Strafe = false);
 	void AutonTurn(float Speed = 0);
@@ -42,6 +41,7 @@ public:
 
 	Gyro *mecanumGyro;
 	ElevatorSpeedAlgorithm *turnOutput;
+	ElevatorSpeedAlgorithm *turnOutput2;
 private:
 	Utilities *utilities;
 	SerialPort *serialPort;

@@ -21,7 +21,8 @@ MecanumDrive::MecanumDrive(){
 	FirstRun = true;
 
 	utilities = new Utilities();
-	turnOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 1, 1, 1, 0.0001, 2, 50);//0.1, 0.02, 1, 1, 1, 0.001, 2, 13
+	turnOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 1, 1, 0.3, 0.0001, 2, 50);//0.1, 0.02, 1, 1, 1, 0.001, 2, 13
+	turnOutput2 = new ElevatorSpeedAlgorithm(0.3, 0.02, 1, 0.3, 1, 0.0001, 2, 50);
 	//TODO need to check these values, dont remember if they work or not. Changing it to the values in autonomous
 
 	FRMotor->Set(0);
@@ -61,26 +62,28 @@ MecanumDrive::~MecanumDrive(){
 void MecanumDrive::CalibrateNavX(void){
 	if (FirstRun) {
 		bool is_calibrating = NavX->IsCalibrating();
-		if ( !is_calibrating ) {
-			Wait( 0.3 );
+		if (!is_calibrating){
+			Wait(0.3);
 			NavX->ZeroYaw();
 			FirstRun = false;
 		}
 	}
+	//printf("Angle: %f\n", NavX->GetYaw());
 }
 
 void MecanumDrive::Drive(Joystick *drivePad){
 
-	if(drivePad->GetRawButton(4)){
-		FLMotor->SetPosition(0);
-		FRMotor->SetPosition(0);
-		BLMotor->SetPosition(0);
-		BRMotor->SetPosition(0);
-	}
-
 	float YDrive;
 	float XDrive;
 	float Rotate;
+	float Angle = NavX->GetYaw();
+	if(NavX->GetYaw() >= 360){
+		Angle -= 180;
+	}
+	else if(NavX->GetYaw() <= -360){
+		Angle += 180;
+	}
+	printf("Angle: %f\n", Angle);
 
 	static bool ThrottleEnabled = true;
 
@@ -160,41 +163,18 @@ void MecanumDrive::Drive(Joystick *drivePad){
 			BRMotor->Set(0.7);
 		}
 	}
+	else if(drivePad->GetRawButton(4)){
+		AutonTurn(-turnOutput->ComputeNextMotorSpeedCommand(Angle, 135) / 2);
+	}
+	else if(drivePad->GetRawButton(3)){
+		AutonTurn(-turnOutput2->ComputeNextMotorSpeedCommand(Angle, -135) / 2);
+	}
 	else{
 		FLMotor->Set(-FLSpeed);
 		FRMotor->Set(FRSpeed);// / 1.02
 		BLMotor->Set(-BLSpeed);
 		BRMotor->Set(BRSpeed);// / 1.02
 	}
-}
-
-void MecanumDrive::TurnToAngle(Joystick *drivePad){
-	float Speed = 0;
-	float NavXAngle = NavX->GetYaw();
-	if(NavXAngle >= 360){
-		NavXAngle -= 360;
-	}
-	else if(NavXAngle <= -360){
-		NavXAngle += 360;
-	}
-	printf("NavX Yaw: %f\n", NavXAngle);
-	if(drivePad->GetRawButton(3)){
-		if(mecanumGyro->GetAngle() < 285){
-			Speed = -turnOutput->ComputeNextMotorSpeedCommand(mecanumGyro->GetAngle(), 285);
-		}
-		else if(mecanumGyro->GetAngle() > 285){
-			Speed = turnOutput->ComputeNextMotorSpeedCommand(mecanumGyro->GetAngle(), 285);
-		}
-	}
-	else if(drivePad->GetRawButton(4)){
-		if(mecanumGyro->GetAngle() > -15){
-			Speed = turnOutput->ComputeNextMotorSpeedCommand(mecanumGyro->GetAngle(), -15);
-		}
-		else if(mecanumGyro->GetAngle() < -15){
-			Speed = -turnOutput->ComputeNextMotorSpeedCommand(mecanumGyro->GetAngle(), -15);
-		}
-	}
-	AutonTurn(Speed / 1.5);
 }
 
 void MecanumDrive::AutonDriveStraight(bool GyroEnabled, float Speed, bool Strafe){

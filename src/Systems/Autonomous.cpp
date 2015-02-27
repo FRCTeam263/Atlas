@@ -116,16 +116,16 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case StrafeRight:
-		if(drive->AverageLeftStrafe() > 210){
-			drive->AutonDriveStraight(false, -0.3, true);
+		if(drive->AverageLeftStrafe() > 130){
+			drive->AutonDriveStraight(false, -0.4, true);
 			printf("Strafe");
-			if(drive->AverageLeftStrafe() <= 210){
+			if(drive->AverageLeftStrafe() <= 130){
 				drive->SetZero();
 				autoMode = Drop1Tote;
 				printf("DropEntered1");
 			}
 		}
-		else if(drive->AverageLeftStrafe() <= 210){
+		else if(drive->AverageLeftStrafe() <= 130){
 			drive->SetZero();
 			autoMode = Drop1Tote;
 			printf("DropEntered2");

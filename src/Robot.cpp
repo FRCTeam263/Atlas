@@ -50,13 +50,13 @@ public:
 	{
 		drive->mecanumGyro->Reset();
 		while(IsAutonomous() && IsEnabled()){
-			if(drive->AverageLeftStrafe() > -150){
+			/*if(drive->AverageLeftStrafe() > -100){
 				drive->AutonDriveStraight(false, -0.4, true);
 			}
-			else if(drive->AverageLeftStrafe() <= -150){
+			else if(drive->AverageLeftStrafe() <= -100){
 				drive->AutonDriveStraight(false, 0);
-			}
-			/*if(auto2tote1Can->Get() == 0){
+			}*/
+			if(auto2tote1Can->Get() == 0){
 				auton->Run2Tote1CanAuto(drive, lifter);
 			}
 			else if(auto1Tote1Can->Get() == 0){
@@ -70,7 +70,7 @@ public:
 			}
 			else{
 				auton->RunNothing(drive, lifter);
-			}*/
+			}
 			//printf("Angle: %f\n", drive->mecanumGyro->GetAngle());
 		}
 	}
@@ -82,7 +82,7 @@ public:
 			drive->CalibrateNavX();
 			drive->Drive(drivePad);
 			lifter->RunLifter(gamePad, drivePad);
-			printf("StrafeLeft: %d\n", drive->AverageLeftStrafe());
+			//printf("StrafeLeft: %d\n", drive->AverageLeftStrafe());
 			//printf("Tote: %f\n", lifter->shortLiftMotor1->Get());
 			//printf("Angle: %f\n", drive->mecanumGyro->GetAngle());
 			//printf("FL: %f\t FR: %f \t BL: %f\t BR: %f\t Avg: %d\n", drive->FLMotor->GetPosition(), drive->FRMotor->GetPosition(), drive->BLMotor->GetPosition(), drive->BRMotor->GetPosition(), drive->AverageLeftStrafe());

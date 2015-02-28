@@ -11,17 +11,13 @@ MecanumDrive::MecanumDrive(){
 	FRMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
 	BRMotor->SetFeedbackDevice(CANTalon::QuadEncoder);
 
-	mecanumGyro = new Gyro(GYRO);
-	mecanumGyro->SetSensitivity(0.007);
-	mecanumGyro->Reset();
-
 	serialPort = new SerialPort(57600, SerialPort::kMXP);
 	uint8_t updateRateHZ = 50;
 	NavX = new IMU(serialPort, updateRateHZ);
 	FirstRun = true;
 
 	utilities = new Utilities();
-	turnOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 1, 1, 0.3, 0.0001, 2, 50);//0.1, 0.02, 1, 1, 1, 0.001, 2, 13
+	turnOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 1, 1, 0.7, 0.0001, 2, 50);//0.1, 0.02, 1, 1, 1, 0.001, 2, 13
 	turnOutput2 = new ElevatorSpeedAlgorithm(0.3, 0.02, 1, 0.3, 1, 0.0001, 2, 50);
 	//TODO need to check these values, dont remember if they work or not. Changing it to the values in autonomous
 
@@ -52,7 +48,7 @@ MecanumDrive::~MecanumDrive(){
 	delete NavX;
 	delete serialPort;
 
-	delete mecanumGyro;
+	delete NavX;
 	delete turnOutput;
 
 	delete utilities;
@@ -92,9 +88,9 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	}
 
 	if(ThrottleEnabled == true){
-		YDrive = drivePad->GetY() / 2.35;
-		XDrive = (drivePad->GetX()  * -1) / 2.35;
-		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 2.35;
+		YDrive = drivePad->GetY() / 2;
+		XDrive = (drivePad->GetX()  * -1) / 2;
+		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 2;
 	}
 	else if(ThrottleEnabled == false){
 		YDrive = drivePad->GetY();
@@ -139,8 +135,8 @@ void MecanumDrive::Drive(Joystick *drivePad){
 		if(ThrottleEnabled == true){
 			FLMotor->Set(0);
 			FRMotor->Set(0);
-			BLMotor->Set(-0.35);
-			BRMotor->Set(-0.35);
+			BLMotor->Set(-0.45);
+			BRMotor->Set(-0.45);
 		}
 		else if(ThrottleEnabled == false){
 			FLMotor->Set(0);
@@ -153,8 +149,8 @@ void MecanumDrive::Drive(Joystick *drivePad){
 		if(ThrottleEnabled == true){
 			FLMotor->Set(0);
 			FRMotor->Set(0);
-			BLMotor->Set(0.35);
-			BRMotor->Set(0.35);
+			BLMotor->Set(0.45);
+			BRMotor->Set(0.45);
 		}
 		else if(ThrottleEnabled == false){
 			FLMotor->Set(0);
@@ -163,11 +159,11 @@ void MecanumDrive::Drive(Joystick *drivePad){
 			BRMotor->Set(0.7);
 		}
 	}
-	else if(drivePad->GetRawButton(4)){
-		AutonTurn(-turnOutput->ComputeNextMotorSpeedCommand(Angle, 135) / 2);
+	else if(drivePad->GetRawButton(2)){
+		AutonDriveStraight(false, -0.4, true);
 	}
 	else if(drivePad->GetRawButton(3)){
-		AutonTurn(-turnOutput2->ComputeNextMotorSpeedCommand(Angle, -135) / 2);
+		AutonDriveStraight(false, 0.4, true);
 	}
 	else{
 		FLMotor->Set(-FLSpeed);
@@ -190,10 +186,9 @@ void MecanumDrive::AutonDriveStraight(bool GyroEnabled, float Speed, bool Strafe
 		driveX = 0;
 	}
 
-	float twist = mecanumGyro->GetAngle() * 3 / 180;
+	float twist = NavX->GetYaw() * 3 / 180;
 
-	float angle = mecanumGyro->GetAngle() * -1;
-	float NavXAngle = NavX->GetYaw();
+	float angle = NavX->GetYaw() * -1;
 
 	if(angle < 0){
 		angle = angle + 360;

@@ -39,13 +39,12 @@ public:
 	CANTalon *BLMotor;
 	CANTalon *BRMotor;
 
-	Gyro *mecanumGyro;
+	IMU *NavX;
 	ElevatorSpeedAlgorithm *turnOutput;
 	ElevatorSpeedAlgorithm *turnOutput2;
 private:
 	Utilities *utilities;
 	SerialPort *serialPort;
-	IMU *NavX;
 	bool FirstRun;
 
 	float FLSpeed;

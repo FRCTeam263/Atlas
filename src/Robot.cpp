@@ -48,14 +48,8 @@ public:
 
 	void Autonomous()
 	{
-		drive->mecanumGyro->Reset();
 		while(IsAutonomous() && IsEnabled()){
-			/*if(drive->AverageLeftStrafe() > -100){
-				drive->AutonDriveStraight(false, -0.4, true);
-			}
-			else if(drive->AverageLeftStrafe() <= -100){
-				drive->AutonDriveStraight(false, 0);
-			}*/
+			drive->CalibrateNavX();
 			if(auto2tote1Can->Get() == 0){
 				auton->Run2Tote1CanAuto(drive, lifter);
 			}
@@ -71,7 +65,7 @@ public:
 			else{
 				auton->RunNothing(drive, lifter);
 			}
-			//printf("Angle: %f\n", drive->mecanumGyro->GetAngle());
+			printf("Angle: %f\n", drive->NavX->GetYaw());
 		}
 	}
 

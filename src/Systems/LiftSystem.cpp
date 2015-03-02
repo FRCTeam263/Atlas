@@ -77,22 +77,11 @@ void LiftSystem::RunLifter(Joystick *gamePad, Joystick *drivePad){
 		canManualEnabled = true;
 	}
 	else if((canTopLS->Get() == false || canTopLS->Get() == true) && gamePad->GetRawButton(6)){
-		if(lifterToggle == true){
-			canLiftMotor->Set(0.3);
-		}
-		else if(lifterToggle == false){
-			canLiftMotor->Set(0.55);
-		}
+		canLiftMotor->Set(0.7);
 		canManualEnabled = true;
 	}
 	else if((canBottomLS->Get() == false || canBottomLS->Get() == true) && gamePad->GetRawButton(7)){
-
-		if(lifterToggle == true){
-			canLiftMotor->Set(-0.7);
-		}
-		else if(lifterToggle == false){
-			canLiftMotor->Set(-1);
-		}
+		canLiftMotor->Set(-1);
 		canManualEnabled = true;
 	}
 	else{

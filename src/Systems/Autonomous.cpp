@@ -436,6 +436,42 @@ void AutonomousSystem::RunDriveForward(MecanumDrive *drive){
 		break;
 	}
 }
+
+void AutonomousSystem::RunFast1Can(MecanumDrive *drive, LiftSystem *lifter){
+	float canLifterDistance = lifter->canLiftMotor->GetPosition();
+	float canLifterSetpoint = 0;
+
+	if(lifter->canBottomLS->Get() == true){
+		lifter->canLiftMotor->SetPosition(0);
+	}
+
+	//printf("Avg: %d\n", drive->AverageEncoders());
+
+	switch(autoMode){
+	case LiftCan:
+		if(drive->AverageEncoders() < 4770){
+			drive->AutonDriveStraight(true, -0.5);
+			canLifterSetpoint = 0.8;
+			printf("canlift");
+		}
+		else if(drive->AverageEncoders() >= 4770){
+			drive->SetZero();
+		}
+		else{
+			canLifterSetpoint = 0;
+			drive->AutonTurn(0);
+			drive->SetZero();
+			lifter->SetZero();
+			printf("Wrong1");
+		}
+		break;
+	}
+	if(canLifterDistance > 550 && canLifterSetpoint > 0){
+		canLifterSetpoint = 0;
+	}
+	lifter->SetCanSpeed(canLifterSetpoint);
+
+}
 void AutonomousSystem::RunNothing(MecanumDrive *drive, LiftSystem *lifter){
 	drive->SetZero();
 	lifter->SetZero();

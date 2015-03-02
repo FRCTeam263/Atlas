@@ -18,6 +18,7 @@ public:
 	DigitalInput *auto1Tote1Can;
 	DigitalInput *auto1Can;
 	DigitalInput *autoDriveFwd;
+	DigitalInput *autoFastCan;
 
 	Omega()
 	{
@@ -28,14 +29,11 @@ public:
 		lifter = new LiftSystem();
 
 		auton = new AutonomousSystem();
+		autoFastCan = new DigitalInput(5);
 		autoDriveFwd = new DigitalInput(6);
 		auto1Can = new DigitalInput(7);
 		auto1Tote1Can = new DigitalInput(8);
 		auto2tote1Can = new DigitalInput(9);
-
-
-		CameraServer::GetInstance()->SetQuality(50);
-		CameraServer::GetInstance()->StartAutomaticCapture("cam0");
 	}
 
 	~Omega(){
@@ -61,6 +59,9 @@ public:
 			}
 			else if(autoDriveFwd->Get() == 0){
 				auton->RunDriveForward(drive);
+			}
+			else if(autoFastCan->Get() == 0){
+				auton->RunFast1Can(drive, lifter);
 			}
 			else{
 				auton->RunNothing(drive, lifter);

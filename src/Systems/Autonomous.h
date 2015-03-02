@@ -15,6 +15,7 @@ public:
 	void Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter);
 	void RunDriveForward(MecanumDrive *drive);
 	void Run1CanPickup(MecanumDrive *drive, LiftSystem *lifter);
+	void RunFast1Can(MecanumDrive *drive, LiftSystem *lifter);
 	void RunNothing(MecanumDrive *drive, LiftSystem *lifter);
 
 	ElevatorSpeedAlgorithm *turnOutput;

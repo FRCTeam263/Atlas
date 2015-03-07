@@ -11,6 +11,8 @@ public:
 	AutonomousSystem(void);
 	~AutonomousSystem(void);
 
+	void Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter);
+	void Run1Tote2CanAuto(MecanumDrive *drive, LiftSystem *lifter);
 	void Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter);
 	void Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter);
 	void RunDriveForward(MecanumDrive *drive);
@@ -21,7 +23,7 @@ public:
 	ElevatorSpeedAlgorithm *turnOutput;
 
 private:
-	typedef enum{LiftCan, Lift1Tote, Rotate1Tote, StrafeRight, Drop1Tote, Lineup2Totes, RotateToAutoZone,
+	typedef enum{LiftCan, Lift1Tote, Rotate1Tote, StrafeRight, Drop1Tote, Lineup2Totes, DriveTo3Totes, Stack3Totes, RotateToAutoZone,
 		DriveToAutoZone, RotateInAutoZone} AutoMode;
 
 	AutoMode autoMode;

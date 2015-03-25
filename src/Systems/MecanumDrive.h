@@ -41,7 +41,6 @@ public:
 
 	IMU *NavX;
 	ElevatorSpeedAlgorithm *turnOutput;
-	ElevatorSpeedAlgorithm *turnOutput2;
 private:
 	Utilities *utilities;
 	SerialPort *serialPort;

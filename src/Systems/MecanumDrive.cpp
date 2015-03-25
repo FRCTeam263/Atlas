@@ -18,7 +18,6 @@ MecanumDrive::MecanumDrive(){
 
 	utilities = new Utilities();
 	turnOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 1, 1, 0.7, 0.0001, 2, 50);//0.1, 0.02, 1, 1, 1, 0.001, 2, 13
-	turnOutput2 = new ElevatorSpeedAlgorithm(0.3, 0.02, 1, 0.3, 1, 0.0001, 2, 50);
 	//TODO need to check these values, dont remember if they work or not. Changing it to the values in autonomous
 
 	FRMotor->Set(0);
@@ -88,9 +87,9 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	}
 
 	if(ThrottleEnabled == true){
-		YDrive = drivePad->GetY() / 1.8;
-		XDrive = (drivePad->GetX()  * -1) / 1.8;
-		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 1.8;
+		YDrive = drivePad->GetY() / 1.7;
+		XDrive = (drivePad->GetX()  * -1) / 1.7;
+		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 1.7;
 	}
 	else if(ThrottleEnabled == false){
 		YDrive = drivePad->GetY();
@@ -134,14 +133,14 @@ void MecanumDrive::Drive(Joystick *drivePad){
 		//rotate around a point outside the robot instead of rotating around the center of the robot.
 			FLMotor->Set(0);
 			FRMotor->Set(0);
-			BLMotor->Set(-0.7);
-			BRMotor->Set(-0.7);
+			BLMotor->Set(-0.8);
+			BRMotor->Set(-0.8);
 	}
 	else if(drivePad->GetRawButton(6) == true){
 			FLMotor->Set(0);
 			FRMotor->Set(0);
-			BLMotor->Set(0.7);
-			BRMotor->Set(0.7);
+			BLMotor->Set(0.8);
+			BRMotor->Set(0.8);
 
 	}
 	else if(drivePad->GetRawButton(2)){

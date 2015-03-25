@@ -55,7 +55,7 @@ public:
 				auton->Run1Tote1CanAuto(drive, lifter);
 			}
 			else if(auto1Can->Get() == 0){
-				auton->Run1CanPickup(drive, lifter);
+				auton->Run3Tote1CanAuto(drive, lifter);
 			}
 			else if(autoDriveFwd->Get() == 0){
 				auton->RunDriveForward(drive);

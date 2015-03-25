@@ -7,7 +7,7 @@
 #define BACK_LEFT_MOTOR 2
 #define BACK_RIGHT_MOTOR 5
 
-#define CAN_LIFT_MOTOR 4
+#define CAN_LIFT_MOTOR 8
 #define SHORT_LIFT_MOTOR_1 7
 #define SHORT_LIFT_MOTOR_2 6
 

@@ -88,9 +88,9 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	}
 
 	if(ThrottleEnabled == true){
-		YDrive = drivePad->GetY() / 2;
-		XDrive = (drivePad->GetX()  * -1) / 2;
-		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 2;
+		YDrive = drivePad->GetY() / 1.8;
+		XDrive = (drivePad->GetX()  * -1) / 1.8;
+		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 1.8;
 	}
 	else if(ThrottleEnabled == false){
 		YDrive = drivePad->GetY();
@@ -132,32 +132,17 @@ void MecanumDrive::Drive(Joystick *drivePad){
 
 	if(drivePad->GetRawButton(5) == true){
 		//rotate around a point outside the robot instead of rotating around the center of the robot.
-		if(ThrottleEnabled == true){
-			FLMotor->Set(0);
-			FRMotor->Set(0);
-			BLMotor->Set(-0.45);
-			BRMotor->Set(-0.45);
-		}
-		else if(ThrottleEnabled == false){
 			FLMotor->Set(0);
 			FRMotor->Set(0);
 			BLMotor->Set(-0.7);
 			BRMotor->Set(-0.7);
-		}
 	}
 	else if(drivePad->GetRawButton(6) == true){
-		if(ThrottleEnabled == true){
-			FLMotor->Set(0);
-			FRMotor->Set(0);
-			BLMotor->Set(0.45);
-			BRMotor->Set(0.45);
-		}
-		else if(ThrottleEnabled == false){
 			FLMotor->Set(0);
 			FRMotor->Set(0);
 			BLMotor->Set(0.7);
 			BRMotor->Set(0.7);
-		}
+
 	}
 	else if(drivePad->GetRawButton(2)){
 		AutonDriveStraight(false, -0.4, true);
@@ -242,6 +227,13 @@ void MecanumDrive::AutonDriveStraight(bool GyroEnabled, float Speed, bool Strafe
 	FRMotor->Set(FRSpeed);
 	BLMotor->Set(-BLSpeed);
 	BRMotor->Set(BRSpeed);
+
+	if(Strafe == true){
+		FLMotor->Set(-FLSpeed);
+		FRMotor->Set(FRSpeed);
+		BLMotor->Set(-BLSpeed);
+		BRMotor->Set(BRSpeed);
+	}
 }
 
 void MecanumDrive::AutonTurn(float Speed){

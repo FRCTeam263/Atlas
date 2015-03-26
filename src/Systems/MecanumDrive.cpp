@@ -78,7 +78,7 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	else if(NavX->GetYaw() <= -360){
 		Angle += 180;
 	}
-	printf("Angle: %f\n", Angle);
+	//printf("Angle: %f\n", Angle);
 
 	static bool ThrottleEnabled = true;
 

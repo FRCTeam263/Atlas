@@ -48,8 +48,7 @@ public:
 	{
 		while(IsAutonomous() && IsEnabled()){
 			drive->CalibrateNavX();
-			auton->Run3Tote1CanAuto(drive, lifter);
-			/*if(auto2tote1Can->Get() == 0){//DIO 9
+			if(auto2tote1Can->Get() == 0){//DIO 9
 				auton->Run2Tote1CanAuto(drive, lifter);
 			}
 			else if(auto1Tote1Can->Get() == 0){//DIO 8
@@ -66,7 +65,7 @@ public:
 			}
 			else{//Not Plugged In
 				auton->RunNothing(drive, lifter);
-			}*/
+			}
 			printf("Angle: %f\n", drive->NavX->GetYaw());
 		}
 	}

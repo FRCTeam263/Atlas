@@ -55,6 +55,7 @@ void LiftSystem::RunLifter(Joystick *gamePad, Joystick *drivePad){
 	static bool lifterToggle = false;
 
 	utilities->LimitSwitchRumble(drivePad, toteBottomLS);
+	printf("Encoder: %f\n", toteLiftMotor1->GetPosition());
 
 	if(utilities->GetJoystickButton(10, gamePad)){
 		lifterToggle = !lifterToggle;
@@ -66,6 +67,10 @@ void LiftSystem::RunLifter(Joystick *gamePad, Joystick *drivePad){
 	if(canBottomLS->Get() == true){
 		canLiftMotor->SetPosition(0);
 	}
+	/*if(toteTopLS->Get() == true){
+		toteLiftMotor1->SetPosition(4500);
+	}*/
+
 
 	if(canBottomLS->Get() == true && gamePad->GetRawButton(6)){
 		canLiftMotor->Set(0);
@@ -182,7 +187,7 @@ void LiftSystem::RunLifter(Joystick *gamePad, Joystick *drivePad){
 			targetCount = targetCount - 30;
 		}
 
-		targetCount = utilities->MaxValue(targetCount, 0, 3850);
+		targetCount = utilities->MaxValue(targetCount, 0, 4500);
 
 		//printf("Target: %d\n", targetCount);
 

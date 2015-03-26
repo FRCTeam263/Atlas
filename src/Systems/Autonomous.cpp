@@ -260,7 +260,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		break;
 	case Stack3Totes:
 		if(lifter->toteLiftMotor1->GetPosition() > 805){
-			toteLifterSetpoint = -0.8;
+			toteLifterSetpoint = -0.5;
 			drive->SetZero();
 			canLifterSetpoint = 0;
 			printf("drop3tote");
@@ -306,7 +306,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case DriveToAutoZone:
-		if(drive->AverageEncoders() < 3680){
+		if(drive->AverageEncoders() < 4080){
 			drive->AutonDriveStraight(false, -0.5);
 			if(toteLifterDistance > 0){
 				toteLifterSetpoint = -1;
@@ -316,7 +316,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 			}
 			printf("DriveToAuto");
 		}
-		else if(drive->AverageEncoders() >= 3680){
+		else if(drive->AverageEncoders() >= 4080){
 			drive->SetZero();
 			autoMode = Score3Totes;
 			printf("InAuto");

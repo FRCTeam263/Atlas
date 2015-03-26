@@ -38,17 +38,21 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 	switch(autoMode){
 	case LiftCan:
 		if(drive->AverageEncoders() < 400){
-			drive->AutonDriveStraight(true, -0.6);
-			if(canLifterDistance < 550){
-				canLifterSetpoint = 0.8;
+			timer->Start();
+			if(timer->HasPeriodPassed(0.1)){
+				drive->AutonDriveStraight(true, -0.6);
 			}
-			else if(canLifterDistance >= 550){
+			if(canLifterDistance < 950){
+				canLifterSetpoint = 1;
+			}
+			else if(canLifterDistance >= 950){
 				canLifterSetpoint = 0;
 			}
 			printf("canlift");
 		}
 		else if(drive->AverageEncoders() >= 400){
 			drive->SetZero();
+			timer->Stop();
 			autoMode = Rotate1Tote;
 		}
 		else{
@@ -62,7 +66,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		break;
 	case Rotate1Tote:
 		if(TurnReached == false){
-			drive->AutonTurn(-driveOutput->ComputeNextMotorSpeedCommand(drive->AverageTurnRightEncoders(), 4325) / 1.5);
+			drive->AutonTurn(-driveOutput->ComputeNextMotorSpeedCommand(drive->AverageTurnRightEncoders(), 4625) / 1.5);
 			if(toteLifterDistance < elevatorShortLevels[3]){
 				toteLifterSetpoint = toteLifterOutput->ComputeNextMotorSpeedCommand(toteLifterDistance, elevatorShortLevels[3]);
 			}

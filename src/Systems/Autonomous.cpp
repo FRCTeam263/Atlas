@@ -209,13 +209,13 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		if(drive->AverageEncoders() < 3850){
 			drive->AutonDriveStraight(false, -0.4);
 			timer->Stop();
-			if(drive->AverageEncoders() >= 950){
+			if(drive->AverageEncoders() >= 600){
 				drive->SetZero();
 				autoMode = StrafeRight3Tote;
 			}
 			printf("lineuptotes");
 		}
-		else if(drive->AverageEncoders() >= 250 && toteLifterDistance >= 3850){
+		else if(drive->AverageEncoders() >= 150 && toteLifterDistance >= 3850){
 			printf("EnterAutoRotate");
 			timer->Stop();
 			autoMode = StrafeRight3Tote;

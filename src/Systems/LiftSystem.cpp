@@ -53,6 +53,7 @@ void LiftSystem::RunLifter(Joystick *gamePad, Joystick *drivePad){
 	float canMotorOutput = 0;
 	float shortMotorOutput = 0;
 	static bool lifterToggle = false;
+	static int LockedInValue = 0;
 
 	utilities->LimitSwitchRumble(drivePad, toteBottomLS);
 	printf("Encoder: %f\n", toteLiftMotor1->GetPosition());
@@ -99,11 +100,13 @@ void LiftSystem::RunLifter(Joystick *gamePad, Joystick *drivePad){
 		toteLiftMotor1->Set(0);
 		toteLiftMotor2->Set(0);
 		toteLiftMotor1->SetPosition(0);
+		LockedInValue = 0;
 		toteManualEnabled = true;
 	}
 	else if(toteTopLS->Get() == true && gamePad->GetRawButton(9) == true){
 		toteLiftMotor1->Set(0);
 		toteLiftMotor2->Set(0);
+		LockedInValue = 0;
 		toteManualEnabled = true;
 	}
 	else if((toteTopLS->Get() == false || toteTopLS->Get() == true) && gamePad->GetRawButton(8)){
@@ -115,6 +118,7 @@ void LiftSystem::RunLifter(Joystick *gamePad, Joystick *drivePad){
 			toteLiftMotor1->Set(0.4);
 			toteLiftMotor2->Set(0.4);
 		}
+		LockedInValue = 0;
 		toteManualEnabled = true;
 	}
 	else if((toteBottomLS->Get() == false || toteBottomLS->Get() == true) && gamePad->GetRawButton(9)){
@@ -126,7 +130,16 @@ void LiftSystem::RunLifter(Joystick *gamePad, Joystick *drivePad){
 			toteLiftMotor1->Set(-1);
 			toteLiftMotor2->Set(-1);
 		}
+		LockedInValue = 0;
 		toteManualEnabled = true;
+	}
+	else if(gamePad->GetRawButton(8) == false && gamePad->GetRawButton(9) == false){
+		if(LockedInValue == 0){
+			LockedInValue = toteLiftMotor1->GetPosition();
+		}
+		else if(LockedInValue > 0){
+			SetToteSpeed(toteLifterOutput->ComputeNextMotorSpeedCommand(toteLiftMotor1->GetPosition(), LockedInValue));
+		}
 	}
 	else{
 		if(toteManualEnabled){

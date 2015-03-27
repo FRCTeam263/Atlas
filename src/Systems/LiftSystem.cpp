@@ -133,7 +133,7 @@ void LiftSystem::RunLifter(Joystick *gamePad, Joystick *drivePad){
 		LockedInValue = 0;
 		toteManualEnabled = true;
 	}
-	else if(gamePad->GetRawButton(8) == false && gamePad->GetRawButton(9) == false){
+	else if(gamePad->GetRawButton(8) == false && gamePad->GetRawButton(9) == false && toteManualEnabled == true){
 		if(LockedInValue == 0){
 			LockedInValue = toteLiftMotor1->GetPosition();
 		}
@@ -151,26 +151,31 @@ void LiftSystem::RunLifter(Joystick *gamePad, Joystick *drivePad){
 	if(gamePad->GetRawButton(11) == true){
 		ShortLevel = 0;
 		toteManualEnabled = false;
+		LockedInValue = 0;
 		targetCount = elevatorShortLevels[ShortLevel];
 	}
 	else if(gamePad->GetRawButton(12) == true){
 		ShortLevel = 1;
 		toteManualEnabled = false;
+		LockedInValue = 0;
 		targetCount = elevatorShortLevels[ShortLevel];
 	}
 	else if(gamePad->GetRawButton(13) == true){//1 tote high
 		ShortLevel = 2;
 		toteManualEnabled = false;
+		LockedInValue = 0;
 		targetCount = elevatorShortLevels[ShortLevel];
 	}
 	else if(gamePad->GetRawButton(14) == true){
 		ShortLevel = 3;
 		toteManualEnabled = false;
+		LockedInValue = 0;
 		targetCount = elevatorShortLevels[ShortLevel];
 	}
 	else if(gamePad->GetRawButton(15) == true){
 		ShortLevel = 4;
 		toteManualEnabled = false;
+		LockedInValue = 0;
 		targetCount = elevatorShortLevels[ShortLevel];
 	}
 

@@ -433,16 +433,23 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 
 	switch(autoMode){
 	case LiftCan:
-		if(canLifterDistance < elevatorCanLevels[2]){
-			canLifterSetpoint = canLifterOutput->ComputeNextMotorSpeedCommand(canLifterDistance, elevatorCanLevels[5]);
-			drive->ResetEncoders();
-			if(canLifterDistance >= 1700){
-				autoMode = Lift1Tote;
+		if(drive->AverageEncoders() < 400){
+			timer->Start();
+			if(timer->HasPeriodPassed(0.1)){
+				drive->AutonDriveStraight(true, -0.6);
+			}
+			if(canLifterDistance < 950){
+				canLifterSetpoint = 1;
+			}
+			else if(canLifterDistance >= 950){
+				canLifterSetpoint = 0;
 			}
 			printf("canlift");
 		}
-		else if(canLifterDistance >= 1700 || lifter->canTopLS->Get()){
-			autoMode = Lift1Tote;
+		else if(drive->AverageEncoders() >= 400){
+			drive->SetZero();
+			timer->Stop();
+			autoMode = Rotate1Tote;
 		}
 		else{
 			toteLifterSetpoint = 0;
@@ -453,51 +460,28 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 			printf("Wrong1");
 		}
 		break;
-	case Lift1Tote:
-		if((WheelEncoder < autonDrive1[1]) && (toteLifterDistance < elevatorShortLevels[3])){
-			drive->AutonDriveStraight(false, driveOutput->ComputeNextMotorSpeedCommand(WheelEncoder, autonDrive1[1]) * -1);
-			if(WheelEncoder > autonDrive1[1]){
-				drive->AutonDriveStraight(false, 0);
-			}
-			printf("drivefwd");
-		}
-		else if(WheelEncoder >= autonDrive1[1] && toteLifterDistance < elevatorShortLevels[3]){
-			toteLifterSetpoint = toteLifterOutput->ComputeNextMotorSpeedCommand(toteLifterDistance, elevatorShortLevels[3]);
-			printf("lifttote");
-
-		}
-		else if((WheelEncoder >= autonDrive1[1]) && (WheelEncoder < autonDrive1[2]) && (toteLifterDistance >= (elevatorShortLevels[3]) - 40)){
-			autoMode = Rotate1Tote;
-			printf("StackEntered");
-		}
-		else {
-			toteLifterSetpoint = 0;
-			canLifterSetpoint = 0;
-			drive->AutonTurn(0);
-			drive->SetZero();
-			lifter->SetZero();
-			printf("Wrong2");
-		}
-		break;
-
 	case Rotate1Tote:
 		if(TurnReached == false){
-			drive->AutonTurn(-driveOutput->ComputeNextMotorSpeedCommand(drive->AverageTurnRightEncoders(), 4325) / 1.5);
+			drive->AutonTurn(-driveOutput->ComputeNextMotorSpeedCommand(drive->AverageTurnRightEncoders(), 4625) / 1.5);
+			if(toteLifterDistance < elevatorShortLevels[3]){
+				toteLifterSetpoint = toteLifterOutput->ComputeNextMotorSpeedCommand(toteLifterDistance, elevatorShortLevels[3]);
+			}
 			timer->Start();
 			if(timer->HasPeriodPassed(2.8)){
 				TurnReached = true;
 				drive->AutonTurn(0);
 				drive->SetZero();
+				toteLifterSetpoint = 0;
 				timer->Stop();
 				printf("true");
 			}
 			printf("turn");
 		}
 		else if(TurnReached == true){
-			drive->AutonDriveStraight(false, -driveOutput->ComputeNextMotorSpeedCommand(WheelEncoder, 6440) / 2);
+			drive->AutonDriveStraight(false, -driveOutput->ComputeNextMotorSpeedCommand(WheelEncoder, 6640) / 2);
 			if(WheelEncoder >= 6440){
 				drive->SetZero();
-				autoMode = StrafeRight;
+				autoMode = Drop1Tote;
 			}
 			printf("drivefwd2");
 		}
@@ -558,16 +542,16 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case Lineup2Totes:
-		if(drive->AverageEncoders() < 300){
+		if(drive->AverageEncoders() < 400){
 			drive->AutonDriveStraight(false, -0.5);
 			timer->Stop();
-			if(drive->AverageEncoders() >= 160){
+			if(drive->AverageEncoders() >= 200){
 				drive->SetZero();
 				autoMode = RotateToAutoZone;
 			}
 			printf("lineuptotes");
 		}
-		else if(drive->AverageEncoders() >= 150 && toteLifterDistance >= 500){
+		else if(drive->AverageEncoders() >= 200 && toteLifterDistance >= 400){
 			printf("EnterAutoRotate");
 			timer->Stop();
 			autoMode = RotateToAutoZone;
@@ -606,11 +590,11 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case DriveToAutoZone:
-		if(drive->AverageEncoders() < 6280){
+		if(drive->AverageEncoders() < 5280){
 			drive->AutonDriveStraight(false, -0.5);
 			printf("DriveToAuto");
 		}
-		else if(drive->AverageEncoders() >= 6280){
+		else if(drive->AverageEncoders() >= 5280){
 			drive->SetZero();
 			autoMode = RotateInAutoZone;
 			printf("InAuto");

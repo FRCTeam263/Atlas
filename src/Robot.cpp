@@ -3,7 +3,7 @@
 #include "Systems/LiftSystem.h"
 #include "Systems/Autonomous.h"
 
-class Omega: public SampleRobot
+class Atlas: public SampleRobot
 {
 public:
 	Joystick *drivePad;
@@ -20,7 +20,7 @@ public:
 	DigitalInput *autoDriveFwd;
 	DigitalInput *autoFastCan;
 
-	Omega()
+	Atlas()
 	{
 		drivePad = new Joystick(0);
 		gamePad = new Joystick(1);
@@ -36,7 +36,7 @@ public:
 		auto2tote1Can = new DigitalInput(9);
 	}
 
-	~Omega(){
+	~Atlas(){
 		delete drivePad;
 		delete gamePad;
 		delete drive;
@@ -86,4 +86,4 @@ public:
 	}
 };
 
-START_ROBOT_CLASS(Omega);
+START_ROBOT_CLASS(Atlas);

@@ -53,7 +53,7 @@ void LiftSystem::RunLifter(Joystick *gamePad, Joystick *drivePad){
 	float canMotorOutput = 0;
 	float shortMotorOutput = 0;
 	static bool lifterToggle = false;
-	static int LockedInValue = 0;
+	static float LockedInValue = 0;
 
 	utilities->LimitSwitchRumble(drivePad, toteBottomLS);
 	printf("Encoder: %f\n", toteLiftMotor1->GetPosition());

@@ -260,7 +260,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		break;
 	case Stack3Totes:
 		if(lifter->toteLiftMotor1->GetPosition() > 805){
-			toteLifterSetpoint = -0.5;
+			toteLifterSetpoint = -0.6;
 			drive->SetZero();
 			canLifterSetpoint = 0;
 			printf("drop3tote");

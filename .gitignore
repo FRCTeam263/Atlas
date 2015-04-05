@@ -46,3 +46,5 @@ Temporary Items
 src/Systems/Robot.cpp
 *.xml
 *.xml
+.settings/language.settings.xml
+*.xml

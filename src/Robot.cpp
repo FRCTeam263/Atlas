@@ -3,7 +3,7 @@
 #include "Systems/LiftSystem.h"
 #include "Systems/Autonomous.h"
 
-class Omega: public SampleRobot
+class Atlas: public SampleRobot
 {
 public:
 	Joystick *drivePad;
@@ -16,11 +16,11 @@ public:
 
 	DigitalInput *auto2tote1Can;
 	DigitalInput *auto1Tote1Can;
-	DigitalInput *auto1Can;
+	DigitalInput *auto3ToteStack;
 	DigitalInput *autoDriveFwd;
 	DigitalInput *autoFastCan;
 
-	Omega()
+	Atlas()
 	{
 		drivePad = new Joystick(0);
 		gamePad = new Joystick(1);
@@ -31,12 +31,12 @@ public:
 		auton = new AutonomousSystem();
 		autoFastCan = new DigitalInput(5);
 		autoDriveFwd = new DigitalInput(6);
-		auto1Can = new DigitalInput(7);
+		auto3ToteStack = new DigitalInput(7);
 		auto1Tote1Can = new DigitalInput(8);
 		auto2tote1Can = new DigitalInput(9);
 	}
 
-	~Omega(){
+	~Atlas(){
 		delete drivePad;
 		delete gamePad;
 		delete drive;
@@ -48,22 +48,22 @@ public:
 	{
 		while(IsAutonomous() && IsEnabled()){
 			drive->CalibrateNavX();
-			if(auto2tote1Can->Get() == 0){
+			if(auto2tote1Can->Get() == 0){//DIO 9
 				auton->Run2Tote1CanAuto(drive, lifter);
 			}
-			else if(auto1Tote1Can->Get() == 0){
+			else if(auto1Tote1Can->Get() == 0){//DIO 8
 				auton->Run1Tote1CanAuto(drive, lifter);
 			}
-			else if(auto1Can->Get() == 0){
-				auton->Run1CanPickup(drive, lifter);
+			else if(auto3ToteStack->Get() == 0){//DIO 7
+				auton->Run3Tote1CanAuto(drive, lifter);
 			}
-			else if(autoDriveFwd->Get() == 0){
+			else if(autoDriveFwd->Get() == 0){//DIO 6
 				auton->RunDriveForward(drive);
 			}
-			else if(autoFastCan->Get() == 0){
+			else if(autoFastCan->Get() == 0){//DIO 5
 				auton->RunFast1Can(drive, lifter);
 			}
-			else{
+			else{//Not Plugged In
 				auton->RunNothing(drive, lifter);
 			}
 			printf("Angle: %f\n", drive->NavX->GetYaw());
@@ -86,4 +86,4 @@ public:
 	}
 };
 
-START_ROBOT_CLASS(Omega);
+START_ROBOT_CLASS(Atlas);

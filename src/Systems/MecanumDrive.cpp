@@ -18,7 +18,6 @@ MecanumDrive::MecanumDrive(){
 
 	utilities = new Utilities();
 	turnOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 1, 1, 0.7, 0.0001, 2, 50);//0.1, 0.02, 1, 1, 1, 0.001, 2, 13
-	turnOutput2 = new ElevatorSpeedAlgorithm(0.3, 0.02, 1, 0.3, 1, 0.0001, 2, 50);
 	//TODO need to check these values, dont remember if they work or not. Changing it to the values in autonomous
 
 	FRMotor->Set(0);
@@ -79,7 +78,7 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	else if(NavX->GetYaw() <= -360){
 		Angle += 180;
 	}
-	printf("Angle: %f\n", Angle);
+	//printf("Angle: %f\n", Angle);
 
 	static bool ThrottleEnabled = true;
 
@@ -88,9 +87,9 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	}
 
 	if(ThrottleEnabled == true){
-		YDrive = drivePad->GetY() / 2;
-		XDrive = (drivePad->GetX()  * -1) / 2;
-		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 2;
+		YDrive = drivePad->GetY() / 1.7;
+		XDrive = (drivePad->GetX()  * -1) / 1.7;
+		Rotate = (-drivePad->GetThrottle() + drivePad->GetTwist()) / 1.7;
 	}
 	else if(ThrottleEnabled == false){
 		YDrive = drivePad->GetY();
@@ -132,32 +131,17 @@ void MecanumDrive::Drive(Joystick *drivePad){
 
 	if(drivePad->GetRawButton(5) == true){
 		//rotate around a point outside the robot instead of rotating around the center of the robot.
-		if(ThrottleEnabled == true){
 			FLMotor->Set(0);
 			FRMotor->Set(0);
-			BLMotor->Set(-0.45);
-			BRMotor->Set(-0.45);
-		}
-		else if(ThrottleEnabled == false){
-			FLMotor->Set(0);
-			FRMotor->Set(0);
-			BLMotor->Set(-0.7);
-			BRMotor->Set(-0.7);
-		}
+			BLMotor->Set(-0.8);
+			BRMotor->Set(-0.8);
 	}
 	else if(drivePad->GetRawButton(6) == true){
-		if(ThrottleEnabled == true){
 			FLMotor->Set(0);
 			FRMotor->Set(0);
-			BLMotor->Set(0.45);
-			BRMotor->Set(0.45);
-		}
-		else if(ThrottleEnabled == false){
-			FLMotor->Set(0);
-			FRMotor->Set(0);
-			BLMotor->Set(0.7);
-			BRMotor->Set(0.7);
-		}
+			BLMotor->Set(0.8);
+			BRMotor->Set(0.8);
+
 	}
 	else if(drivePad->GetRawButton(2)){
 		AutonDriveStraight(false, -0.4, true);
@@ -242,6 +226,13 @@ void MecanumDrive::AutonDriveStraight(bool GyroEnabled, float Speed, bool Strafe
 	FRMotor->Set(FRSpeed);
 	BLMotor->Set(-BLSpeed);
 	BRMotor->Set(BRSpeed);
+
+	if(Strafe == true){
+		FLMotor->Set(-FLSpeed);
+		FRMotor->Set(FRSpeed);
+		BLMotor->Set(-BLSpeed);
+		BRMotor->Set(BRSpeed);
+	}
 }
 
 void MecanumDrive::AutonTurn(float Speed){

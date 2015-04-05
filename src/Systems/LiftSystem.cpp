@@ -68,9 +68,9 @@ void LiftSystem::RunLifter(Joystick *gamePad, Joystick *drivePad){
 	if(canBottomLS->Get() == true){
 		canLiftMotor->SetPosition(0);
 	}
-	/*if(toteTopLS->Get() == true){
+	if(toteTopLS->Get() == true){
 		toteLiftMotor1->SetPosition(4500);
-	}*/
+	}
 
 
 	if(canBottomLS->Get() == true && gamePad->GetRawButton(6)){
@@ -133,19 +133,20 @@ void LiftSystem::RunLifter(Joystick *gamePad, Joystick *drivePad){
 		LockedInValue = 0;
 		toteManualEnabled = true;
 	}
-	else if(gamePad->GetRawButton(8) == false && gamePad->GetRawButton(9) == false && toteManualEnabled == true){
+	else if((gamePad->GetRawButton(8) == false && gamePad->GetRawButton(9) == false) && toteManualEnabled == true){
 		if(LockedInValue == 0){
 			LockedInValue = toteLiftMotor1->GetPosition();
 		}
 		else if(LockedInValue > 0){
 			SetToteSpeed(toteLifterOutput->ComputeNextMotorSpeedCommand(toteLiftMotor1->GetPosition(), LockedInValue));
 		}
-	}
-	else{
-		if(toteManualEnabled){
+		else{
 			toteLiftMotor1->Set(0);
 			toteLiftMotor2->Set(0);
 		}
+
+	}
+	else{
 	}
 
 	if(gamePad->GetRawButton(11) == true){

@@ -12,7 +12,6 @@ public:
 	~AutonomousSystem(void);
 
 	void Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter);
-	void Run1Tote2CanAuto(MecanumDrive *drive, LiftSystem *lifter);
 	void Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter);
 	void Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter);
 	void RunDriveForward(MecanumDrive *drive);

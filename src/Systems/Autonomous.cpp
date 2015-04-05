@@ -66,7 +66,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		break;
 	case Rotate1Tote:
 		if(TurnReached == false){
-			drive->AutonTurn(-driveOutput->ComputeNextMotorSpeedCommand(drive->AverageTurnRightEncoders(), 4625) / 1.5);
+			drive->AutonTurn(-driveOutput->ComputeNextMotorSpeedCommand(drive->AverageTurnRightEncoders(), 4325) / 1.5);
 			if(toteLifterDistance < elevatorShortLevels[3]){
 				toteLifterSetpoint = toteLifterOutput->ComputeNextMotorSpeedCommand(toteLifterDistance, elevatorShortLevels[3]);
 			}
@@ -83,7 +83,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		else if(TurnReached == true){
 			drive->AutonDriveStraight(false, -driveOutput->ComputeNextMotorSpeedCommand(WheelEncoder, 6690) / 2);
-			if(WheelEncoder >= 6440){
+			if(WheelEncoder >= 6640){
 				drive->SetZero();
 				autoMode = Drop1Tote;
 			}
@@ -170,7 +170,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case DriveTo3Totes:
-		if(drive->AverageEncoders() < 3800){
+		if(drive->AverageEncoders() < 3600){
 			if(drive->AverageEncoders() < 2200){
 				drive->AutonDriveStraight(false, -0.7, false);
 				if(drive->AverageEncoders() >= 1000 && drive->AverageEncoders() <= 2300){

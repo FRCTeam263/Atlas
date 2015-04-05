@@ -175,7 +175,7 @@ void MecanumDrive::AutonDriveStraight(bool GyroEnabled, float Speed, bool Strafe
 	float angle = NavX->GetYaw() * -1;
 
 	if(angle < 0){
-		angle = angle + 360;
+		angle += 360;
 	}
 
 	if(GyroEnabled && Strafe == false){

@@ -21,10 +21,15 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 	float toteLifterDistance = lifter->toteLiftMotor1->GetPosition();
 	float WheelEncoder = drive->FLMotor->GetPosition();
 	float canLifterDistance = lifter->canLiftMotor->GetPosition();
+	float Angle = drive->NavX->GetYaw();
 	static bool TurnReached = false;
 
 	float toteLifterSetpoint = 0;
 	float canLifterSetpoint = 0;
+
+	if(Angle < 0){
+		Angle += 360;
+	}
 
 	if(lifter->toteBottomLS->Get() == true){
 		lifter->toteLiftMotor1->SetPosition(0);
@@ -66,7 +71,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		break;
 	case Rotate1Tote:
 		if(TurnReached == false){
-			drive->AutonTurn(-driveOutput->ComputeNextMotorSpeedCommand(drive->AverageTurnRightEncoders(), 4325) / 1.5);
+			drive->AutonTurn(-driveOutput->ComputeNextMotorSpeedCommand(Angle, 180) / 1.5);
 			if(toteLifterDistance < elevatorShortLevels[3]){
 				toteLifterSetpoint = toteLifterOutput->ComputeNextMotorSpeedCommand(toteLifterDistance, elevatorShortLevels[3]);
 			}

@@ -46,24 +46,36 @@ public:
 
 	void Autonomous()
 	{
+		float tiltAngleRad = drive->NavX->GetPitch() * (M_PIl/180);
 		while(IsAutonomous() && IsEnabled()){
 			drive->CalibrateNavX();
-			if(auto2tote1Can->Get() == 0){//DIO 9
-				auton->Run2Tote1CanAuto(drive, lifter);
+			if(drive->NavX->GetPitch() < 25 && drive->NavX->GetPitch() > -25){
+				if(auto2tote1Can->Get() == 0){//DIO 9
+					auton->Run2Tote1CanAuto(drive, lifter);
+				}
+				else if(auto1Tote1Can->Get() == 0){//DIO 8
+					auton->Run1Tote1CanAuto(drive, lifter);
+				}
+				else if(auto3ToteStack->Get() == 0){//DIO 7
+					auton->Run3Tote1CanAuto(drive, lifter);
+				}
+				else if(autoDriveFwd->Get() == 0){//DIO 6
+					auton->RunDriveForward(drive);
+				}
+				else if(autoFastCan->Get() == 0){//DIO 5
+					auton->RunFast1Can(drive, lifter);
+				}
+				else{//Not Plugged In
+					auton->RunNothing(drive, lifter);
+				}
 			}
-			else if(auto1Tote1Can->Get() == 0){//DIO 8
-				auton->Run1Tote1CanAuto(drive, lifter);
+			else if(drive->NavX->GetPitch() > 25){
+				drive->AutonDriveStraight(false, tiltAngleRad);
 			}
-			else if(auto3ToteStack->Get() == 0){//DIO 7
-				auton->Run3Tote1CanAuto(drive, lifter);
+			else if(drive->NavX->GetPitch() < -25){
+				drive->AutonDriveStraight(false, tiltAngleRad);
 			}
-			else if(autoDriveFwd->Get() == 0){//DIO 6
-				auton->RunDriveForward(drive);
-			}
-			else if(autoFastCan->Get() == 0){//DIO 5
-				auton->RunFast1Can(drive, lifter);
-			}
-			else{//Not Plugged In
+			else{
 				auton->RunNothing(drive, lifter);
 			}
 			printf("Angle: %f\n", drive->NavX->GetYaw());

@@ -277,6 +277,56 @@ void MecanumDrive::AutonTurn(float Speed){
 	BRMotor->Set(BRSpeed);
 }
 
+void MecanumDrive::AutonDiagonalStrafe(bool NegativeX, float Speed){
+	float driveX = Speed;
+	float driveY = Speed;
+	float twist = 0;
+
+	if(NegativeX == true){
+		FLSpeed = 0;
+		FRSpeed = -driveX + driveY - twist;
+		BLSpeed = -driveX + driveY + twist;
+		BRSpeed = 0;
+	}
+	else if(NegativeX == false){
+		FLSpeed = driveX + driveY + twist;
+		FRSpeed = 0;
+		BLSpeed = 0;
+		BRSpeed = driveX + driveY - twist;
+	}
+
+	double Max = 0;
+
+	if(fabs(FLSpeed) > Max)
+	{
+		Max = fabs(FLSpeed);
+	}
+	if(fabs(FRSpeed) > Max)
+	{
+		Max = fabs(FRSpeed);
+	}
+	if(fabs(BLSpeed) > Max)
+	{
+		Max = fabs(BLSpeed);
+	}
+	if(fabs(BRSpeed) > Max)
+	{
+		Max = fabs(BRSpeed);
+	}
+	if(Max > 1.0)
+	{
+		FLSpeed = FLSpeed / Max;
+		FRSpeed = FRSpeed / Max;
+		BLSpeed = BLSpeed / Max;
+		BRSpeed = BRSpeed / Max;
+	}
+
+	FLMotor->Set(-FLSpeed);
+	FRMotor->Set(FRSpeed);
+	BLMotor->Set(-BLSpeed);
+	BRMotor->Set(BRSpeed);
+}
+
 void MecanumDrive::SetZero(void){
 	FLMotor->Set(0);
 	FRMotor->Set(0);

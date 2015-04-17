@@ -176,10 +176,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		break;
 	case DriveTo3Totes:
 		if(drive->AverageEncoders() < 3600){
-			if(drive->AverageEncoders() < 1000){
-				drive->AutonDiagonalStrafe(true, -0.7);
-			}
-			else if(drive->AverageEncoders() >= 1000 && drive->AverageEncoders() < 2200){
+			if(drive->AverageEncoders() < 2200){
 				drive->AutonDriveStraight(false, -0.7, false);
 				if(drive->AverageEncoders() >= 1000 && drive->AverageEncoders() <= 2300){
 					toteLifterSetpoint = -1;

@@ -26,6 +26,7 @@ public:
 	void AutonDriveStraight(bool GyroEnabled = false, float Speed = 0,
 							bool Strafe = false);
 	void AutonTurn(float Speed = 0);
+	void AutonDiagonalStrafe(bool NegativeX = true, float Speed = 0);
 	void SetZero(void);
 	int AverageEncoders(void);
 	int AverageTurnRightEncoders(void);

@@ -30,6 +30,7 @@ private:
 	ElevatorSpeedAlgorithm *canLifterOutput;
 	ElevatorSpeedAlgorithm *driveOutput;
 	Timer *timer;
+	Timer *angleTimer;
 
 };
 

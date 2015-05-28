@@ -19,6 +19,7 @@ public:
 	DigitalInput *auto3ToteStack;
 	DigitalInput *autoDriveFwd;
 	DigitalInput *autoFastCan;
+	Timer *timer;
 
 	Atlas()
 	{
@@ -34,6 +35,7 @@ public:
 		auto3ToteStack = new DigitalInput(7);
 		auto1Tote1Can = new DigitalInput(8);
 		auto2tote1Can = new DigitalInput(9);
+		timer = new Timer;
 	}
 
 	~Atlas(){
@@ -46,10 +48,10 @@ public:
 
 	void Autonomous()
 	{
-		float tiltAngleRad = drive->NavX->GetPitch() * (M_PIl/180);
+		//float tiltAngleRad = drive->NavX->GetPitch() * (M_PIl/180);
 		while(IsAutonomous() && IsEnabled()){
 			drive->CalibrateNavX();
-			if(drive->NavX->GetPitch() < 25 && drive->NavX->GetPitch() > -25){
+			//if(drive->NavX->GetPitch() < 25 && drive->NavX->GetPitch() > -25){
 				if(auto2tote1Can->Get() == 0){//DIO 9
 					auton->Run2Tote1CanAuto(drive, lifter);
 				}
@@ -68,7 +70,7 @@ public:
 				else{//Not Plugged In
 					auton->RunNothing(drive, lifter);
 				}
-			}
+			/*}
 			else if(drive->NavX->GetPitch() > 25){
 				drive->AutonDriveStraight(false, tiltAngleRad);
 			}
@@ -77,8 +79,8 @@ public:
 			}
 			else{
 				auton->RunNothing(drive, lifter);
-			}
-			printf("Angle: %f\n", drive->NavX->GetYaw());
+			}*/
+			//printf("Angle: %f\n", drive->NavX->GetYaw());
 		}
 	}
 

@@ -94,7 +94,7 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	else if(ThrottleEnabled == false){
 		YDrive = drivePad->GetY();
 		XDrive = drivePad->GetX() * -1;
-		Rotate = -drivePad->GetThrottle() + drivePad->GetTwist();
+		Rotate = -drivePad->GetThrottle() + drivePad->GetTwist() / 1.4;
 	}
 
 	//printf("Throttle: %f\t Twist: %f\t Trigger: %d\n", drivePad->GetThrottle(), drivePad->GetTwist(), drivePad->GetTrigger());

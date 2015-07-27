@@ -17,8 +17,7 @@ MecanumDrive::MecanumDrive(){
 	FirstRun = true;
 
 	utilities = new Utilities();
-	turnOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 1, 1, 0.7, 0.0001, 2, 50);//0.1, 0.02, 1, 1, 1, 0.001, 2, 13
-	//TODO need to check these values, dont remember if they work or not. Changing it to the values in autonomous
+	turnOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 1, 1, 0.7, 0.0001, 2, 50);
 
 	FRMotor->Set(0);
 	BRMotor->Set(0);
@@ -128,9 +127,9 @@ void MecanumDrive::Drive(Joystick *drivePad){
 		BLSpeed = BLSpeed / max;
 		BRSpeed = BRSpeed / max;
 	}
-
+	//Allows driver to rotate around a point outside the robot instead of rotating around the center of the robot.
+	//Makes it so tote stack will not fall from rotational force.
 	if(drivePad->GetRawButton(5) == true){
-		//rotate around a point outside the robot instead of rotating around the center of the robot.
 			FLMotor->Set(0);
 			FRMotor->Set(0);
 			BLMotor->Set(-0.8);
@@ -151,9 +150,9 @@ void MecanumDrive::Drive(Joystick *drivePad){
 	}
 	else{
 		FLMotor->Set(-FLSpeed);
-		FRMotor->Set(FRSpeed);// / 1.02
+		FRMotor->Set(FRSpeed);
 		BLMotor->Set(-BLSpeed);
-		BRMotor->Set(BRSpeed);// / 1.02
+		BRMotor->Set(BRSpeed);
 	}
 }
 

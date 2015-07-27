@@ -1,3 +1,6 @@
+//FRC 2015 Robot Code for Atlas
+//By: 263 Programming Team led by Tejas Prasad and mentored by Mr. Tripi
+
 #include "WPILib.h"
 #include "Systems/MecanumDrive.h"
 #include "Systems/LiftSystem.h"
@@ -48,9 +51,11 @@ public:
 
 	void Autonomous()
 	{
-		//float tiltAngleRad = drive->NavX->GetPitch() * (M_PIl/180);
 		while(IsAutonomous() && IsEnabled()){
+			//Autonomous function selection is made by inserting a jumper into the desired Digital I/O slot.
 			drive->CalibrateNavX();
+			//The commented code is a theoretical anti-tilt function based on the Z rotation of the gyro.
+			//It was based off of the code example from Kauai Labs.
 			//if(drive->NavX->GetPitch() < 25 && drive->NavX->GetPitch() > -25){
 				if(auto2tote1Can->Get() == 0){//DIO 9
 					auton->Run2Tote1CanAuto(drive, lifter);

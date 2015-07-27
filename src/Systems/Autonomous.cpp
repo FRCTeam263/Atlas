@@ -6,7 +6,7 @@ AutonomousSystem::AutonomousSystem(){
 	canLifterOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 10, 1, 0.5, 0.005, 5, 5);
 	driveOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 25, 1, 0.8, 0.005, 5, 5);
 	turnOutput = new ElevatorSpeedAlgorithm(0.3, 0.02, 1, 1, 0.8, 0.0001, 2, 50);//0.3, 0.02, 1, 1, 1, 0.0001, 2, 50 works at half speed
-	timer = new Timer();//0.3, 0.005, 1, 1, 1, 0.0005, 2, 25 works at full speed but isnt full speed
+	timer = new Timer();														 //0.3, 0.005, 1, 1, 1, 0.0005, 2, 25 works at full speed but isn't full speed
 	angleTimer = new Timer();
 }
 
@@ -17,7 +17,10 @@ AutonomousSystem::~AutonomousSystem(){
 	delete turnOutput;
 	delete timer;
 }
-
+//3 Tote is not tested with gyro rotation. Theoretically would work.
+//For a working version look at 3 tote autonomous at the end of NY Tech Valley Regional.
+//Note: This version uses encoder values for rotation instead of gyro value and needs its stack speed for the third tote slowed down.
+//It worked 3 times, twice on the practice field and once on the official field.
 void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter){
 	float toteLifterDistance = lifter->toteLiftMotor1->GetPosition();
 	float WheelEncoder = drive->FLMotor->GetPosition();
@@ -216,10 +219,10 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case Lineup3Totes:
-		if(drive->AverageEncoders() < 3850){//should really be whatever the value below is
+		if(drive->AverageEncoders() < 3850){
 			drive->AutonDriveStraight(false, -0.4);
 			timer->Stop();
-			if(drive->AverageEncoders() >= 600){//Change this value to increase fwd distance after lifting
+			if(drive->AverageEncoders() >= 600){//Change this value to increase the forward distance after lifting.
 				drive->SetZero();
 				autoMode = StrafeRight3Tote;
 			}

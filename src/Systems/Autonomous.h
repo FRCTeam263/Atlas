@@ -5,15 +5,16 @@
 #include "LiftSystem.h"
 #include "MecanumDrive.h"
 #include "ElevatorSpeedAlgorithm.h"
+#include "PivotPiston.h"
 
 class AutonomousSystem{
 public:
 	AutonomousSystem(void);
 	~AutonomousSystem(void);
 
-	void Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter);
-	void Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter);
-	void Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter);
+	void Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter, PivotPiston *pivotPiston);
+	void Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter, PivotPiston *pivotPiston);
+	void Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter, PivotPiston *pivotPiston);
 	void RunDriveForward(MecanumDrive *drive);
 	void Run1CanPickup(MecanumDrive *drive, LiftSystem *lifter);
 	void RunFast1Can(MecanumDrive *drive, LiftSystem *lifter);

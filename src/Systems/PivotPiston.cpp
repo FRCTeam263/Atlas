@@ -31,3 +31,11 @@ void PivotPiston::CommandPivotPistonPosition(Joystick *drivePad) {
     }
 }
 
+void PivotPiston::CommandPivotPistonPosition(PivotPistonPosition commandedPivotPosition) {
+    if (PivotPiston::Deploy == commandedPivotPosition) {
+		theDoubleSolenoid->Set(DoubleSolenoid::kForward); // Deploy it so its anchored, and robot can pivot arround it.
+	} else {
+		theDoubleSolenoid->Set(DoubleSolenoid::kReverse); // Retract it so robot can move around.
+	}
+}
+

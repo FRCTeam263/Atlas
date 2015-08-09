@@ -18,7 +18,7 @@ AutonomousSystem::~AutonomousSystem(){
 	delete timer;
 }
 
-void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter){
+void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter, PivotPiston *pivotPiston){
 	float toteLifterDistance = lifter->toteLiftMotor1->GetPosition();
 	float WheelEncoder = drive->FLMotor->GetPosition();
 	float canLifterDistance = lifter->canLiftMotor->GetPosition();
@@ -39,6 +39,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 
 	switch(autoMode){
 	case LiftCan:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if(drive->AverageEncoders() < 400){
 			timer->Start();
 			if(timer->HasPeriodPassed(0.1)){
@@ -68,6 +69,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case Rotate1Tote:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Deploy);
 		if(TurnReached == false){
 			angleTimer->Start();
 			if(angleTimer->Get() > 0.3){
@@ -109,6 +111,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case StrafeRight:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if(drive->AverageLeftStrafe() > 100){
 			drive->AutonDriveStraight(false, -0.4, true);
 			printf("Strafe");
@@ -133,6 +136,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case Drop1Tote:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if(lifter->toteLiftMotor1->GetPosition() > 805){
 			toteLifterSetpoint = -1;
 			drive->SetZero();
@@ -156,6 +160,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case Lineup2Totes:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if(drive->AverageEncoders() < 400){
 			drive->AutonDriveStraight(false, -0.5);
 			timer->Stop();
@@ -180,6 +185,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case DriveTo3Totes:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		//if(drive->AverageEncoders() < 3600){
 			if(drive->AverageEncoders() < 2200){
 				drive->AutonDiagonalStrafe(true, -0.6);
@@ -216,6 +222,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case Lineup3Totes:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if(drive->AverageEncoders() < 3850){//should really be whatever the value below is
 			drive->AutonDriveStraight(false, -0.4);
 			timer->Stop();
@@ -240,6 +247,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case StrafeRight3Tote:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if(drive->AverageLeftStrafe() > -120){
 			drive->AutonDriveStraight(false, -0.3, true);
 			timer->Start();
@@ -269,6 +277,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case Stack3Totes:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if(lifter->toteLiftMotor1->GetPosition() > 805){
 			toteLifterSetpoint = -0.6;
 			drive->SetZero();
@@ -292,6 +301,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case RotateToAutoZone:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Deploy);
 		if(Angle > 90){
 			timer->Start();
 			if(timer->HasPeriodPassed(0.05)){
@@ -317,6 +327,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case DriveToAutoZone:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if(drive->AverageEncoders() < 4580){
 			drive->AutonDriveStraight(false, -0.5);
 			if(toteLifterDistance > 0){
@@ -334,6 +345,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case Score3Totes:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if(drive->AverageEncoders() > 1000){
 			drive->AutonDriveStraight(false, 0.5);
 		}
@@ -349,7 +361,7 @@ void AutonomousSystem::Run3Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 	lifter->SetCanSpeed(canLifterSetpoint);
 }
 
-void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter){
+void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter, PivotPiston *pivotPiston){
 	float toteLifterDistance = lifter->toteLiftMotor1->GetPosition();
 	float WheelEncoder = drive->FLMotor->GetPosition();
 	float canLifterDistance = lifter->canLiftMotor->GetPosition();
@@ -374,6 +386,7 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 
 	switch(autoMode){
 	case LiftCan:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if(drive->AverageEncoders() < 400){
 			timer->Start();
 			if(timer->HasPeriodPassed(0.1)){
@@ -402,6 +415,7 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case Rotate1Tote:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Deploy);
 		if(TurnReached == false){
 			drive->AutonTurn(-turnOutput->ComputeNextMotorSpeedCommand(Angle, 180) / 2);
 			timer->Start();
@@ -441,6 +455,7 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case StrafeRight:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if(drive->AverageLeftStrafe() > 100){
 			drive->AutonDriveStraight(false, -0.4, true);
 			printf("Strafe");
@@ -465,6 +480,7 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case Drop1Tote:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if(lifter->toteLiftMotor1->GetPosition() > 805){
 			toteLifterSetpoint = -1;
 			drive->SetZero();
@@ -488,6 +504,7 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case Lineup2Totes:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if(drive->AverageEncoders() < 400){
 			drive->AutonDriveStraight(false, -0.5);
 			timer->Stop();
@@ -512,6 +529,7 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case RotateToAutoZone:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Deploy);
 		if(drive->AverageTurnLeftEncoders() < 2200){
 			timer->Start();
 			if(timer->HasPeriodPassed(0.05)){
@@ -536,6 +554,7 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case DriveToAutoZone:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if(drive->AverageEncoders() < 5280){
 			drive->AutonDriveStraight(false, -0.5);
 			printf("DriveToAuto");
@@ -547,12 +566,14 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case RotateInAutoZone:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Deploy);
 		if(drive->AverageTurnRightEncoders() < -1000){
 			drive->AutonTurn(-0.5);
 			printf("RotateInAUto");
 		}
 		else if(drive->AverageTurnRightEncoders() >= -1000){
 			drive->SetZero();
+			pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 			printf("Done");
 		}
 		break;
@@ -565,7 +586,7 @@ void AutonomousSystem::Run2Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 	lifter->SetCanSpeed(canLifterSetpoint);
 }
 
-void AutonomousSystem::Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter){
+void AutonomousSystem::Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter, PivotPiston *pivotPiston){
 	float toteLifterDistance = lifter->toteLiftMotor1->GetPosition();
 	float WheelEncoder = drive->FLMotor->GetPosition();
 	float canLifterDistance = lifter->canLiftMotor->GetPosition();
@@ -585,6 +606,7 @@ void AutonomousSystem::Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 
 	switch(autoMode){
 	case LiftCan:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if(canLifterDistance < elevatorCanLevels[2]){
 			canLifterSetpoint = canLifterOutput->ComputeNextMotorSpeedCommand(canLifterDistance, elevatorCanLevels[5]);
 			drive->ResetEncoders();
@@ -606,6 +628,7 @@ void AutonomousSystem::Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case Lift1Tote:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 		if((WheelEncoder < autonDrive1[1]) && (toteLifterDistance < elevatorShortLevels[3])){
 			drive->AutonDriveStraight(false, driveOutput->ComputeNextMotorSpeedCommand(WheelEncoder, autonDrive1[1]) * -1);
 			if(WheelEncoder > autonDrive1[1]){
@@ -632,6 +655,7 @@ void AutonomousSystem::Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case Rotate1Tote:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Deploy);
 		if(TurnReached == false){
 			drive->AutonTurn(-drive->turnOutput->ComputeNextMotorSpeedCommand(drive->NavX->GetYaw(), 90) / 2);
 			timer->Start();
@@ -668,12 +692,14 @@ void AutonomousSystem::Run1Tote1CanAuto(MecanumDrive *drive, LiftSystem *lifter)
 		}
 		break;
 	case RotateInAutoZone:
+		pivotPiston->CommandPivotPistonPosition(PivotPiston::Deploy);
 		if(drive->AverageTurnRightEncoders() < 3000){
 			drive->AutonTurn(-0.5);
 			printf("RotateInAUto");
 		}
 		else if(drive->AverageTurnRightEncoders() >= 3000){
 			drive->SetZero();
+			pivotPiston->CommandPivotPistonPosition(PivotPiston::Retract);
 			printf("Done");
 		}
 		break;

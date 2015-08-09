@@ -59,13 +59,13 @@ public:
 			drive->CalibrateNavX();
 			//if(drive->NavX->GetPitch() < 25 && drive->NavX->GetPitch() > -25){
 				if(auto2tote1Can->Get() == 0){//DIO 9
-					auton->Run2Tote1CanAuto(drive, lifter);
+					auton->Run2Tote1CanAuto(drive, lifter, pivotPiston);
 				}
 				else if(auto1Tote1Can->Get() == 0){//DIO 8
-					auton->Run1Tote1CanAuto(drive, lifter);
+					auton->Run1Tote1CanAuto(drive, lifter, pivotPiston);
 				}
 				else if(auto3ToteStack->Get() == 0){//DIO 7
-					auton->Run3Tote1CanAuto(drive, lifter);
+					auton->Run3Tote1CanAuto(drive, lifter, pivotPiston);
 				}
 				else if(autoDriveFwd->Get() == 0){//DIO 6
 					auton->RunDriveForward(drive);

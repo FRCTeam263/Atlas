@@ -20,6 +20,9 @@ public:
 
 	void CommandPivotPistonPosition(Joystick *drivePad);
 
+	enum PivotPistonPosition { Retract, Deploy };
+	void CommandPivotPistonPosition(PivotPistonPosition commandedPivotPosition);
+
 private:
 	Utilities *theUtilities;
 	DoubleSolenoid *theDoubleSolenoid;

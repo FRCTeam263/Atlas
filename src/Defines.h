@@ -22,6 +22,12 @@
 //Analog Input
 #define GYRO 0
 
+
+//Pnuematic Control Module (PCM)
+#define PIVOT_PISTON_FORWARD_CHANNEL 0
+#define PIVOT_PISTON_REVERSE_CHANNEL 1
+
+
 //Const
 const int elevatorShortLevels[6] = {0, 856, 1560, 2700, 4400, 1660};
 const int elevatorCanLevels[6] = {0, 1000, 1973, 3500, 1950, 2400};

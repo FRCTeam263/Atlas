@@ -2,6 +2,7 @@
 #include "Systems/MecanumDrive.h"
 #include "Systems/LiftSystem.h"
 #include "Systems/Autonomous.h"
+#include "Systems/PivotPiston.h"
 
 class Atlas: public SampleRobot
 {
@@ -11,6 +12,7 @@ public:
 
 	MecanumDrive *drive;
 	LiftSystem *lifter;
+	PivotPiston *pivotPiston;
 
 	AutonomousSystem *auton;
 
@@ -28,6 +30,7 @@ public:
 
 		drive = new MecanumDrive();
 		lifter = new LiftSystem();
+		pivotPiston = new PivotPiston();
 
 		auton = new AutonomousSystem();
 		autoFastCan = new DigitalInput(5);
@@ -36,6 +39,8 @@ public:
 		auto1Tote1Can = new DigitalInput(8);
 		auto2tote1Can = new DigitalInput(9);
 		timer = new Timer;
+
+
 	}
 
 	~Atlas(){
@@ -43,6 +48,7 @@ public:
 		delete gamePad;
 		delete drive;
 		delete lifter;
+		delete pivotPiston;
 		delete auton;
 	}
 
@@ -96,6 +102,7 @@ public:
 			//printf("Angle: %f\n", drive->mecanumGyro->GetAngle());
 			//printf("FL: %f\t FR: %f \t BL: %f\t BR: %f\t Avg: %d\n", drive->FLMotor->GetPosition(), drive->FRMotor->GetPosition(), drive->BLMotor->GetPosition(), drive->BRMotor->GetPosition(), drive->AverageLeftStrafe());
 			//printf("WideEncoder: %f\t ShortEncoder: %f\n", lifter->canLiftMotor->GetPosition(), lifter->shortLiftMotor1->GetPosition());
+			pivotPiston->CommandPivotPistonPosition(drivePad);
 		}
 	}
 };
